@@ -1,16 +1,19 @@
 import glowTitle from '@/assets/images/glow-title.png';
-import React, { useCallback } from 'react';
+import React from 'react';
 import { Image, ImageStyle, Text, TouchableOpacity, View } from 'react-native';
 import { onboardingQuestionsList, styles } from '../../constants/onboarding';
 
-import { router } from 'expo-router';
 import OAuth from '../OAuth';
 
-export const AuthScreen = ({ navigation }: { navigation: any }) => {
-  const handleGoogleSignIn = useCallback(() => {
-    router.replace('/(auth)/sign-up');
-  }, []);
-
+export const AuthScreen = ({
+  navigation,
+  onNext,
+  onAuthComplete,
+}: {
+  navigation: any;
+  onNext: () => void;
+  onAuthComplete: any;
+}) => {
   return (
     <View style={styles.container}>
       <View style={styles.headerContainer}>
@@ -35,8 +38,7 @@ export const AuthScreen = ({ navigation }: { navigation: any }) => {
       </View>
 
       <View style={styles.footerContainer}>
-        <TouchableOpacity onPress={handleGoogleSignIn}>
-          {/* <Text style={styles.buttonText}>Sign in with Google</Text> */}
+        <TouchableOpacity onPress={onAuthComplete}>
           <OAuth />
         </TouchableOpacity>
       </View>

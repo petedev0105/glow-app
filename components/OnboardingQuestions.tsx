@@ -125,6 +125,7 @@ const OnboardingQuestions = () => {
               key={index}
               navigation={navigation}
               onNext={goToNextSlide}
+              onAuthComplete={null}
             />
           ))}
         </Swiper>

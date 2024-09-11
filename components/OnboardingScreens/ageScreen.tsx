@@ -7,9 +7,11 @@ import { onboardingQuestionsList, styles } from '../../constants/onboarding';
 export const AgeScreen = ({
   navigation,
   onNext,
+  onAuthComplete,
 }: {
   navigation: any;
   onNext: () => void;
+  onAuthComplete: any;
 }) => {
   // Default to a recent year (e.g., 2000)
   const [selectedYear, setSelectedYear] = useState('2000');

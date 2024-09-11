@@ -17,8 +17,11 @@ const Home = () => {
   const [activeIndex, setActiveIndex] = useState(0);
   const [responses, setResponses] = useState({});
   const [isLoading, setIsLoading] = useState(false);
+  const [authCompleted, setAuthCompleted] = useState(false); // To track if authentication is finished
   const navigation = useNavigation();
-  // Determine if the current slide is the last one
+
+  // Determine if the current slide is the AuthScreen
+  const isAuthScreen = activeIndex === 2;
   const isLastSlide = activeIndex === onboardingQuestionsList.length - 1;
 
   useEffect(() => {
@@ -37,6 +40,12 @@ const Home = () => {
     setResponses(responses);
     router.replace('/(auth)/sign-up');
   }, []);
+
+  // Function to be called when authentication is completed
+  const handleAuthComplete = () => {
+    setAuthCompleted(true);
+    goToNextSlide();
+  };
 
   // Loading screen if still loading
   if (isLoading) {
@@ -64,6 +73,7 @@ const Home = () => {
       <Swiper
         ref={swiperRef}
         loop={false}
+        scrollEnabled={!isAuthScreen || authCompleted}
         dot={<View className='w-0' />}
         activeDot={<View className='w-0' />}
         onIndexChanged={(index) => setActiveIndex(index)}
@@ -74,6 +84,7 @@ const Home = () => {
             key={index}
             navigation={navigation}
             onNext={goToNextSlide}
+            onAuthComplete={handleAuthComplete}
           />
         ))}
       </Swiper>
