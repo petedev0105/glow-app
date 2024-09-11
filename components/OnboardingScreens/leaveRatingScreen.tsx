@@ -25,7 +25,9 @@ export const LeaveRatingScreen = ({
       </View>
 
       <Text style={styles.title}>{onboardingQuestionsList[8].title}</Text>
-      <Text style={styles.subtitle}>{onboardingQuestionsList[8].subtitle}</Text>
+      <Text style={styles.subtitleCaption}>
+        {onboardingQuestionsList[8].subtitle}
+      </Text>
 
       <View style={styles.contentContainer}>
         <View style={{ ...styles.imagePlaceholder, marginVertical: 40 }} />

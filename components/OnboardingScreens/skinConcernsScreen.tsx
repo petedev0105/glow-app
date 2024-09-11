@@ -27,7 +27,9 @@ export const SkinConcernsScreen = ({
       </View>
 
       <Text style={styles.title}>{onboardingQuestionsList[5].title}</Text>
-      <Text style={styles.subtitle}>{onboardingQuestionsList[5].subtitle}</Text>
+      <Text style={styles.subtitleCaption}>
+        {onboardingQuestionsList[5].subtitle}
+      </Text>
 
       <View
         style={{

@@ -42,6 +42,8 @@ import { ReferralScreen } from './OnboardingScreens/referralScreen';
 import { SkinConcernsScreen } from './OnboardingScreens/skinConcernsScreen';
 import { TrustedScreen } from './OnboardingScreens/trustedScreen';
 
+export const initialiseScreens = [TrustedScreen, ReferralScreen, AuthScreen];
+
 export const onboardingQuestionsScreens = [
   TrustedScreen,
   ReferralScreen,

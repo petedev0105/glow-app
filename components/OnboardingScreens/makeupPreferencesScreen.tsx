@@ -27,7 +27,9 @@ export const MakeUpPreferencesScreen = ({
       </View>
 
       <Text style={styles.title}>{onboardingQuestionsList[7].title}</Text>
-      <Text style={styles.subtitle}>{onboardingQuestionsList[7].subtitle}</Text>
+      <Text style={styles.subtitleCaption}>
+        {onboardingQuestionsList[7].subtitle}
+      </Text>
 
       <View
         style={{
