@@ -4,13 +4,15 @@ import { Image, View } from 'react-native';
 import CustomButton from '@/components/CustomButton';
 import { icons } from '@/constants';
 import { googleOAuth } from '@/lib/auth';
-import { useQuestionStore } from '@/store/onboardingStore'; // Import the store
+import { useQuestionStore } from '@/store/onboardingStore';
+import * as Haptics from 'expo-haptics';
 
 const OAuth = () => {
   const { startOAuthFlow } = useOAuth({ strategy: 'oauth_google' });
   const { setShowQuestions } = useQuestionStore();
 
   const handleGoogleSignIn = async () => {
+    Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
     const result = await googleOAuth(startOAuthFlow);
 
     console.log('google auth result: ', result);
