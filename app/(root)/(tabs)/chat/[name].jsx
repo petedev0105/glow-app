@@ -1,19 +1,18 @@
-import React, { useState, useEffect } from "react";
+import { useUser } from "@clerk/clerk-expo";
+import { Ionicons, MaterialIcons } from "@expo/vector-icons";
+import { useLocalSearchParams, useRouter } from "expo-router";
+import React, { useEffect, useState } from "react";
 import {
-  View,
-  Text,
-  TextInput,
-  TouchableOpacity,
+  ActivityIndicator,
   FlatList,
   KeyboardAvoidingView,
   Platform,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { useLocalSearchParams, useRouter } from "expo-router";
-import { Ionicons } from "@expo/vector-icons";
-import { ActivityIndicator } from "react-native";
-import { useUser } from "@clerk/clerk-expo";
-import { MaterialIcons } from "@expo/vector-icons"; // Import the icon library
 
 const ChatbotConversation = () => {
   const { name, prompt } = useLocalSearchParams();
