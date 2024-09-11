@@ -60,7 +60,9 @@ export const ProductPreferencesScreen = ({
 
       <View style={styles.footerContainer}>
         <TouchableOpacity style={styles.button} onPress={onNext}>
-          <Text style={styles.buttonText}>Continue</Text>
+          <Text style={styles.buttonText} disabled={selectedGoal === ''}>
+            Continue
+          </Text>
         </TouchableOpacity>
       </View>
     </View>
