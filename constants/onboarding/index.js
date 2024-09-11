@@ -3,13 +3,14 @@ import { StyleSheet } from "react-native";
 export const onboardingQuestionsList = [
   {
     id: 0,
-    title: "Trusted by thousands of people.",
-    description: "",
+    title: "Get started on your glow-up journey today with Glow.",
+    subtitle: "",
     continueButton: "Continue", // You can specify button text here.
   },
   {
     id: 1,
     title: "Do you have a referral code?",
+    subtitle: "Enter your code here, or skip",
     inputs: [
       { label: "Referral Code", placeholder: "Enter your code here, or skip" },
     ],
@@ -18,28 +19,31 @@ export const onboardingQuestionsList = [
   {
     id: 2,
     title: "Create your account",
-    description: "Get started on your glow-up journey today with Glow.",
+    subtitle: "Get started on your glow-up journey today with Glow.",
     showGoogleButton: true, // Add a flag to show the Google sign-in button.
   },
   {
     id: 3,
-    title: "Age",
+    title: "Enter your age",
     inputs: [{ label: "Age", placeholder: "Enter your age" }],
     continueButton: "Continue",
   },
   {
     id: 4,
     title: "Beauty Goals",
+    subtitle: "Select all that apply",
     options: [
       "Find the best products for me",
       "Goal 2",
       "Goal 3",
+      "Goal 4",
     ],
     continueButton: "Continue",
   },
   {
     id: 5,
     title: "Skin Concerns",
+    subtitle: "Select all that apply",
     options: [
       "Oily",
       "Dry",
@@ -48,38 +52,84 @@ export const onboardingQuestionsList = [
     ],
     continueButton: "Continue",
   },
+  {
+    id: 6,
+    title: "Product Preferences",
+    subtitle: "Select all that apply",
+    options: [
+      "Oily",
+      "Dry",
+      "Sensitive",
+      "Combination",
+    ],
+    continueButton: "Continue",
+  },
+  {
+    id: 7,
+    title: "Makeup Preferences",
+    subtitle: "Select all that apply",
+    options: [
+      "Find the best products for me0",
+      "Find the best products for me1",
+      "Find the best products for me2",
+      "Find the best products for me3",
+      "Find the best products for me4",
+      "Find the best products for me5",
+    ],
+    continueButton: "Continue",
+  },
+  {
+    id: 8,
+    title: "Leave a rating",
+    subtitle: "Support us so that we could build the best glow up experience for you.",
+    continueButton: "Continue", // You can specify button text here.
+  },
 ];
 
 export const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: 'white',
-    padding: 20,
-    justifyContent: 'space-between',
+    paddingHorizontal: 24,
+  },
+  headerContainer: {
+    flex: 1.8, // Logo and progress bar section gets 15% of the screen
     alignItems: 'center',
+    justifyContent: 'center',
+  },
+  headerTitle: {
+    flex: 0.5,
+    paddingHorizontal: 40,
+    overflow: 'auto',
   },
   logo: {
     width: 150,
     height: 50,
     resizeMode: 'contain',
+    marginVertical: 20,
   },
   progressBar: {
     flexDirection: 'row',
-    marginBottom: 20,
+    marginTop: 10,
   },
   activeDot: {
     width: 50,
-    height: 5,
+    height: 6,
     backgroundColor: '#836E89', // Active color
     borderRadius: 5,
     marginHorizontal: 2,
   },
   inactiveDot: {
     width: 50,
-    height: 5,
+    height: 6,
     backgroundColor: '#E6D8E1', // Inactive color
     borderRadius: 5,
     marginHorizontal: 2,
+  },
+  contentContainer: {
+    flex: 3, // Content section (title, input fields, placeholders) gets 40% of the screen
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   title: {
     fontSize: 24,
@@ -87,27 +137,38 @@ export const styles = StyleSheet.create({
     textAlign: 'center',
     fontWeight: 'bold',
   },
+  subtitleCaption: {
+    fontSize: 12,
+    color: '#836E89', // Subtitle color
+    textAlign: 'center',
+    marginTop: 10,
+  },
   subtitle: {
     fontSize: 16,
     color: '#836E89', // Subtitle color
     textAlign: 'center',
     marginTop: 10,
+    paddingHorizontal: 20,
   },
   imagePlaceholder: {
-    width: 200,
-    height: 200,
+    width: 260,
+    height: 260,
     backgroundColor: '#E6D8E1', // Placeholder color
     borderRadius: 20,
-    marginVertical: 20,
   },
   input: {
-    borderWidth: 1,
+    borderWidth: 2,
     borderColor: '#836E89',
     borderRadius: 10,
     padding: 10,
     width: '100%',
     marginVertical: 10,
     backgroundColor: '#F9F3F8',
+  },
+  footerContainer: {
+    flex: 1.5, // Button section gets 15% of the screen
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   button: {
     backgroundColor: '#836E89', // Button color
@@ -116,6 +177,7 @@ export const styles = StyleSheet.create({
     borderRadius: 30,
     marginVertical: 10,
     alignItems: 'center',
+    width: '100%',
   },
   buttonText: {
     color: 'white',
@@ -123,22 +185,44 @@ export const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   radioButton: {
-    borderWidth: 1,
+    borderWidth: 2,
     borderColor: '#836E89',
-    borderRadius: 10,
+    borderRadius: 50,
     padding: 15,
     marginVertical: 5,
     width: '100%',
     textAlign: 'center',
   },
   radioButtonSelected: {
-    borderWidth: 1,
+    borderWidth: 2,
     borderColor: '#836E89',
-    backgroundColor: '#836E89',
-    borderRadius: 10,
+    // backgroundColor: '#836E89',
+    backgroundColor: 'white',
+    borderRadius: 50,
     padding: 15,
     marginVertical: 5,
     width: '100%',
     textAlign: 'center',
   },
+  radioActiveDot: {
+    width: 16,
+    height: 16,
+    backgroundColor: '#836E89', // Active color
+    borderRadius: 50,
+    borderColor: '#836E89',
+    borderWidth: 2,
+    marginHorizontal: 2,
+  },
+  radioInactiveDot: {
+    width: 16,
+    height: 16,
+    backgroundColor: 'white', // Inactive color
+    borderRadius: 50,
+    borderColor: '#836E89',
+    borderWidth: 2,
+    marginHorizontal: 2,
+  },
+  radioButtonText: {
+    color: '#836E89',
+  }
 });
