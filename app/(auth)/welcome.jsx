@@ -1,15 +1,15 @@
-import { router } from "expo-router";
-import { useEffect, useRef, useState, useCallback } from "react";
-import { Image, Text, View, StatusBar, ActivityIndicator } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
-import Swiper from "react-native-swiper";
-import OnboardingQuestions from "@/components/OnboardingQuestions";
 import CustomButton from "@/components/CustomButton";
-import { onboarding } from "@/constants";
-import { StyleSheet } from "react-native";
 import OAuth from "@/components/OAuth";
+import OnboardingQuestions from "@/components/OnboardingQuestions";
+import { onboarding } from "@/constants";
 import { useQuestionStore } from "@/store/onboardingStore";
 import { useUser } from "@clerk/clerk-expo";
+import { router } from "expo-router";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { ActivityIndicator, Image, StatusBar, StyleSheet, Text, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
+import Swiper from "react-native-swiper";
+import { onboardingQuestionsList } from "../../constants/onboarding";
 
 const Home = () => {
   const { user, isLoaded, isSignedIn } = useUser();
@@ -19,7 +19,7 @@ const Home = () => {
   const [responses, setResponses] = useState({});
   const [isLoading, setIsLoading] = useState(false);
 
-  const isLastSlide = activeIndex === onboarding.length - 1;
+  const isLastSlide = activeIndex === onboardingQuestionsList.length - 1;
 
   useEffect(() => {
     if (isLoaded) {
