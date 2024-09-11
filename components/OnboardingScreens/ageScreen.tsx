@@ -13,10 +13,7 @@ export const AgeScreen = ({
   onNext: () => void;
   onAuthComplete: any;
 }) => {
-  // Default to a recent year (e.g., 2000)
   const [selectedYear, setSelectedYear] = useState('2000');
-
-  // Generate year options from 1970 to the current year
   const currentYear = new Date().getFullYear();
   const years = Array.from(new Array(currentYear - 1970 + 1), (v, i) =>
     (1970 + i).toString()
@@ -35,6 +32,9 @@ export const AgeScreen = ({
       </View>
 
       <Text style={styles.title}>{onboardingQuestionsList[3].title}</Text>
+      <Text style={styles.subtitleCaption}>
+        {onboardingQuestionsList[3].subtitle}
+      </Text>
 
       <View style={styles.contentContainer}>
         <Picker
@@ -44,8 +44,9 @@ export const AgeScreen = ({
             width: '60%',
             height: 150,
             borderColor: '#836E89',
-            backgroundColor: '#F9F3F8',
-            borderWidth: 2,
+            // backgroundColor: '#F9F3F8',
+            backgroundColor: 'white',
+            borderWidth: 0,
             borderRadius: 20,
           }}
           itemStyle={{ height: 120 }} // To show more visible options in the scroll

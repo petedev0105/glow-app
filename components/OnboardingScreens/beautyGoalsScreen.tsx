@@ -27,7 +27,9 @@ export const BeautyGoalsScreen = ({
       </View>
 
       <Text style={styles.title}>{onboardingQuestionsList[4].title}</Text>
-      <Text style={styles.subtitle}>{onboardingQuestionsList[4].subtitle}</Text>
+      <Text style={styles.subtitleCaption}>
+        {onboardingQuestionsList[4].subtitle}
+      </Text>
 
       <View
         style={{

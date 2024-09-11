@@ -3,7 +3,7 @@ import { StyleSheet } from "react-native";
 export const onboardingQuestionsList = [
   {
     id: 0,
-    title: "Get started on your glow-up journey today with Glow.",
+    title: "Get started on your glow-up journey today with Glow",
     subtitle: "",
     continueButton: "Continue", // You can specify button text here.
   },
@@ -19,12 +19,13 @@ export const onboardingQuestionsList = [
   {
     id: 2,
     title: "Create your account",
-    subtitle: "Get started on your glow-up journey today with Glow.",
+    subtitle: "Get started on your glow-up journey today with Glow",
     showGoogleButton: true, // Add a flag to show the Google sign-in button.
   },
   {
     id: 3,
     title: "Enter your age",
+    subtitle: "We'll use this information to personalize your recommendations and help you get the best results",
     inputs: [{ label: "Age", placeholder: "Enter your age" }],
     continueButton: "Continue",
   },

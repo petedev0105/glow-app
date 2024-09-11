@@ -27,7 +27,9 @@ export const ProductPreferencesScreen = ({
       </View>
 
       <Text style={styles.title}>{onboardingQuestionsList[6].title}</Text>
-      <Text style={styles.subtitle}>{onboardingQuestionsList[6].subtitle}</Text>
+      <Text style={styles.subtitleCaption}>
+        {onboardingQuestionsList[6].subtitle}
+      </Text>
 
       <View
         style={{
