@@ -4,6 +4,7 @@ import OnboardingQuestions, {
 import { useQuestionStore } from '@/store/onboardingStore';
 import { useUser } from '@clerk/clerk-expo';
 import { useNavigation } from '@react-navigation/native';
+import * as Haptics from 'expo-haptics';
 import { router } from 'expo-router';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { ActivityIndicator, StatusBar, StyleSheet, View } from 'react-native';
@@ -62,6 +63,7 @@ const Home = () => {
   }
 
   const goToNextSlide = () => {
+    Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
     if (swiperRef.current) {
       swiperRef.current.scrollBy(1);
     }
@@ -73,7 +75,8 @@ const Home = () => {
       <Swiper
         ref={swiperRef}
         loop={false}
-        scrollEnabled={!isAuthScreen || authCompleted}
+        // scrollEnabled={!isAuthScreen || authCompleted} // Remove for testing other screens
+        scrollEnabled={true} // ONLY FOR TESTING
         dot={<View className='w-0' />}
         activeDot={<View className='w-0' />}
         onIndexChanged={(index) => setActiveIndex(index)}
