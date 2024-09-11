@@ -15,9 +15,11 @@ import { onboardingQuestionsList, styles } from '../../constants/onboarding';
 export const ReferralScreen = ({
   navigation,
   onNext,
+  onAuthComplete,
 }: {
   navigation: any;
   onNext: () => void;
+  onAuthComplete: any;
 }) => {
   const [referralCode, setReferralCode] = useState('');
 

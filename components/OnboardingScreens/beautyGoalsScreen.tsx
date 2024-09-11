@@ -6,9 +6,11 @@ import { onboardingQuestionsList, styles } from '../../constants/onboarding';
 export const BeautyGoalsScreen = ({
   navigation,
   onNext,
+  onAuthComplete,
 }: {
   navigation: any;
   onNext: () => void;
+  onAuthComplete: any;
 }) => {
   const [selectedGoal, setSelectedGoal] = useState('');
 
