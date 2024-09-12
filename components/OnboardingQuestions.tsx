@@ -87,8 +87,8 @@ const OnboardingQuestions = () => {
 
   if (showQuestions) {
     return (
-      <SafeAreaView className="flex h-full bg-black">
-        <StatusBar barStyle="light-content" backgroundColor="#6a51ae" />
+      <SafeAreaView className="flex h-full bg-white">
+        <StatusBar barStyle="dark-content" backgroundColor="#6a51ae" />
         <Swiper
           ref={swiperRef}
           showsPagination={false}
