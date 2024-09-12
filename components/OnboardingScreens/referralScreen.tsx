@@ -1,16 +1,14 @@
-import glowTitle from "@/assets/images/glow-title.png";
-import React, { useState } from "react";
+import * as Haptics from 'expo-haptics';
+import React, { useState } from 'react';
 import {
-  Image,
-  ImageStyle,
   KeyboardAvoidingView,
   Platform,
   Text,
   TextInput,
   TouchableOpacity,
   View,
-} from "react-native";
-import { onboardingQuestionsList, styles } from "../../constants/onboarding";
+} from 'react-native';
+import { onboardingQuestionsList, styles } from '../../constants/onboarding';
 
 export const ReferralScreen = ({
   navigation,
@@ -21,7 +19,7 @@ export const ReferralScreen = ({
   onNext: () => void;
   onAuthComplete: any;
 }) => {
-  const [referralCode, setReferralCode] = useState("");
+  const [referralCode, setReferralCode] = useState('');
 
   return (
     <View style={styles.container}>
@@ -29,22 +27,28 @@ export const ReferralScreen = ({
 
       <KeyboardAvoidingView
         style={styles.contentContainer}
-        behavior={Platform.OS === "ios" ? "padding" : "height"}
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       >
         <TextInput
           style={{
             ...styles.input,
             // borderWidth: 0,
             marginTop: 50,
-            width: "60%",
+            width: '60%',
             height: 50,
-            textAlign: "center",
-            textAlignVertical: "top",
+            textAlign: 'center',
+            textAlignVertical: 'top',
           }}
-          className="font-semibold text-[#836E89] shadow-xs"
-          placeholder="Enter your code here, or skip"
+          className='font-semibold text-[#836E89] shadow-xs'
+          placeholder='Enter your code here, or skip'
           value={referralCode.toUpperCase()}
-          onChangeText={setReferralCode}
+          onChangeText={(text) => {
+            setReferralCode(text);
+            Haptics.selectionAsync();
+          }}
+          onPressIn={() => {
+            Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+          }}
         />
         <Text style={styles.subtitleCaption}>
           {onboardingQuestionsList[1].subtitle}
