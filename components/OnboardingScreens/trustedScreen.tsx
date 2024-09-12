@@ -1,7 +1,14 @@
-import glowTitle from '@/assets/images/glow-title.png'; // Import logo
-import React from 'react';
-import { Image, ImageStyle, Text, TouchableOpacity, View } from 'react-native';
-import { onboardingQuestionsList, styles } from '../../constants/onboarding';
+import glowTitle from "@/assets/images/glow-title.png"; // Import logo
+import React from "react";
+import {
+  Image,
+  ImageStyle,
+  Text,
+  TouchableOpacity,
+  View,
+  StatusBar,
+} from "react-native";
+import { onboardingQuestionsList, styles } from "../../constants/onboarding";
 
 export const TrustedScreen = ({
   navigation,
@@ -14,13 +21,16 @@ export const TrustedScreen = ({
 }) => {
   return (
     <View style={styles.container}>
+      {/* <StatusBar barStyle="light-content" /> */}
       <View style={styles.headerContainer}>
         <Image source={glowTitle} style={styles.logo as ImageStyle} />
         <View style={styles.progressBar}>
-          <View style={styles.activeDot} />
-          <View style={styles.inactiveDot} />
-          <View style={styles.inactiveDot} />
-          <View style={styles.inactiveDot} />
+          {[...Array(9)].map((_, index) => (
+            <View
+              key={index}
+              style={index <= 0 ? styles.activeDot : styles.inactiveDot}
+            />
+          ))}
         </View>
       </View>
 

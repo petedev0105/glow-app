@@ -1,5 +1,5 @@
-import glowTitle from '@/assets/images/glow-title.png';
-import React, { useState } from 'react';
+import glowTitle from "@/assets/images/glow-title.png";
+import React, { useState } from "react";
 import {
   Image,
   ImageStyle,
@@ -9,8 +9,8 @@ import {
   TextInput,
   TouchableOpacity,
   View,
-} from 'react-native';
-import { onboardingQuestionsList, styles } from '../../constants/onboarding';
+} from "react-native";
+import { onboardingQuestionsList, styles } from "../../constants/onboarding";
 
 export const ReferralScreen = ({
   navigation,
@@ -21,17 +21,19 @@ export const ReferralScreen = ({
   onNext: () => void;
   onAuthComplete: any;
 }) => {
-  const [referralCode, setReferralCode] = useState('');
+  const [referralCode, setReferralCode] = useState("");
 
   return (
     <View style={styles.container}>
       <View style={styles.headerContainer}>
         <Image source={glowTitle} style={styles.logo as ImageStyle} />
         <View style={styles.progressBar}>
-          <View style={styles.activeDot} />
-          <View style={styles.activeDot} />
-          <View style={styles.inactiveDot} />
-          <View style={styles.inactiveDot} />
+          {[...Array(9)].map((_, index) => (
+            <View
+              key={index}
+              style={index <= 1 ? styles.activeDot : styles.inactiveDot}
+            />
+          ))}
         </View>
       </View>
 
@@ -39,20 +41,20 @@ export const ReferralScreen = ({
 
       <KeyboardAvoidingView
         style={styles.contentContainer}
-        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
       >
         <TextInput
           style={{
             ...styles.input,
             // borderWidth: 0,
             marginTop: 50,
-            width: '60%',
+            width: "60%",
             height: 50,
-            textAlign: 'center',
-            textAlignVertical: 'top',
+            textAlign: "center",
+            textAlignVertical: "top",
           }}
-          className='font-semibold text-[#836E89] shadow-xs'
-          placeholder='Enter your code here, or skip'
+          className="font-semibold text-[#836E89] shadow-xs"
+          placeholder="Enter your code here, or skip"
           value={referralCode.toUpperCase()}
           onChangeText={setReferralCode}
         />
