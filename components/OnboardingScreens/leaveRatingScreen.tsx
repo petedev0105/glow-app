@@ -14,18 +14,6 @@ export const LeaveRatingScreen = ({
 }) => {
   return (
     <View style={styles.container}>
-      <View style={styles.headerContainer}>
-        <Image source={glowTitle} style={styles.logo as ImageStyle} />
-        <View style={styles.progressBar}>
-          {[...Array(9)].map((_, index) => (
-            <View
-              key={index}
-              style={index <= 8 ? styles.activeDot : styles.inactiveDot}
-            />
-          ))}
-        </View>
-      </View>
-
       <Text style={styles.title}>{onboardingQuestionsList[8].title}</Text>
       <Text style={styles.subtitleCaption}>
         {onboardingQuestionsList[8].subtitle}

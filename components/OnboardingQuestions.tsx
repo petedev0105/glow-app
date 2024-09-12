@@ -1,7 +1,14 @@
 import CustomButton from "@/components/CustomButton";
 import { useUser } from "@clerk/clerk-expo";
 import React, { useEffect, useRef, useState } from "react";
-import { ActivityIndicator, StyleSheet, View, StatusBar } from "react-native";
+import {
+  ActivityIndicator,
+  StyleSheet,
+  View,
+  StatusBar,
+  Image,
+  ImageStyle,
+} from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Swiper from "react-native-swiper";
 import OAuth from "@/components/OAuth";
@@ -18,6 +25,9 @@ import { ProductPreferencesScreen } from "./OnboardingScreens/productPreferences
 import { ReferralScreen } from "./OnboardingScreens/referralScreen";
 import { SkinConcernsScreen } from "./OnboardingScreens/skinConcernsScreen";
 import { TrustedScreen } from "./OnboardingScreens/trustedScreen";
+import glowTitle from "@/assets/images/glow-title.png";
+import { onboardingQuestionsList, styles } from "../constants/onboarding";
+import { debounce } from "lodash";
 
 export const initialiseScreens = [TrustedScreen, ReferralScreen, AuthScreen];
 
@@ -40,6 +50,7 @@ const OnboardingQuestions = () => {
   const [activeIndex, setActiveIndex] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
   const navigation = useNavigation();
+  const [selectedIndex, setSelectedIndex] = useState(0);
 
   // Last slide check
   const isLastSlide = activeIndex === onboardingQuestionsScreens.length - 1;
@@ -57,7 +68,7 @@ const OnboardingQuestions = () => {
 
   if (isLoading) {
     return (
-      <View style={styles.loadingContainer}>
+      <View style={localStyles.loadingContainer}>
         <ActivityIndicator size="large" color="#8400FF" />
       </View>
     );
@@ -67,13 +78,17 @@ const OnboardingQuestions = () => {
     setShowQuestions(true);
   }, []);
 
+  const indexChanged = (index: number) => {
+    console.log(index);
+  };
+
   const handleOnboardingComplete = useCallback(() => {
     router.replace("/(auth)/sign-up"); // Redirect to sign-up after onboarding
   }, []);
 
   if (isLoading) {
     return (
-      <View style={styles.loadingContainer}>
+      <View style={localStyles.loadingContainer}>
         <ActivityIndicator size="large" color="#8400FF" />
       </View>
     );
@@ -85,21 +100,37 @@ const OnboardingQuestions = () => {
     }
   };
 
+  // const handleOnIndexChanged = useCallback(
+  //   debounce((index: number) => {
+  //     console.log(index);
+  //     setSelectedIndex(index);
+  //   }, 100),
+  //   []
+  // );
+
   if (showQuestions) {
     return (
       <SafeAreaView className="flex h-full bg-white">
         <StatusBar barStyle="dark-content" backgroundColor="#6a51ae" />
+
+        <View className="flex items-center mb-10">
+          <Image source={glowTitle} style={styles.logo as ImageStyle} />
+          {/* <View style={styles.progressBar} className="px-10 mb-10">
+            {onboardingQuestionsScreens.map((_, index) => (
+              <View
+                key={index}
+                style={
+                  index <= activeIndex ? styles.activeDot : styles.inactiveDot
+                }
+              />
+            ))}
+          </View> */}
+        </View>
+
         <Swiper
           ref={swiperRef}
           showsPagination={false}
-          // loop={false}
-          // dot={
-          //   <View className="w-[32px] h-[4px] mx-1 bg-stone-200 rounded-full" />
-          // }
-          // activeDot={
-          //   <View className="w-[32px] h-[4px] mx-1 bg-[#8400FF] rounded-full" />
-          // }
-          // onIndexChanged={(index) => setActiveIndex(index)}
+          // onIndexChanged={handleOnIndexChanged}
         >
           {onboardingQuestionsScreens.map((ScreenComponent, index) => (
             <ScreenComponent
@@ -131,7 +162,7 @@ const OnboardingQuestions = () => {
   return null; // Or return a placeholder or loader while questions are hidden
 };
 
-const styles = StyleSheet.create({
+const localStyles = StyleSheet.create({
   loadingContainer: {
     flex: 1,
     justifyContent: "center",

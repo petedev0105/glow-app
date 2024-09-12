@@ -58,9 +58,9 @@ const Home = () => {
   }
 
   // If user has questions to answer
-  if (showQuestions) {
-    return <OnboardingQuestions />;
-  }
+  // if (showQuestions) {
+  //   return <OnboardingQuestions />;
+  // }
 
   const goToNextSlide = () => {
     Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
@@ -71,25 +71,7 @@ const Home = () => {
 
   return (
     <View className="flex h-full bg-black">
-      {/* <StatusBar barStyle="light-content" /> */}
-      <Swiper
-        ref={swiperRef}
-        loop={false}
-        showsPagination={false}
-        // scrollEnabled={!isAuthScreen || authCompleted} // Remove for testing other screens
-        // scrollEnabled={true} // ONLY FOR TESTING
-        onIndexChanged={(index) => setActiveIndex(index)}
-      >
-        {/* Render each individual onboarding screen component */}
-        {onboardingQuestionsScreens.map((ScreenComponent, index) => (
-          <ScreenComponent
-            key={index}
-            navigation={navigation}
-            onNext={goToNextSlide}
-            onAuthComplete={handleAuthComplete}
-          />
-        ))}
-      </Swiper>
+      <OnboardingQuestions />
     </View>
   );
 };

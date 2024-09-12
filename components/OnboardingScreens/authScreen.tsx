@@ -16,18 +16,6 @@ export const AuthScreen = ({
 }) => {
   return (
     <View style={styles.container}>
-      <View style={styles.headerContainer}>
-        <Image source={glowTitle} style={styles.logo as ImageStyle} />
-        <View style={styles.progressBar}>
-          {[...Array(9)].map((_, index) => (
-            <View
-              key={index}
-              style={index <= 2 ? styles.activeDot : styles.inactiveDot}
-            />
-          ))}
-        </View>
-      </View>
-
       <View style={styles.contentContainer}>
         {/* Placeholder for an image */}
         <View style={styles.imagePlaceholder} />
