@@ -2,6 +2,7 @@ import glowTitle from '@/assets/images/glow-title.png';
 import { useQuestionStore } from '@/store/onboardingStore';
 import { useUser } from '@clerk/clerk-expo';
 import { useNavigation } from '@react-navigation/native';
+import * as Haptics from 'expo-haptics';
 import { router } from 'expo-router';
 import React, { useCallback, useRef, useState } from 'react';
 import {
@@ -91,6 +92,7 @@ const OnboardingQuestions = () => {
   }
 
   const goToNextSlide = () => {
+    Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
     if (swiperRef.current) {
       swiperRef.current.scrollBy(1);
     }
