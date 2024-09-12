@@ -25,18 +25,6 @@ export const ReferralScreen = ({
 
   return (
     <View style={styles.container}>
-      <View style={styles.headerContainer}>
-        <Image source={glowTitle} style={styles.logo as ImageStyle} />
-        <View style={styles.progressBar}>
-          {[...Array(9)].map((_, index) => (
-            <View
-              key={index}
-              style={index <= 1 ? styles.activeDot : styles.inactiveDot}
-            />
-          ))}
-        </View>
-      </View>
-
       <Text style={styles.title}>{onboardingQuestionsList[1].title}</Text>
 
       <KeyboardAvoidingView
