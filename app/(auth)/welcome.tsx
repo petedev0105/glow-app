@@ -1,15 +1,13 @@
-import OnboardingQuestions, {
-  onboardingQuestionsScreens,
-} from "@/components/OnboardingQuestions";
-import { useQuestionStore } from "@/store/onboardingStore";
-import { useUser } from "@clerk/clerk-expo";
-import { useNavigation } from "@react-navigation/native";
-import * as Haptics from "expo-haptics";
-import { router } from "expo-router";
-import { useCallback, useEffect, useRef, useState } from "react";
-import { ActivityIndicator, StatusBar, StyleSheet, View } from "react-native";
-import Swiper from "react-native-swiper";
-import { onboardingQuestionsList } from "../../constants/onboarding";
+import { useQuestionStore } from '@/store/onboardingStore';
+import { useUser } from '@clerk/clerk-expo';
+import { useNavigation } from '@react-navigation/native';
+import * as Haptics from 'expo-haptics';
+import { router } from 'expo-router';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { ActivityIndicator, StyleSheet, View } from 'react-native';
+import Swiper from 'react-native-swiper';
+import OnboardingQuestions from '../../components/OnboardingQuestions';
+import { onboardingQuestionsList } from '../../constants/onboarding';
 
 const Home = () => {
   const { user, isLoaded, isSignedIn } = useUser();
@@ -37,22 +35,22 @@ const Home = () => {
   }, []);
 
   const handleQuestionsComplete = useCallback((responses: any) => {
-    console.log("User responses:", responses);
+    console.log('User responses:', responses);
     setResponses(responses);
-    router.replace("/(auth)/sign-up");
+    router.replace('/(auth)/sign-up');
   }, []);
 
   // Function to be called when authentication is completed
-  const handleAuthComplete = () => {
-    setAuthCompleted(true);
-    goToNextSlide();
-  };
+  // const handleAuthComplete = () => {
+  //   setAuthCompleted(true);
+  //   goToNextSlide();
+  // };
 
   // Loading screen if still loading
   if (isLoading) {
     return (
       <View style={styles.loadingContainer}>
-        <ActivityIndicator size="large" color="#8400FF" />
+        <ActivityIndicator size='large' color='#8400FF' />
       </View>
     );
   }
@@ -70,18 +68,18 @@ const Home = () => {
   };
 
   return (
-    <View className="flex h-full bg-black">
-      <OnboardingQuestions />
-    </View>
+    // <View className='flex h-full bg-black'>
+    <OnboardingQuestions />
+    // </View>
   );
 };
 
 const styles = StyleSheet.create({
   loadingContainer: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "black",
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'black',
   },
 });
 
