@@ -100,13 +100,9 @@ const OnboardingQuestions = () => {
     }
   };
 
-  // const handleOnIndexChanged = useCallback(
-  //   debounce((index: number) => {
-  //     console.log(index);
-  //     setSelectedIndex(index);
-  //   }, 100),
-  //   []
-  // );
+  const handleOnIndexChanged = (index: number) => {
+    setActiveIndex(index);
+  };
 
   if (showQuestions) {
     return (
@@ -130,7 +126,8 @@ const OnboardingQuestions = () => {
         <Swiper
           ref={swiperRef}
           showsPagination={false}
-          // onIndexChanged={handleOnIndexChanged}
+          loop={false}
+          // onIndexChanged={(index) => handleOnIndexChanged(index)}
         >
           {onboardingQuestionsScreens.map((ScreenComponent, index) => (
             <ScreenComponent
