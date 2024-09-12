@@ -1,9 +1,9 @@
-import glowTitle from '@/assets/images/glow-title.png';
-import React from 'react';
-import { Image, ImageStyle, Text, TouchableOpacity, View } from 'react-native';
-import { onboardingQuestionsList, styles } from '../../constants/onboarding';
+import glowTitle from "@/assets/images/glow-title.png";
+import React from "react";
+import { Image, ImageStyle, Text, TouchableOpacity, View } from "react-native";
+import { onboardingQuestionsList, styles } from "../../constants/onboarding";
 
-import OAuth from '../OAuth';
+import OAuth from "../OAuth";
 
 export const AuthScreen = ({
   navigation,
@@ -19,10 +19,12 @@ export const AuthScreen = ({
       <View style={styles.headerContainer}>
         <Image source={glowTitle} style={styles.logo as ImageStyle} />
         <View style={styles.progressBar}>
-          <View style={styles.activeDot} />
-          <View style={styles.activeDot} />
-          <View style={styles.activeDot} />
-          <View style={styles.inactiveDot} />
+          {[...Array(9)].map((_, index) => (
+            <View
+              key={index}
+              style={index <= 2 ? styles.activeDot : styles.inactiveDot}
+            />
+          ))}
         </View>
       </View>
 

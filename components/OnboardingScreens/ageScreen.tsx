@@ -1,8 +1,8 @@
-import glowTitle from '@/assets/images/glow-title.png';
-import { Picker } from '@react-native-picker/picker';
-import React, { useState } from 'react';
-import { Image, ImageStyle, Text, TouchableOpacity, View } from 'react-native';
-import { onboardingQuestionsList, styles } from '../../constants/onboarding';
+import glowTitle from "@/assets/images/glow-title.png";
+import { Picker } from "@react-native-picker/picker";
+import React, { useState } from "react";
+import { Image, ImageStyle, Text, TouchableOpacity, View } from "react-native";
+import { onboardingQuestionsList, styles } from "../../constants/onboarding";
 
 export const AgeScreen = ({
   navigation,
@@ -13,7 +13,7 @@ export const AgeScreen = ({
   onNext: () => void;
   onAuthComplete: any;
 }) => {
-  const [selectedYear, setSelectedYear] = useState('2000');
+  const [selectedYear, setSelectedYear] = useState("2000");
   const currentYear = new Date().getFullYear();
   const years = Array.from(new Array(currentYear - 1970 + 1), (v, i) =>
     (1970 + i).toString()
@@ -24,10 +24,12 @@ export const AgeScreen = ({
       <View style={styles.headerContainer}>
         <Image source={glowTitle} style={styles.logo as ImageStyle} />
         <View style={styles.progressBar}>
-          <View style={styles.activeDot} />
-          <View style={styles.activeDot} />
-          <View style={styles.activeDot} />
-          <View style={styles.activeDot} />
+          {[...Array(9)].map((_, index) => (
+            <View
+              key={index}
+              style={index <= 3 ? styles.activeDot : styles.inactiveDot}
+            />
+          ))}
         </View>
       </View>
 
@@ -41,11 +43,11 @@ export const AgeScreen = ({
           selectedValue={selectedYear}
           style={{
             ...styles.input,
-            width: '60%',
+            width: "60%",
             height: 150,
-            borderColor: '#836E89',
+            borderColor: "#836E89",
             // backgroundColor: '#F9F3F8',
-            backgroundColor: 'white',
+            backgroundColor: "white",
             borderWidth: 0,
             borderRadius: 20,
           }}
