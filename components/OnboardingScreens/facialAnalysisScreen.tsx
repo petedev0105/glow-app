@@ -84,6 +84,7 @@ export const FacialAnalysisScreen = () => {
 
     try {
       // Store the image URL in your Zustand store
+      useImageStore.getState().clearImages();
       useImageStore.getState().addImage(imageUri);
 
       // Optionally navigate to the next screen after successful upload
