@@ -91,12 +91,12 @@ export const onboardingQuestionsList = [
       "👩‍⚕️",
       "💄"
     ],
-    continueButton: "Start glow up journey 🙌", // You can specify button text here.
+    continueButton: "Start glow up journey 🙌",
   },
   {
     id: 10,
     title: "Facial Analysis",
-    subtitle: "Upload or take a selfie and use our advanced AI to get a personalized beauty routine",
+    subtitle: "See where you stand with our advanced AI and get a personalised beauty routine",
     continueButton: "Upload or take a selfie",
   }
 ];
@@ -184,7 +184,7 @@ export const styles = StyleSheet.create({
     backgroundColor: "#F9F3F8",
   },
   footerContainer: {
-    flex: 1,
+    flex: 1.2,
     justifyContent: "center",
     alignItems: "center",
   },
