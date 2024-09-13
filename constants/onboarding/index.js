@@ -72,6 +72,33 @@ export const onboardingQuestionsList = [
       "Support us so that we could build the best glow up experience for you.",
     continueButton: "Continue", // You can specify button text here.
   },
+  {
+    id: 9,
+    title: "Ready to take your looks to the next level?",
+    options: [
+      "Skincare routine tailored just for you",
+      "Healthy lifestyle habits for lasting beauty",
+      "Exercise and fitness recommendations for your glow up",
+      "Mindfulness and stress reduction tips",
+      "Expert advice from AI powered dermatologists",
+      "Copy any make up style from influencers & celebrities"
+    ],
+    optionsEmojis: [
+      "🧴",
+      "🥗",
+      "🏋️‍♀️",
+      "🧘‍♀️",
+      "👩‍⚕️",
+      "💄"
+    ],
+    continueButton: "Start glow up journey 🙌", // You can specify button text here.
+  },
+  {
+    id: 10,
+    title: "Facial Analysis",
+    subtitle: "Upload or take a selfie and use our advanced AI to get a personalized beauty routine",
+    continueButton: "Upload or take a selfie",
+  }
 ];
 
 export const styles = StyleSheet.create({
@@ -81,7 +108,7 @@ export const styles = StyleSheet.create({
     paddingHorizontal: 24,
   },
   headerContainer: {
-    flex: 0.7, // Logo and progress bar section gets 15% of the screen
+    flex: 0.7,
     alignItems: "center",
     justifyContent: "center",
   },
@@ -117,7 +144,7 @@ export const styles = StyleSheet.create({
     marginHorizontal: 2,
   },
   contentContainer: {
-    flex: 3, // Content section (title, input fields, placeholders) gets 40% of the screen
+    flex: 4, // Content section (title, input fields, placeholders) gets 40% of the screen
     justifyContent: "center",
     alignItems: "center",
   },
@@ -128,17 +155,18 @@ export const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   subtitleCaption: {
-    fontSize: 12,
+    fontSize: 13,
     color: "#836E89", // Subtitle color
     textAlign: "center",
     marginTop: 10,
+    marginHorizontal: 20,
   },
   subtitle: {
     fontSize: 16,
     color: "#836E89", // Subtitle color
     textAlign: "center",
     marginTop: 10,
-    paddingHorizontal: 20,
+    marginHorizontal: 20,
   },
   imagePlaceholder: {
     width: 260,
@@ -156,14 +184,14 @@ export const styles = StyleSheet.create({
     backgroundColor: "#F9F3F8",
   },
   footerContainer: {
-    flex: 1.5, // Button section gets 15% of the screen
+    flex: 1,
     justifyContent: "center",
     alignItems: "center",
   },
   button: {
     backgroundColor: "#836E89", // Button color
-    paddingVertical: 15,
-    paddingHorizontal: 50,
+    paddingVertical: 18,
+    paddingHorizontal: 60,
     borderRadius: 30,
     marginVertical: 10,
     alignItems: "center",
@@ -186,7 +214,6 @@ export const styles = StyleSheet.create({
   radioButtonSelected: {
     borderWidth: 2,
     borderColor: "#836E89",
-    // backgroundColor: '#836E89',
     backgroundColor: "white",
     borderRadius: 50,
     padding: 15,
@@ -214,5 +241,26 @@ export const styles = StyleSheet.create({
   },
   radioButtonText: {
     color: "#836E89",
+  },
+  benefitContainer: {
+    flex: 4,
+    justifyContent: "center",
+    alignItems: "center",
+    flexDirection: 'row',
+    marginBottom: 20,
+  },
+  benefitEmoji: {
+    fontSize: 32,
+    marginRight: 8,
+    width: 40,
+    textAlign: 'center',
+  },
+  benefitText: {
+    fontSize: 14,
+    color: '#836E89',
+    fontWeight: '500',
+    flex: 1,
+    textAlign: 'left',
+    letterSpacing: '-0.4%',
   },
 });

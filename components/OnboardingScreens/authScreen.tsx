@@ -1,9 +1,7 @@
-import glowTitle from "@/assets/images/glow-title.png";
-import React from "react";
-import { Image, ImageStyle, Text, TouchableOpacity, View } from "react-native";
-import { onboardingQuestionsList, styles } from "../../constants/onboarding";
-
-import OAuth from "../OAuth";
+import React from 'react';
+import { Text, TouchableOpacity, View } from 'react-native';
+import { onboardingQuestionsList, styles } from '../../constants/onboarding';
+import OAuth from '../OAuth';
 
 export const AuthScreen = ({
   navigation,

@@ -1,73 +1,55 @@
-import { useSignIn } from "@clerk/clerk-expo";
-import { Link, router } from "expo-router";
-import { useCallback, useState } from "react";
+import glowTitle from '@/assets/images/glow-title.png';
+import { AuthScreen } from '@/components/OnboardingScreens/authScreen';
+import { styles } from '@/constants/onboarding';
+import { useAuth } from '@clerk/clerk-expo';
+import { router } from 'expo-router';
+import { useEffect } from 'react';
 import {
-  Alert,
   Image,
-  ScrollView,
-  Text,
-  View,
-  StatusBar,
+  ImageStyle,
   SafeAreaView,
-} from "react-native";
-
-import CustomButton from "@/components/CustomButton";
-import InputField from "@/components/InputField";
-import OAuth from "@/components/OAuth";
-import { icons, images } from "@/constants";
-import trophy from "../../assets/images/trophy.png";
+  StatusBar,
+  StyleSheet,
+  View,
+} from 'react-native';
 
 const SignIn = () => {
-  const { signIn, setActive, isLoaded } = useSignIn();
+  // const [signInComplete, setSignInComplete] = useState(false);
+  const { isSignedIn } = useAuth();
 
-  const [form, setForm] = useState({
-    email: "",
-    password: "",
-  });
-
-  const onSignInPress = useCallback(async () => {
-    if (!isLoaded) return;
-
-    try {
-      const signInAttempt = await signIn.create({
-        identifier: form.email,
-        password: form.password,
-      });
-
-      if (signInAttempt.status === "complete") {
-        await setActive({ session: signInAttempt.createdSessionId });
-        router.replace("/(root)/(tabs)/home");
-      } else {
-        console.log(JSON.stringify(signInAttempt, null, 2));
-        Alert.alert("Error", "Log in failed. Please try again.");
-      }
-    } catch (err: any) {
-      console.log(JSON.stringify(err, null, 2));
-      Alert.alert("Error", err.errors[0].longMessage);
+  useEffect(() => {
+    if (isSignedIn) {
+      router.replace('/(auth)/welcome');
     }
-  }, [isLoaded, form]);
+  }, [isSignedIn]);
 
   return (
-    <SafeAreaView className="flex-1 bg-white">
-      <ScrollView className="flex-1  py-10">
-        <View>
-          <Image className="" source={trophy} />
-        </View>
+    <SafeAreaView className='flex h-full bg-white'>
+      <StatusBar barStyle='dark-content' backgroundColor='#6a51ae' />
 
-        <View className="pt-10">
-          <Text className="text-2xl text-center font-JakartaBold">
-            Log in to Aura
-          </Text>
-          <Text className=" text-center mx-24 text-stone-500 mt-3">
-            Get started with your aura improvement journey
-          </Text>
-        </View>
-        <View className="flex-row justify-between mx-auto">
-          <OAuth />
-        </View>
-      </ScrollView>
+      <View className='flex items-center mb-10'>
+        <Image source={glowTitle} style={styles.logo as ImageStyle} />
+      </View>
+      <AuthScreen
+        navigation={undefined}
+        onNext={function (): void {
+          throw new Error('Function not implemented.');
+        }}
+        onAuthComplete={() => {
+          console.log('auth sign intriggered');
+        }}
+      />
     </SafeAreaView>
   );
 };
+
+const localStyles = StyleSheet.create({
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'black',
+  },
+});
 
 export default SignIn;
