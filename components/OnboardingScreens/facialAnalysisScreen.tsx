@@ -1,4 +1,3 @@
-import { Camera } from 'expo-camera';
 import * as FileSystem from 'expo-file-system';
 import * as ImageManipulator from 'expo-image-manipulator';
 import * as ImagePicker from 'expo-image-picker';
@@ -8,17 +7,7 @@ import { Alert, Image, Text, TouchableOpacity, View } from 'react-native';
 import { onboardingQuestionsList, styles } from '../../constants/onboarding';
 
 export const FacialAnalysisScreen = () => {
-  const [hasPermission, setHasPermission] = useState<boolean | null>(null);
   const [image, setImage] = useState<string | null>(null);
-
-  // Request camera permissions
-  const requestCameraPermission = async () => {
-    const { status } = await Camera.requestCameraPermissionsAsync();
-    setHasPermission(status === 'granted');
-    if (status !== 'granted') {
-      Alert.alert('Enable camera access to take a selfie!');
-    }
-  };
 
   // Compress the image if needed
   const compressImage = async (uri: string) => {
@@ -41,30 +30,43 @@ export const FacialAnalysisScreen = () => {
     }
   };
 
-  // Handle taking a selfie
-  const takeSelfie = async () => {
-    await requestCameraPermission();
-    if (hasPermission) {
-      const result = await ImagePicker.launchCameraAsync({
-        mediaTypes: ImagePicker.MediaTypeOptions.Images,
-        allowsEditing: true,
-        quality: 1,
-      });
-      if (!result.canceled) {
-        const compressedUri = await compressImage(result.assets[0].uri);
-        setImage(compressedUri);
-        handleImageUpload(compressedUri);
-      }
+  // Handle camera capture permissions and selfie capture
+  const handleCameraCapture = async () => {
+    const permissionResult = await ImagePicker.requestCameraPermissionsAsync();
+    if (!permissionResult.granted) {
+      Alert.alert('Permission to access camera is required!');
+      return;
+    }
+
+    const result = await ImagePicker.launchCameraAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      quality: 1,
+      cameraType: ImagePicker.CameraType.front,
+    });
+
+    if (!result.canceled) {
+      const compressedUri = await compressImage(result.assets[0].uri);
+      setImage(compressedUri);
+      handleImageUpload(compressedUri);
     }
   };
 
-  // Handle choosing an image from the library
-  const pickImageFromLibrary = async () => {
+  // Handle gallery image upload
+  const handleGalleryUpload = async () => {
+    const permissionResult =
+      await ImagePicker.requestMediaLibraryPermissionsAsync();
+    if (!permissionResult.granted) {
+      Alert.alert('Permission to access gallery is required!');
+      return;
+    }
+
     const result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
       allowsEditing: true,
       quality: 1,
     });
+
     if (!result.canceled) {
       const compressedUri = await compressImage(result.assets[0].uri);
       setImage(compressedUri);
@@ -77,7 +79,7 @@ export const FacialAnalysisScreen = () => {
     try {
       router.replace({
         pathname: '/(auth)/next-screen',
-        params: { imageUri, hasPermission: hasPermission?.toString() },
+        params: { imageUri },
       });
     } catch (error) {
       Alert.alert('Error uploading image');
@@ -90,8 +92,8 @@ export const FacialAnalysisScreen = () => {
       'Upload Image',
       'Choose an option',
       [
-        { text: 'Take a Selfie', onPress: takeSelfie },
-        { text: 'Choose Existing Image', onPress: pickImageFromLibrary },
+        { text: 'Take a Selfie', onPress: handleCameraCapture },
+        { text: 'Choose Existing Image', onPress: handleGalleryUpload },
         { text: 'Cancel', style: 'cancel' },
       ],
       { cancelable: true }
