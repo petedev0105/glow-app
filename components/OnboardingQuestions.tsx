@@ -1,9 +1,19 @@
+<<<<<<< HEAD
 import glowTitle from "@/assets/images/glow-title.png";
 import { useQuestionStore } from "@/store/onboardingStore";
 import { useUser } from "@clerk/clerk-expo";
 import { useNavigation } from "@react-navigation/native";
 import { router } from "expo-router";
 import React, { useCallback, useRef, useState } from "react";
+=======
+import glowTitle from '@/assets/images/glow-title.png';
+import { useQuestionStore } from '@/store/onboardingStore';
+import { useUser } from '@clerk/clerk-expo';
+import { useNavigation } from '@react-navigation/native';
+import * as Haptics from 'expo-haptics';
+import { router } from 'expo-router';
+import React, { useCallback, useRef, useState } from 'react';
+>>>>>>> 5296b3a8d2e89bad6af7fa9e861b3b5c38a180be
 import {
   ActivityIndicator,
   Image,
@@ -91,6 +101,7 @@ const OnboardingQuestions = () => {
   }
 
   const goToNextSlide = () => {
+    Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
     if (swiperRef.current) {
       swiperRef.current.scrollBy(1);
     }
