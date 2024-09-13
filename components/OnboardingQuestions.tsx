@@ -1,19 +1,10 @@
-<<<<<<< HEAD
 import glowTitle from "@/assets/images/glow-title.png";
 import { useQuestionStore } from "@/store/onboardingStore";
 import { useUser } from "@clerk/clerk-expo";
 import { useNavigation } from "@react-navigation/native";
+import * as Haptics from "expo-haptics";
 import { router } from "expo-router";
 import React, { useCallback, useRef, useState } from "react";
-=======
-import glowTitle from '@/assets/images/glow-title.png';
-import { useQuestionStore } from '@/store/onboardingStore';
-import { useUser } from '@clerk/clerk-expo';
-import { useNavigation } from '@react-navigation/native';
-import * as Haptics from 'expo-haptics';
-import { router } from 'expo-router';
-import React, { useCallback, useRef, useState } from 'react';
->>>>>>> 5296b3a8d2e89bad6af7fa9e861b3b5c38a180be
 import {
   ActivityIndicator,
   Image,
@@ -118,6 +109,16 @@ const OnboardingQuestions = () => {
 
       <View className="flex items-center mb-10">
         <Image source={glowTitle} style={styles.logo as ImageStyle} />
+        {/* <View style={styles.progressBar} className="px-10 mb-10">
+            {onboardingQuestionsScreens.map((_, index) => (
+              <View
+                key={index}
+                style={
+                  index <= activeIndex ? styles.activeDot : styles.inactiveDot
+                }
+              />
+            ))}
+          </View> */}
       </View>
 
       <Swiper
