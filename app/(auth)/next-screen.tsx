@@ -127,7 +127,7 @@ const NextScreen = () => {
             style={styles.button}
             // onPress={showImagePickerOptions}
           >
-            <Text style={styles.buttonText}>Upload or take a selfie</Text>
+            <Text style={styles.buttonText}>Take another or reupload</Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.button}

@@ -103,21 +103,11 @@ const OnboardingQuestions = () => {
 
   // if (showQuestions) {
   return (
-    <SafeAreaView className="flex h-full bg-white">
-      <StatusBar barStyle="dark-content" backgroundColor="#6a51ae" />
+    <SafeAreaView className='flex h-full bg-white'>
+      <StatusBar barStyle='dark-content' backgroundColor='#6a51ae' />
 
-      <View className="flex items-center mb-10">
+      <View className='flex items-center mb-10'>
         <Image source={glowTitle} style={styles.logo as ImageStyle} />
-        {/* <View style={styles.progressBar} className="px-10 mb-10">
-            {onboardingQuestionsScreens.map((_, index) => (
-              <View
-                key={index}
-                style={
-                  index <= activeIndex ? styles.activeDot : styles.inactiveDot
-                }
-              />
-            ))}
-          </View> */}
       </View>
 
       <Swiper
