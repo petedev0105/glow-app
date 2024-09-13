@@ -7,7 +7,7 @@ import * as FileSystem from 'expo-file-system';
 import * as ImageManipulator from 'expo-image-manipulator';
 import * as ImagePicker from 'expo-image-picker';
 import { router } from 'expo-router';
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
   Alert,
   Image,
@@ -85,10 +85,10 @@ const handleGalleryUpload = async () => {
 // Handle image upload to Neon DB
 const handleImageUpload = async (imageUri: string) => {
   try {
-    router.replace({
-      pathname: '/(auth)/next-screen',
-      params: { imageUri },
-    });
+    useImageStore.getState().clearImages();
+    useImageStore.getState().addImage(imageUri);
+
+    // router.replace('/(auth)/next-screen');
   } catch (error) {
     Alert.alert('Error uploading image');
   }
@@ -149,6 +149,8 @@ const NextScreen = () => {
   const { user } = useUser();
   const images = useImageStore((state) => state.images);
   const imageUri = images[0];
+
+  useEffect(() => {}, [images]);
 
   return (
     <SafeAreaView className='flex h-full bg-white'>
