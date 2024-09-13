@@ -1,9 +1,19 @@
+import glowTitle from '@/assets/images/glow-title.png';
 import { onboardingQuestionsList, styles } from '@/constants/onboarding';
 import { Camera } from 'expo-camera';
 import * as ImagePicker from 'expo-image-picker';
 import { router, useLocalSearchParams } from 'expo-router';
 import React, { useEffect, useState } from 'react';
-import { Alert, Image, Text, TouchableOpacity, View } from 'react-native';
+import {
+  Alert,
+  Image,
+  ImageStyle,
+  SafeAreaView,
+  StatusBar,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 
 const NextScreen = () => {
   const [hasPermission, setHasPermission] = useState(false);
@@ -90,30 +100,44 @@ const NextScreen = () => {
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>{onboardingQuestionsList[10].title}</Text>
-      <Text style={styles.subtitleCaption}>
-        {onboardingQuestionsList[10].subtitle}
-      </Text>
+    <SafeAreaView className='flex h-full bg-white'>
+      <StatusBar barStyle='dark-content' backgroundColor='#6a51ae' />
 
-      <View style={styles.contentContainer}>
-        <View style={{ ...styles.imagePlaceholder, marginVertical: 40 }}>
-          <Image
-            source={{ uri: imageUri as string }}
-            style={{ width: '100%', height: '100%', borderRadius: 10 }}
-          />
+      <View className='flex items-center mb-10'>
+        <Image source={glowTitle} style={styles.logo as ImageStyle} />
+      </View>
+
+      <View style={styles.container}>
+        <Text style={styles.title}>{onboardingQuestionsList[10].title}</Text>
+        <Text style={styles.subtitleCaption}>
+          {onboardingQuestionsList[10].subtitle}
+        </Text>
+
+        <View style={styles.contentContainer}>
+          <View style={styles.snapPlaceholder}>
+            <Image
+              source={{ uri: imageUri as string }}
+              style={{ width: '100%', height: '100%', borderRadius: 10 }}
+            />
+          </View>
+        </View>
+
+        <View style={styles.footerContainer}>
+          <TouchableOpacity
+            style={styles.button}
+            // onPress={showImagePickerOptions}
+          >
+            <Text style={styles.buttonText}>Upload or take a selfie</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.button}
+            // onPress={showImagePickerOptions}
+          >
+            <Text style={styles.buttonText}>Continue</Text>
+          </TouchableOpacity>
         </View>
       </View>
-
-      <View style={styles.footerContainer}>
-        <TouchableOpacity
-          style={styles.button}
-          onPress={showImagePickerOptions}
-        >
-          <Text style={styles.buttonText}>Upload or take a selfie</Text>
-        </TouchableOpacity>
-      </View>
-    </View>
+    </SafeAreaView>
   );
 };
 
