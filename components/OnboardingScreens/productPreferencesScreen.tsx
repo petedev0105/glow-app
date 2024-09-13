@@ -1,7 +1,7 @@
-import glowTitle from "@/assets/images/glow-title.png";
-import React, { useState } from "react";
-import { Image, ImageStyle, Text, TouchableOpacity, View } from "react-native";
-import { onboardingQuestionsList, styles } from "../../constants/onboarding";
+import * as Haptics from 'expo-haptics';
+import React, { useState } from 'react';
+import { Text, TouchableOpacity, View } from 'react-native';
+import { onboardingQuestionsList, styles } from '../../constants/onboarding';
 
 export const ProductPreferencesScreen = ({
   navigation,
@@ -12,7 +12,7 @@ export const ProductPreferencesScreen = ({
   onNext: () => void;
   onAuthComplete: any;
 }) => {
-  const [selectedGoal, setSelectedGoal] = useState("");
+  const [selectedGoal, setSelectedGoal] = useState('');
 
   return (
     <View style={styles.container}>
@@ -26,20 +26,25 @@ export const ProductPreferencesScreen = ({
           ...styles.contentContainer,
           marginHorizontal: 20,
           marginTop: 40,
-          justifyContent: "flex-start",
+          justifyContent: 'flex-start',
         }}
       >
         {onboardingQuestionsList[6].options?.map((goal, index) => (
           <TouchableOpacity
             key={index}
-            onPress={() => setSelectedGoal(goal)}
+            onPress={() => {
+              Haptics.notificationAsync(
+                Haptics.NotificationFeedbackType.Success
+              );
+              setSelectedGoal(goal);
+            }}
             style={
               selectedGoal === goal
                 ? styles.radioButtonSelected
                 : styles.radioButton
             }
           >
-            <View className="flex flex-row gap-2 items-center">
+            <View className='flex flex-row gap-2 items-center'>
               {selectedGoal !== goal && (
                 <View style={styles.radioInactiveDot} />
               )}
@@ -52,7 +57,7 @@ export const ProductPreferencesScreen = ({
 
       <View style={styles.footerContainer}>
         <TouchableOpacity style={styles.button} onPress={onNext}>
-          <Text style={styles.buttonText} disabled={selectedGoal === ""}>
+          <Text style={styles.buttonText} disabled={selectedGoal === ''}>
             Continue
           </Text>
         </TouchableOpacity>
