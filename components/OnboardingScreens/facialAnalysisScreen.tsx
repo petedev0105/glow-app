@@ -1,3 +1,5 @@
+import { useImageStore } from '@/store/imageStore';
+import { useUser } from '@clerk/clerk-expo';
 import * as FileSystem from 'expo-file-system';
 import * as ImageManipulator from 'expo-image-manipulator';
 import * as ImagePicker from 'expo-image-picker';
@@ -8,7 +10,7 @@ import { onboardingQuestionsList, styles } from '../../constants/onboarding';
 
 export const FacialAnalysisScreen = () => {
   const [image, setImage] = useState<string | null>(null);
-
+  const { user } = useUser();
   // Compress the image if needed
   const compressImage = async (uri: string) => {
     try {
@@ -74,15 +76,21 @@ export const FacialAnalysisScreen = () => {
     }
   };
 
-  // Handle image upload to the next screen
   const handleImageUpload = async (imageUri: string) => {
+    if (!user || !user.id) {
+      console.error('User is not logged in');
+      return;
+    }
+
     try {
-      router.replace({
-        pathname: '/(auth)/next-screen',
-        params: { imageUri },
-      });
-    } catch (error) {
-      Alert.alert('Error uploading image');
+      // Store the image URL in your Zustand store
+      useImageStore.getState().addImage(imageUri);
+
+      // Optionally navigate to the next screen after successful upload
+      router.replace('/(auth)/next-screen');
+    } catch (error: any) {
+      console.error('Error uploading image:', error);
+      Alert.alert('Error uploading image', error.message);
     }
   };
 
