@@ -108,14 +108,7 @@ export const FacialAnalysisScreen = () => {
       </Text>
 
       <View style={styles.contentContainer}>
-        <View
-          style={{
-            ...styles.imagePlaceholder,
-            marginVertical: 40,
-            width: 300,
-            height: 300,
-          }}
-        >
+        <View style={styles.snapPlaceholder}>
           <Image
             source={require('../../assets/images/model.png')}
             style={{ width: '100%', height: '100%', borderRadius: 10 }}

@@ -174,6 +174,15 @@ export const styles = StyleSheet.create({
     backgroundColor: "#E6D8E1", // Placeholder color
     borderRadius: 20,
   },
+  snapPlaceholder: {
+    width: 260,
+    height: 260,
+    backgroundColor: "#E6D8E1", // Placeholder color
+    borderRadius: 20,
+    marginVertical: 40,
+    width: 300,
+    height: 360,
+  },
   input: {
     borderWidth: 2,
     borderColor: "#836E89",
@@ -191,11 +200,10 @@ export const styles = StyleSheet.create({
   button: {
     backgroundColor: "#836E89", // Button color
     paddingVertical: 18,
-    paddingHorizontal: 60,
     borderRadius: 30,
     marginVertical: 10,
     alignItems: "center",
-    width: "100%",
+    width: "90%",
   },
   buttonText: {
     color: "white",
