@@ -1,9 +1,12 @@
 import glowTitle from '@/assets/images/glow-title.png';
+import { s3Bucket } from '@/constants';
 import { onboardingQuestionsList, styles } from '@/constants/onboarding';
+import { useImageStore } from '@/store/imageStore';
+import { useUser } from '@clerk/clerk-expo';
 import * as FileSystem from 'expo-file-system';
 import * as ImageManipulator from 'expo-image-manipulator';
 import * as ImagePicker from 'expo-image-picker';
-import { router, useLocalSearchParams } from 'expo-router';
+import { router } from 'expo-router';
 import React from 'react';
 import {
   Alert,
@@ -105,8 +108,47 @@ const showImagePickerOptions = () => {
   );
 };
 
+const handleSubmitImage = async ({
+  imageUri,
+  user,
+}: {
+  imageUri: string;
+  user: any;
+}) => {
+  if (!user || !user.id) {
+    console.error();
+    return;
+  }
+
+  try {
+    // Convert the local file to a buffer, or use the correct format for S3.
+    const response = await fetch(imageUri);
+    const blob = await response.blob();
+
+    const params = {
+      Bucket: 'glow-snaps',
+      Key: `${user.id}/${Date.now()}-image.jpg`,
+      Body: blob,
+      ContentType: 'image/jpeg', // Change based on your file type
+      ACL: 'public-read', // Ensure the image is publicly accessible
+    };
+
+    // Upload image to S3
+    const uploadResult = await s3Bucket.upload(params).promise();
+
+    // Get the S3 URL of the uploaded image
+    const imageUrl = uploadResult.Location;
+  } catch (error) {
+    console.error('Error uploading image:', error);
+    Alert.alert('Error uploading image');
+  }
+};
+
 const NextScreen = () => {
-  const { imageUri } = useLocalSearchParams();
+  // const { imageUri } = useLocalSearchParams();
+  const { user } = useUser();
+  const images = useImageStore((state) => state.images);
+  const imageUri = images[0];
 
   return (
     <SafeAreaView className='flex h-full bg-white'>
@@ -142,7 +184,10 @@ const NextScreen = () => {
             style={styles.button}
             onPress={() => router.replace('/')}
           >
-            <Text style={styles.buttonText} onPress={() => router.replace('/')}>
+            <Text
+              style={styles.buttonText}
+              onPress={() => handleSubmitImage({ imageUri, user })}
+            >
               Continue
             </Text>
           </TouchableOpacity>
@@ -153,3 +198,6 @@ const NextScreen = () => {
 };
 
 export default NextScreen;
+function useUserStore() {
+  throw new Error('Function not implemented.');
+}
