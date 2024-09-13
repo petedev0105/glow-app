@@ -1,9 +1,10 @@
 import glowTitle from '@/assets/images/glow-title.png';
 import { onboardingQuestionsList, styles } from '@/constants/onboarding';
-import { Camera } from 'expo-camera';
+import * as FileSystem from 'expo-file-system';
+import * as ImageManipulator from 'expo-image-manipulator';
 import * as ImagePicker from 'expo-image-picker';
 import { router, useLocalSearchParams } from 'expo-router';
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import {
   Alert,
   Image,
@@ -15,89 +16,97 @@ import {
   View,
 } from 'react-native';
 
-const NextScreen = () => {
-  const [hasPermission, setHasPermission] = useState(false);
-  const { imageUri, hasPermission: hasPermissionParam } =
-    useLocalSearchParams();
+// Compress the image if needed
+const compressImage = async (uri: string) => {
+  try {
+    const fileInfo = await FileSystem.getInfoAsync(uri);
 
-  useEffect(() => {
-    setHasPermission(hasPermissionParam === 'true');
-  }, [hasPermissionParam]);
-
-  // Request camera permissions
-  const requestCameraPermission = async () => {
-    const { status } = await Camera.requestCameraPermissionsAsync();
-    setHasPermission(status === 'granted');
-    if (status !== 'granted') {
-      Alert.alert('Enable camera access to take a selfie!');
+    if ('size' in fileInfo && fileInfo.size > 1000000) {
+      const manipResult = await ImageManipulator.manipulateAsync(
+        uri,
+        [{ resize: { width: 1000 } }],
+        { compress: 0.7, format: ImageManipulator.SaveFormat.JPEG }
+      );
+      return manipResult.uri;
+    } else {
+      return uri;
     }
-  };
+  } catch (error) {
+    console.error('Error compressing image:', error);
+    return uri;
+  }
+};
 
-  // Handle taking a selfie
-  const takeSelfie = async () => {
-    await requestCameraPermission();
-    if (hasPermission) {
-      let result = await ImagePicker.launchCameraAsync({
-        mediaTypes: ImagePicker.MediaTypeOptions.Images,
-        quality: 1,
-      });
-      if (!result.canceled) {
-        await handleImageUpload(result.assets[0].uri);
-      }
-    }
-  };
+// Handle camera capture permissions and selfie capture
+const handleCameraCapture = async () => {
+  const permissionResult = await ImagePicker.requestCameraPermissionsAsync();
+  if (!permissionResult.granted) {
+    Alert.alert('Permission to access camera is required!');
+    return;
+  }
 
-  // Handle choosing an image from the library
-  const pickImageFromLibrary = async () => {
-    let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      quality: 1,
+  const result = await ImagePicker.launchCameraAsync({
+    mediaTypes: ImagePicker.MediaTypeOptions.Images,
+    allowsEditing: true,
+    quality: 1,
+    cameraType: ImagePicker.CameraType.front,
+  });
+
+  if (!result.canceled) {
+    const compressedUri = await compressImage(result.assets[0].uri);
+    await handleImageUpload(compressedUri);
+  }
+};
+
+// Handle gallery image upload
+const handleGalleryUpload = async () => {
+  const permissionResult =
+    await ImagePicker.requestMediaLibraryPermissionsAsync();
+  if (!permissionResult.granted) {
+    Alert.alert('Permission to access gallery is required!');
+    return;
+  }
+
+  const result = await ImagePicker.launchImageLibraryAsync({
+    mediaTypes: ImagePicker.MediaTypeOptions.Images,
+    allowsEditing: true,
+    quality: 1,
+  });
+
+  if (!result.canceled) {
+    const compressedUri = await compressImage(result.assets[0].uri);
+    await handleImageUpload(compressedUri);
+  }
+};
+
+// Handle image upload to Neon DB
+const handleImageUpload = async (imageUri: string) => {
+  try {
+    router.replace({
+      pathname: '/(auth)/next-screen',
+      params: { imageUri },
     });
-    if (!result.canceled) {
-      await handleImageUpload(result.assets[0].uri);
-    }
-  };
+  } catch (error) {
+    Alert.alert('Error uploading image');
+  }
+};
 
-  // Handle image upload to Neon DB
-  const handleImageUpload = async (imageUri: string) => {
-    try {
-      // TODO: SEND TO S3 BUCKET WITH USER ID AS FOLDER NAME
-      router.replace('/');
+// Show options to take a selfie or choose from the library
+const showImagePickerOptions = () => {
+  Alert.alert(
+    'Upload Image',
+    'Choose an option',
+    [
+      { text: 'Take a Selfie', onPress: handleCameraCapture },
+      { text: 'Choose Existing Image', onPress: handleGalleryUpload },
+      { text: 'Cancel', style: 'cancel' },
+    ],
+    { cancelable: true }
+  );
+};
 
-      // const response = await uploadImageToNeonDB(imageUri);
-      // if (response.success) {
-      //   Alert.alert('Image uploaded successfully');
-      //   onNext(); // Proceed to the next step
-      // } else {
-      //   Alert.alert('Failed to upload image');
-      // }
-    } catch (error) {
-      Alert.alert('Error uploading image');
-    }
-  };
-
-  // Show options to take a selfie or choose from the library
-  const showImagePickerOptions = () => {
-    Alert.alert(
-      'Upload Image',
-      'Choose an option',
-      [
-        {
-          text: 'Take a Selfie',
-          onPress: takeSelfie,
-        },
-        {
-          text: 'Choose Existing Image',
-          onPress: pickImageFromLibrary,
-        },
-        {
-          text: 'Cancel',
-          style: 'cancel',
-        },
-      ],
-      { cancelable: true }
-    );
-  };
+const NextScreen = () => {
+  const { imageUri } = useLocalSearchParams();
 
   return (
     <SafeAreaView className='flex h-full bg-white'>
@@ -125,15 +134,17 @@ const NextScreen = () => {
         <View style={styles.footerContainer}>
           <TouchableOpacity
             style={styles.button}
-            // onPress={showImagePickerOptions}
+            onPress={showImagePickerOptions}
           >
             <Text style={styles.buttonText}>Take another or reupload</Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.button}
-            // onPress={showImagePickerOptions}
+            onPress={() => router.replace('/')}
           >
-            <Text style={styles.buttonText}>Continue</Text>
+            <Text style={styles.buttonText} onPress={() => router.replace('/')}>
+              Continue
+            </Text>
           </TouchableOpacity>
         </View>
       </View>
