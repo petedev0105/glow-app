@@ -2,7 +2,7 @@ import React from 'react';
 import { Text, TouchableOpacity, View } from 'react-native';
 import { onboardingQuestionsList, styles } from '../../constants/onboarding';
 
-export const LeaveRatingScreen = ({
+export const FacialAnalysisScreen = ({
   navigation,
   onNext,
   onAuthComplete,
@@ -13,9 +13,9 @@ export const LeaveRatingScreen = ({
 }) => {
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>{onboardingQuestionsList[8].title}</Text>
+      <Text style={styles.title}>{onboardingQuestionsList[10].title}</Text>
       <Text style={styles.subtitleCaption}>
-        {onboardingQuestionsList[8].subtitle}
+        {onboardingQuestionsList[10].subtitle}
       </Text>
 
       <View style={styles.contentContainer}>
@@ -25,7 +25,7 @@ export const LeaveRatingScreen = ({
       <View style={styles.footerContainer}>
         <TouchableOpacity style={styles.button} onPress={onNext}>
           <Text style={styles.buttonText}>
-            {onboardingQuestionsList[8].continueButton}
+            {onboardingQuestionsList[10].continueButton}
           </Text>
         </TouchableOpacity>
       </View>

@@ -12,32 +12,35 @@ import {
   StatusBar,
   StyleSheet,
   View,
-} from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
-import Swiper from "react-native-swiper";
-import { styles } from "../constants/onboarding";
-import { AgeScreen } from "./OnboardingScreens/ageScreen";
-import { AuthScreen } from "./OnboardingScreens/authScreen";
-import { BeautyGoalsScreen } from "./OnboardingScreens/beautyGoalsScreen";
-import { LeaveRatingScreen } from "./OnboardingScreens/leaveRatingScreen";
-import { MakeUpPreferencesScreen } from "./OnboardingScreens/makeupPreferencesScreen";
-import { ProductPreferencesScreen } from "./OnboardingScreens/productPreferencesScreen";
-import { ReferralScreen } from "./OnboardingScreens/referralScreen";
-import { SkinConcernsScreen } from "./OnboardingScreens/skinConcernsScreen";
-import { TrustedScreen } from "./OnboardingScreens/trustedScreen";
+} from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import Swiper from 'react-native-swiper';
+import { styles } from '../constants/onboarding';
+import { AgeScreen } from './OnboardingScreens/ageScreen';
+import { AuthScreen } from './OnboardingScreens/authScreen';
+import { BeautyGoalsScreen } from './OnboardingScreens/beautyGoalsScreen';
+import { BenefitsScreen } from './OnboardingScreens/benefitsScreen';
+import { FacialAnalysisScreen } from './OnboardingScreens/facialAnalysisScreen';
+import { LeaveRatingScreen } from './OnboardingScreens/leaveRatingScreen';
+import { MakeUpPreferencesScreen } from './OnboardingScreens/makeupPreferencesScreen';
+import { ProductPreferencesScreen } from './OnboardingScreens/productPreferencesScreen';
+import { ReferralScreen } from './OnboardingScreens/referralScreen';
+import { SkinConcernsScreen } from './OnboardingScreens/skinConcernsScreen';
+import { TrustedScreen } from './OnboardingScreens/trustedScreen';
 
 export const initialiseScreens = [TrustedScreen, ReferralScreen, AuthScreen];
 
 export const onboardingQuestionsScreens = [
   TrustedScreen,
   ReferralScreen,
-  AuthScreen,
   AgeScreen,
   BeautyGoalsScreen,
   SkinConcernsScreen,
   ProductPreferencesScreen,
   MakeUpPreferencesScreen,
   LeaveRatingScreen,
+  BenefitsScreen,
+  FacialAnalysisScreen,
 ];
 
 const OnboardingQuestions = () => {
@@ -58,10 +61,6 @@ const OnboardingQuestions = () => {
   //     setIsLoading(false);
   //   }
   // }, [isLoaded, isSignedIn]);
-
-  const handleSwipeNext = () => {
-    swiperRef.current?.scrollBy(1);
-  };
 
   if (isLoading) {
     return (
@@ -98,8 +97,8 @@ const OnboardingQuestions = () => {
     }
   };
 
-  const handleOnIndexChanged = (index: number) => {
-    setActiveIndex(index);
+  const handleAuthComplete = () => {
+    setShowQuestions(true);
   };
 
   // if (showQuestions) {
@@ -127,14 +126,16 @@ const OnboardingQuestions = () => {
         loop={false}
         // onIndexChanged={(index) => handleOnIndexChanged(index)}
       >
-        {onboardingQuestionsScreens.map((ScreenComponent, index) => (
-          <ScreenComponent
-            key={index}
-            navigation={navigation}
-            onNext={goToNextSlide}
-            onAuthComplete={null}
-          />
-        ))}
+        {onboardingQuestionsScreens
+          // .slice(showQuestions ? 3 : 0, showQuestions ? undefined : 3)
+          .map((ScreenComponent, index) => (
+            <ScreenComponent
+              key={index}
+              navigation={navigation}
+              onNext={goToNextSlide}
+              onAuthComplete={handleAuthComplete}
+            />
+          ))}
       </Swiper>
 
       {/* <View className='justify-end px-5'>

@@ -1,13 +1,7 @@
-import { useAuth } from "@clerk/clerk-expo";
-import { Redirect, useLocalSearchParams } from "expo-router";
-import { useUser } from "@clerk/clerk-expo";
+import { useAuth, useUser } from "@clerk/clerk-expo";
+import { useLocalSearchParams, useRouter } from "expo-router";
 import { useEffect, useLayoutEffect, useState } from "react";
-import { useRouter } from "expo-router";
-import { View, Text } from "react-native"; // {{ edit_1 }}
-import splash from "../assets/images/splash.png";
-import { Image } from "react-native";
-import { ActivityIndicator } from "react-native";
-import { TouchableOpacity } from "react-native-gesture-handler";
+import { ActivityIndicator, View } from "react-native"; // {{ edit_1 }}
 
 const Page = () => {
   const { isSignedIn } = useAuth();
@@ -26,7 +20,8 @@ const Page = () => {
   useEffect(() => {
     if (mounted) {
       if (!userId) {
-        router.replace("/(auth)/welcome");
+        // router.replace("/(auth)/welcome");
+        router.replace("/(auth)/sign-in");
       } else {
         console.log(user.id);
         fetchPaidStatus(userId);
