@@ -182,6 +182,9 @@ const GlowResultScreen = () => {
       style={localStyles.background}
       resizeMode='cover'
     >
+      {/* Add semi-transparent overlay */}
+      <View style={localStyles.overlay} />
+
       <SafeAreaView style={localStyles.safeArea}>
         <StatusBar barStyle='dark-content' backgroundColor='#6a51ae' />
 
@@ -278,7 +281,7 @@ const GlowResultScreen = () => {
             end={{ x: 1, y: 0 }}
             style={localStyles.unlockButton}
           >
-            <Text style={localStyles.unlockButtonText}>Unlock</Text>
+            <Text style={localStyles.unlockButtonText}>Unlock Results 🙌</Text>
           </LinearGradient>
         </View>
       </SafeAreaView>
@@ -287,6 +290,10 @@ const GlowResultScreen = () => {
 };
 
 const localStyles = StyleSheet.create({
+  overlay: {
+    ...StyleSheet.absoluteFillObject, // Makes the overlay cover the entire background
+    backgroundColor: 'rgba(255, 255, 255, 0.5)', // Adjust opacity here (lighter background)
+  },
   background: {
     flex: 1,
     resizeMode: 'cover',
@@ -415,6 +422,8 @@ const localStyles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     marginTop: 16,
+    borderColor: 'black',
+    borderWidth: 2,
   },
   unlockButtonText: {
     color: 'white',
