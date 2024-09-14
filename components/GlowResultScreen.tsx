@@ -217,35 +217,25 @@ const GlowResultScreen = () => {
                 const isActive = activeTab === tab;
                 return (
                   <View key={tab} style={localStyles.tabWrapper}>
-                    {isActive ? (
-                      <LinearGradient
-                        colors={['#da70d6', '#7b68ee', '#87cefa']} // Gradient for active tab
-                        start={{ x: 0, y: 0 }}
-                        end={{ x: 1, y: 0 }}
-                        style={localStyles.gradientTabBackground}
+                    <TouchableOpacity
+                      style={[
+                        localStyles.tabBase, // Common tab styling
+                        isActive
+                          ? localStyles.activeTab
+                          : localStyles.inactiveTab, // Conditionally apply styles
+                      ]}
+                      onPress={() => setActiveTab(tab)}
+                    >
+                      <Text
+                        style={[
+                          isActive
+                            ? localStyles.activeTabText
+                            : localStyles.inactiveTabText,
+                        ]}
                       >
-                        <TouchableOpacity
-                          style={localStyles.whiteTab}
-                          onPress={() => setActiveTab(tab)}
-                        >
-                          <Text
-                            style={[
-                              localStyles.tabText,
-                              localStyles.activeTabText,
-                            ]}
-                          >
-                            {tab}
-                          </Text>
-                        </TouchableOpacity>
-                      </LinearGradient>
-                    ) : (
-                      <TouchableOpacity
-                        style={localStyles.whiteTab}
-                        onPress={() => setActiveTab(tab)}
-                      >
-                        <Text style={localStyles.tabText}>{tab}</Text>
-                      </TouchableOpacity>
-                    )}
+                        {tab}
+                      </Text>
+                    </TouchableOpacity>
                   </View>
                 );
               })}
@@ -266,7 +256,7 @@ const GlowResultScreen = () => {
             >
               You are in the{'\n'}
               <Text style={localStyles.percentileHighlight}>
-                👉{percentile}th percentile👈
+                {`👉  ${percentile}th percentile  👈`}
               </Text>
               {'\n'}
               of all users.
@@ -360,25 +350,27 @@ const localStyles = StyleSheet.create({
   tabWrapper: {
     marginRight: 10,
   },
-  gradientTabBackground: {
-    borderRadius: 20,
-    padding: 2,
-  },
-  whiteTab: {
-    backgroundColor: 'black',
+  tabBase: {
     borderRadius: 20,
     paddingVertical: 10,
     paddingHorizontal: 15,
     justifyContent: 'center',
     alignItems: 'center',
   },
-  tabText: {
-    color: '#666',
+  activeTab: {
+    backgroundColor: 'black',
+  },
+  inactiveTab: {
+    backgroundColor: 'transparent',
+  },
+  inactiveTabText: {
+    color: 'black',
   },
   activeTabText: {
     color: 'white',
     fontWeight: 'bold',
   },
+
   profileContainer: {
     alignItems: 'center',
     marginBottom: 20,
