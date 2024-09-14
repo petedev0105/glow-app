@@ -1,8 +1,9 @@
-import { fetchAPI } from "@/lib/fetch";
-import { useImageStore } from "@/store/imageStore";
-import { useGlowResultStore } from "@/store/glowResultStore";
-import { useUser } from "@clerk/clerk-expo";
-import React, { useEffect, useRef, useState } from "react";
+import { fetchAPI } from '@/lib/fetch';
+import { useGlowResultStore } from '@/store/glowResultStore';
+import { useImageStore } from '@/store/imageStore';
+import { useUser } from '@clerk/clerk-expo';
+import { useRouter } from 'expo-router';
+import React, { useEffect, useRef, useState } from 'react';
 import {
   Alert,
   Animated,
@@ -12,10 +13,9 @@ import {
   StyleSheet,
   Text,
   View,
-} from "react-native";
-import { useRouter } from "expo-router";
+} from 'react-native';
 
-const { width, height } = Dimensions.get("window");
+const { width, height } = Dimensions.get('window');
 
 const ResultsScreen = () => {
   const { user } = useUser(); // Get the user outside the async function
@@ -25,7 +25,7 @@ const ResultsScreen = () => {
   const [loadingProgress, setLoadingProgress] = useState(0);
   const [loading, setLoading] = useState(true);
   const { glowResult, setGlowResult } = useGlowResultStore();
-  const [message, setMessage] = useState("Analyzing your features...");
+  const [message, setMessage] = useState('Analyzing your features...');
   const [intervalDuration, setIntervalDuration] = useState(125);
 
   const fadeAnim = useRef(new Animated.Value(1)).current;
@@ -35,10 +35,10 @@ const ResultsScreen = () => {
   const router = useRouter();
 
   const messages = [
-    "Analyzing your features ✨",
-    "Calculating glow score... 💫",
-    "Just a moment, almost there... ⏳",
-    "Finalizing results... 🌟",
+    'Analyzing your features ✨',
+    'Calculating glow score... 💫',
+    'Just a moment, almost there... ⏳',
+    'Finalizing results... 🌟',
   ];
 
   useEffect(() => {
@@ -171,11 +171,11 @@ const ResultsScreen = () => {
     }) => {
       try {
         if (!imageUri) {
-          throw new Error("Image URI is missing");
+          throw new Error('Image URI is missing');
         }
 
-        const response = await fetchAPI("/(api)/(openai)/glowscore", {
-          method: "POST",
+        const response = await fetchAPI('/(api)/(openai)/glowscore', {
+          method: 'POST',
           body: JSON.stringify({ prompt, imageUri }),
         });
 
@@ -189,11 +189,11 @@ const ResultsScreen = () => {
         const stringResponse = JSON.stringify(response);
 
         try {
-          console.log("running recommendations api...");
+          console.log('running recommendations api...');
           const recommendationsResponse = await fetchAPI(
-            "/(api)/(openai)/glowrecommendations",
+            '/(api)/(openai)/glowrecommendations',
             {
-              method: "POST",
+              method: 'POST',
               body: JSON.stringify({ stringResponse }),
             }
           );
@@ -201,19 +201,19 @@ const ResultsScreen = () => {
           console.log(recommendationsResponse);
           // Alert and stringify the recommendations response
           Alert.alert(
-            "Recommendations",
+            'Recommendations',
             JSON.stringify(recommendationsResponse)
           );
         } catch (error) {
           console.log(error);
         }
 
-        // router.push("/glow-results-screen");
+        router.push('/glow-results-screen');
 
         // Alert.alert("Glow Score", JSON.stringify(response)); // Display the result
       } catch (error) {
-        console.error("Error fetching glow results:", error);
-        Alert.alert("Error", "Could not fetch glow results.");
+        console.error('Error fetching glow results:', error);
+        Alert.alert('Error', 'Could not fetch glow results.');
       } finally {
         setLoading(false); // Ensure the loading state is set to false once the request completes
       }
@@ -221,13 +221,13 @@ const ResultsScreen = () => {
 
     if (loadingProgress >= 100 && !glowResult && imageUri) {
       // Fetch only when progress reaches 100, no result is fetched yet, and imageUri is valid
-      fetchGlowResults({ prompt: "", imageUri });
+      fetchGlowResults({ prompt: '', imageUri });
     }
   }, [loadingProgress, imageUri, glowResult]);
 
   return (
     <ImageBackground
-      source={require("@/assets/images/glow-eclipse.png")} // Replace this with your actual image path
+      source={require('@/assets/images/glow-eclipse.png')} // Replace this with your actual image path
       style={resultStyles.background}
     >
       {/* Ripple effect */}
@@ -248,7 +248,7 @@ const ResultsScreen = () => {
           <Text style={resultStyles.percentage}>{loadingProgress}%</Text>
           <Animated.Text
             style={[resultStyles.caption, { opacity: fadeAnim }]}
-            className="tracking-tight"
+            className='tracking-tight'
           >
             {message}
           </Animated.Text>
@@ -301,50 +301,50 @@ const ResultsScreen = () => {
 const resultStyles = StyleSheet.create({
   background: {
     flex: 1,
-    resizeMode: "cover",
-    justifyContent: "center",
+    resizeMode: 'cover',
+    justifyContent: 'center',
   },
   container: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
     // backgroundColor: '#FFFFFF',
     // backgroundColor: 'black',
   },
   contentContainer: {
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
     padding: 20,
   },
   percentage: {
     fontSize: 85,
-    fontWeight: "bold",
-    color: "white",
-    textAlign: "center",
+    fontWeight: 'bold',
+    color: 'white',
+    textAlign: 'center',
     marginBottom: 10,
   },
   caption: {
     fontSize: 16,
-    color: "white",
-    textAlign: "center",
+    color: 'white',
+    textAlign: 'center',
   },
   title: {
     fontSize: 30,
-    color: "white",
-    fontWeight: "bold",
+    color: 'white',
+    fontWeight: 'bold',
     marginBottom: 20,
   },
   subtitleCaption: {
     fontSize: 16,
-    color: "white",
+    color: 'white',
     marginTop: 10,
   },
   ripple: {
-    position: "absolute",
+    position: 'absolute',
     width: 100,
     height: 100,
     borderRadius: 50,
-    backgroundColor: "rgba(255, 255, 255, 0.3)",
+    backgroundColor: 'rgba(255, 255, 255, 0.3)',
     top: height / 2 - 50, // Center the ripple
     left: width / 2 - 50,
   },
