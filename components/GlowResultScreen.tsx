@@ -1,9 +1,10 @@
 import { styles } from '@/constants/onboarding';
+import { useRecommendationsStore } from '@/store/glowRecommendationsStore';
 import { useGlowResultStore } from '@/store/glowResultStore';
 import { useImageStore } from '@/store/imageStore';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Image,
   ImageBackground,
@@ -24,6 +25,14 @@ const GlowResultScreen = () => {
   const [activeTab, setActiveTab] = useState('Ratings');
   const insets = useSafeAreaInsets();
   const images = useImageStore((state) => state.images);
+
+  const { recommendations } = useRecommendationsStore();
+
+  useEffect(() => {
+    if (recommendations) {
+      console.log('recommendations from results screen: ', recommendations);
+    }
+  }, []);
 
   if (!glowResult) {
     return (
@@ -199,12 +208,122 @@ const GlowResultScreen = () => {
             </View>
           </View>
         );
-      case 'Product Recommendations':
+      case 'Glow-Up Tips':
         // Implement Product Recommendations when available
         return (
-          <View style={localStyles.sectionContainer}>
-            <Text>Product Recommendations coming soon...</Text>
-          </View>
+          <ScrollView style={localStyles.scoresContainer}>
+            <Text style={localStyles.summarySectionTitle}>
+              {recommendations?.result[0]?.userFeaturesSummary}
+            </Text>
+            {recommendations?.result[0]?.steps.map((tip: any) => (
+              <View key={tip.id} style={localStyles.tipCard}>
+                <Text style={localStyles.tipTitle}>{tip.name}</Text>
+                <Text style={localStyles.tipDetails}>{tip.details}</Text>
+                <Text style={localStyles.tipImportance}>
+                  Importance: {tip.importance}
+                </Text>
+                <Text style={localStyles.tipRelatedFeature}>
+                  Related Feature: {tip.relatedFeature}
+                </Text>
+                <Text style={localStyles.tipExplanation}>
+                  {tip.explanation}
+                </Text>
+              </View>
+            ))}
+          </ScrollView>
+        );
+      case 'Skincare Recommendations':
+        return (
+          <ScrollView style={localStyles.scoresContainer}>
+            <Text style={localStyles.summarySectionTitle}>
+              {recommendations?.result[1]?.userSkinSummary}
+            </Text>
+            {recommendations?.result[1]?.steps.map((rec: any) => (
+              <View key={rec.id} style={localStyles.recCard}>
+                <Text style={localStyles.recTitle}>{rec.name}</Text>
+                <View style={localStyles.productSection}>
+                  <Text style={localStyles.productTitle}>High-End:</Text>
+                  <Text>
+                    {rec.highEnd.product} - {rec.highEnd.price}
+                  </Text>
+                  <Text>How to use: {rec.highEnd.howToUse}</Text>
+                </View>
+                <View style={localStyles.productSection}>
+                  <Text style={localStyles.productTitle}>Affordable:</Text>
+                  <Text>
+                    {rec.affordable.product} - {rec.affordable.price}
+                  </Text>
+                  <Text>How to use: {rec.affordable.howToUse}</Text>
+                </View>
+                <Text style={localStyles.recImportance}>
+                  Importance: {rec.importance}
+                </Text>
+                <Text style={localStyles.recTechnique}>
+                  Technique: {rec.technique}
+                </Text>
+                <Text style={localStyles.recTargetedConcern}>
+                  Targeted Concern: {rec.targetedConcern}
+                </Text>
+                <Text style={localStyles.recExplanation}>
+                  {rec.explanation}
+                </Text>
+              </View>
+            ))}
+          </ScrollView>
+        );
+      case 'Makeup Tips':
+        return (
+          <ScrollView style={localStyles.scoresContainer}>
+            <Text style={localStyles.summarySectionTitle}>
+              {recommendations?.result[2]?.userMakeupSummary}
+            </Text>
+            {recommendations?.result[2]?.steps.map((tip: any) => (
+              <View key={tip.id} style={localStyles.makeupTipCard}>
+                <Text style={localStyles.makeupTipTitle}>{tip.name}</Text>
+                <Text style={localStyles.makeupTipTechnique}>
+                  Technique: {tip.technique}
+                </Text>
+                <Text style={localStyles.makeupTipImportance}>
+                  Importance: {tip.importance}
+                </Text>
+                <Text style={localStyles.makeupTipSuitableFor}>
+                  Suitable For: {tip.suitableFor}
+                </Text>
+                <Text style={localStyles.makeupTipExplanation}>
+                  {tip.explanation}
+                </Text>
+                {tip.products.map((product: any, index: number) => (
+                  <View key={index} style={localStyles.makeupProductSection}>
+                    <Text style={localStyles.makeupProductCategory}>
+                      {product.category}
+                    </Text>
+                    <View style={localStyles.makeupProductDetails}>
+                      <Text style={localStyles.makeupProductTitle}>
+                        High-End:
+                      </Text>
+                      <Text>
+                        {product.highEnd.name} - {product.highEnd.price}
+                      </Text>
+                      <Text>
+                        Application Tip: {product.highEnd.applicationTip}
+                      </Text>
+                    </View>
+                    <View style={localStyles.makeupProductDetails}>
+                      <Text style={localStyles.makeupProductTitle}>
+                        Affordable:
+                      </Text>
+                      <Text>
+                        {product.affordable.name} - {product.affordable.price}
+                      </Text>
+                      <Text>
+                        Application Tip: {product.affordable.applicationTip}
+                      </Text>
+                    </View>
+                  </View>
+                ))}
+              </View>
+            ))}
+          </ScrollView>
         );
       default:
         return null;
@@ -247,7 +366,9 @@ const GlowResultScreen = () => {
                 'Ratings',
                 'Facial Analysis',
                 'Skin Analysis',
-                'Product Recommendations',
+                'Glow-Up Tips',
+                'Skincare Recommendations',
+                'Makeup Tips',
               ].map((tab) => {
                 const isActive = activeTab === tab;
                 return (
@@ -583,6 +704,120 @@ const localStyles = StyleSheet.create({
         elevation: 5,
       },
     }),
+  },
+  tipCard: {
+    backgroundColor: '#F5F5F5',
+    borderRadius: 10,
+    padding: 15,
+    marginBottom: 10,
+  },
+  tipTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginBottom: 5,
+  },
+  tipDetails: {
+    fontSize: 14,
+    marginBottom: 5,
+  },
+  tipImportance: {
+    fontSize: 14,
+    fontStyle: 'italic',
+  },
+  recCard: {
+    backgroundColor: '#F5F5F5',
+    borderRadius: 10,
+    padding: 15,
+    marginBottom: 10,
+  },
+  recTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginBottom: 10,
+  },
+  productSection: {
+    marginBottom: 10,
+  },
+  productTitle: {
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  recImportance: {
+    fontSize: 14,
+    fontStyle: 'italic',
+    marginTop: 5,
+  },
+  recTechnique: {
+    fontSize: 14,
+    marginTop: 5,
+  },
+  makeupTipCard: {
+    backgroundColor: '#F5F5F5',
+    borderRadius: 10,
+    padding: 15,
+    marginBottom: 10,
+  },
+  makeupTipTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginBottom: 5,
+  },
+  makeupTipTechnique: {
+    fontSize: 14,
+    marginBottom: 5,
+  },
+  makeupTipImportance: {
+    fontSize: 14,
+    fontStyle: 'italic',
+    marginBottom: 10,
+  },
+  makeupProductSection: {
+    marginBottom: 10,
+  },
+  makeupProductCategory: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    marginBottom: 5,
+  },
+  makeupProductDetails: {
+    marginLeft: 10,
+    marginBottom: 5,
+  },
+  makeupProductTitle: {
+    fontSize: 14,
+    fontWeight: 'bold',
+  },
+  summarySectionTitle: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    marginBottom: 10,
+  },
+  tipRelatedFeature: {
+    fontSize: 14,
+    marginTop: 5,
+  },
+  tipExplanation: {
+    fontSize: 14,
+    marginTop: 5,
+    fontStyle: 'italic',
+  },
+  recTargetedConcern: {
+    fontSize: 14,
+    marginTop: 5,
+  },
+  recExplanation: {
+    fontSize: 14,
+    marginTop: 5,
+    fontStyle: 'italic',
+  },
+  makeupTipSuitableFor: {
+    fontSize: 14,
+    marginBottom: 5,
+  },
+  makeupTipExplanation: {
+    fontSize: 14,
+    marginBottom: 10,
+    fontStyle: 'italic',
   },
 });
 

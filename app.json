@@ -1,8 +1,8 @@
 {
   "expo": {
-    "name": "Aura - Level Up Your Vibe",
-    "slug": "aura",
-    "version": "1.0.5",
+    "name": "Glow - Look your best",
+    "slug": "glow",
+    "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "scheme": "myapp",
@@ -14,7 +14,7 @@
     },
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.supitspete.aura",
+      "bundleIdentifier": "com.supitspete.glow",
       "infoPlist": {
         "NSAppTransportSecurity": {
           "NSAllowsArbitraryLoads": true
@@ -26,7 +26,7 @@
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.supitspete.aura"
+      "package": "com.supitspete.glow"
     },
     "web": {
       "bundler": "metro",
@@ -37,7 +37,7 @@
       [
         "expo-router",
         {
-          "origin": "https://getauraapp.com/"
+          "origin": "https://glowapp.com/"
         }
       ],
       "expo-font",
@@ -48,10 +48,7 @@
     },
     "extra": {
       "router": {
-        "origin": "https://getauraapp.com/"
-      },
-      "eas": {
-        "projectId": "08ef2857-8897-4721-a044-c53d2a95ddf5"
+        "origin": "https://glowapp.com/"
       }
     },
     "owner": "supitspete",
