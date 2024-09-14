@@ -186,7 +186,29 @@ const ResultsScreen = () => {
         // set into global state
         setGlowResult(response); // Set the fetched glow result
 
-        router.push("/glow-results-screen");
+        const stringResponse = JSON.stringify(response);
+
+        try {
+          console.log("running recommendations api...");
+          const recommendationsResponse = await fetchAPI(
+            "/(api)/(openai)/glowrecommendations",
+            {
+              method: "POST",
+              body: JSON.stringify({ stringResponse }),
+            }
+          );
+
+          console.log(recommendationsResponse);
+          // Alert and stringify the recommendations response
+          Alert.alert(
+            "Recommendations",
+            JSON.stringify(recommendationsResponse)
+          );
+        } catch (error) {
+          console.log(error);
+        }
+
+        // router.push("/glow-results-screen");
 
         // Alert.alert("Glow Score", JSON.stringify(response)); // Display the result
       } catch (error) {
