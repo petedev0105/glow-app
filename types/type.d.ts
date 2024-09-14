@@ -137,3 +137,17 @@ declare interface DriverCardProps {
   selected: number;
   setSelected: () => void;
 }
+
+type GlowResult = {
+  scores: {
+    overall: number;
+    potential: number;
+    skinHealth: number;
+    glowFactor: number;
+    featureHarmony: number;
+    authenticity: number;
+  };
+  percentile: number;
+  facialCharacteristics: Record<string, string>;
+  skinAnalysis: Record<string, string>;
+};
