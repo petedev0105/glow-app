@@ -1,14 +1,6 @@
-import glowTitle from "@/assets/images/glow-title.png"; // Import logo
-import React from "react";
-import {
-  Image,
-  ImageStyle,
-  Text,
-  TouchableOpacity,
-  View,
-  StatusBar,
-} from "react-native";
-import { onboardingQuestionsList, styles } from "../../constants/onboarding";
+import React from 'react';
+import { Text, TouchableOpacity, View } from 'react-native';
+import { onboardingQuestionsList, styles } from '../../constants/onboarding';
 
 export const TrustedScreen = ({
   navigation,

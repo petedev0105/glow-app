@@ -104,7 +104,6 @@ export const onboardingQuestionsList = [
 export const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "white",
     paddingHorizontal: 24,
   },
   headerContainer: {
@@ -132,7 +131,7 @@ export const styles = StyleSheet.create({
   activeDot: {
     flex: 1,
     height: 4,
-    backgroundColor: "#836E89", // Active color
+    backgroundColor: "black", // Active color
     borderRadius: 2,
     marginHorizontal: 2,
   },
@@ -150,20 +149,20 @@ export const styles = StyleSheet.create({
   },
   title: {
     fontSize: 24,
-    color: "#836E89", // Text color
+    color: "black",
     textAlign: "center",
     fontWeight: "bold",
   },
   subtitleCaption: {
     fontSize: 13,
-    color: "#836E89", // Subtitle color
+    color: "black",
     textAlign: "center",
     marginTop: 10,
     marginHorizontal: 20,
   },
   subtitle: {
     fontSize: 16,
-    color: "#836E89", // Subtitle color
+    color: "black",
     textAlign: "center",
     marginTop: 10,
     marginHorizontal: 20,
@@ -171,24 +170,22 @@ export const styles = StyleSheet.create({
   imagePlaceholder: {
     width: 260,
     height: 260,
-    backgroundColor: "#E6D8E1", // Placeholder color
+    backgroundColor: "#F2F2F2", // Placeholder color
     borderRadius: 20,
   },
   snapPlaceholder: {
-    backgroundColor: "#E6D8E1", // Placeholder color
+    backgroundColor: "#F2F2F2", // Placeholder color
     borderRadius: 20,
     marginVertical: 40,
     width: 300,
     height: 360,
   },
   input: {
-    borderWidth: 2,
-    borderColor: "#836E89",
-    borderRadius: 10,
+    borderRadius: 50,
     padding: 10,
     width: "100%",
     marginVertical: 10,
-    backgroundColor: "#F9F3F8",
+    backgroundColor: "#F2F2F2",
   },
   footerContainer: {
     flex: 1.2,
@@ -196,21 +193,27 @@ export const styles = StyleSheet.create({
     alignItems: "center",
   },
   button: {
-    backgroundColor: "#836E89", // Button color
+    backgroundColor: "white", // Button color
     paddingVertical: 18,
     borderRadius: 30,
     marginVertical: 10,
     alignItems: "center",
     width: "90%",
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 2,
+    elevation: 2,
+    marginHorizontal: 10,
   },
   buttonText: {
-    color: "white",
+    color: "black",
     fontSize: 16,
     fontWeight: "bold",
   },
   radioButton: {
     borderWidth: 2,
-    borderColor: "#836E89",
+    borderColor: "black",
     borderRadius: 50,
     padding: 15,
     marginVertical: 5,
@@ -219,7 +222,7 @@ export const styles = StyleSheet.create({
   },
   radioButtonSelected: {
     borderWidth: 2,
-    borderColor: "#836E89",
+    borderColor: "black",
     backgroundColor: "white",
     borderRadius: 50,
     padding: 15,
@@ -230,9 +233,9 @@ export const styles = StyleSheet.create({
   radioActiveDot: {
     width: 16,
     height: 16,
-    backgroundColor: "#836E89", // Active color
+    backgroundColor: "black", // Active color
     borderRadius: 50,
-    borderColor: "#836E89",
+    borderColor: "black",
     borderWidth: 2,
     marginHorizontal: 2,
   },
@@ -241,12 +244,12 @@ export const styles = StyleSheet.create({
     height: 16,
     backgroundColor: "white", // Inactive color
     borderRadius: 50,
-    borderColor: "#836E89",
+    borderColor: "black",
     borderWidth: 2,
     marginHorizontal: 2,
   },
   radioButtonText: {
-    color: "#836E89",
+    color: "black",
   },
   benefitContainer: {
     flex: 4,
@@ -263,7 +266,7 @@ export const styles = StyleSheet.create({
   },
   benefitText: {
     fontSize: 14,
-    color: '#836E89',
+    color: 'black',
     fontWeight: '500',
     flex: 1,
     textAlign: 'left',

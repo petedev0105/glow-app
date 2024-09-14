@@ -1,13 +1,15 @@
-import glowTitle from "@/assets/images/glow-title.png";
-import { useQuestionStore } from "@/store/onboardingStore";
-import { useUser } from "@clerk/clerk-expo";
-import { useNavigation } from "@react-navigation/native";
-import * as Haptics from "expo-haptics";
-import { router } from "expo-router";
-import React, { useCallback, useRef, useState } from "react";
+import glowTitle from '@/assets/images/glow-title.png';
+import { images } from '@/constants';
+import { useQuestionStore } from '@/store/onboardingStore';
+import { useUser } from '@clerk/clerk-expo';
+import { useNavigation } from '@react-navigation/native';
+import * as Haptics from 'expo-haptics';
+import { router } from 'expo-router';
+import React, { useCallback, useRef, useState } from 'react';
 import {
   ActivityIndicator,
   Image,
+  ImageBackground,
   ImageStyle,
   StatusBar,
   StyleSheet,
@@ -65,7 +67,7 @@ const OnboardingQuestions = () => {
   if (isLoading) {
     return (
       <View style={localStyles.loadingContainer}>
-        <ActivityIndicator size="large" color="#8400FF" />
+        <ActivityIndicator size='large' color='#8400FF' />
       </View>
     );
   }
@@ -79,13 +81,13 @@ const OnboardingQuestions = () => {
   };
 
   const handleOnboardingComplete = useCallback(() => {
-    router.replace("/(auth)/sign-up"); // Redirect to sign-up after onboarding
+    router.replace('/(auth)/sign-up'); // Redirect to sign-up after onboarding
   }, []);
 
   if (isLoading) {
     return (
       <View style={localStyles.loadingContainer}>
-        <ActivityIndicator size="large" color="#8400FF" />
+        <ActivityIndicator size='large' color='#8400FF' />
       </View>
     );
   }
@@ -103,32 +105,37 @@ const OnboardingQuestions = () => {
 
   // if (showQuestions) {
   return (
-    <SafeAreaView className='flex h-full bg-white'>
-      <StatusBar barStyle='dark-content' backgroundColor='#6a51ae' />
+    <ImageBackground
+      resizeMode='cover'
+      source={images.screenBg} // Background image with cover mode
+      style={styles.container} // Reusing container style
+    >
+      <SafeAreaView className='flex h-full'>
+        <StatusBar barStyle='dark-content' backgroundColor='#6a51ae' />
 
-      <View className='flex items-center mb-10'>
-        <Image source={glowTitle} style={styles.logo as ImageStyle} />
-      </View>
+        <View className='flex items-center mb-10'>
+          <Image source={glowTitle} style={styles.logo as ImageStyle} />
+        </View>
 
-      <Swiper
-        ref={swiperRef}
-        showsPagination={false}
-        loop={false}
-        // onIndexChanged={(index) => handleOnIndexChanged(index)}
-      >
-        {onboardingQuestionsScreens
-          // .slice(showQuestions ? 3 : 0, showQuestions ? undefined : 3)
-          .map((ScreenComponent, index) => (
-            <ScreenComponent
-              key={index}
-              navigation={navigation}
-              onNext={goToNextSlide}
-              onAuthComplete={handleAuthComplete}
-            />
-          ))}
-      </Swiper>
+        <Swiper
+          ref={swiperRef}
+          showsPagination={false}
+          loop={false}
+          // onIndexChanged={(index) => handleOnIndexChanged(index)}
+        >
+          {onboardingQuestionsScreens
+            // .slice(showQuestions ? 3 : 0, showQuestions ? undefined : 3)
+            .map((ScreenComponent, index) => (
+              <ScreenComponent
+                key={index}
+                navigation={navigation}
+                onNext={goToNextSlide}
+                onAuthComplete={handleAuthComplete}
+              />
+            ))}
+        </Swiper>
 
-      {/* <View className='justify-end px-5'>
+        {/* <View className='justify-end px-5'>
           <View className='w-full mb-5'>
             {!isLastSlide ? (
               <CustomButton
@@ -141,7 +148,8 @@ const OnboardingQuestions = () => {
             )}
           </View>
         </View> */}
-    </SafeAreaView>
+      </SafeAreaView>
+    </ImageBackground>
   );
   // return null; // Or return a placeholder or loader while questions are hidden
 };
@@ -149,9 +157,9 @@ const OnboardingQuestions = () => {
 const localStyles = StyleSheet.create({
   loadingContainer: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "black",
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'black',
   },
 });
 
