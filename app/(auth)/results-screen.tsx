@@ -1,7 +1,8 @@
 import { fetchAPI } from "@/lib/fetch";
-import { useImageStore } from "@/store/imageStore";
 import { useGlowResultStore } from "@/store/glowResultStore";
+import { useImageStore } from "@/store/imageStore";
 import { useUser } from "@clerk/clerk-expo";
+import { useRouter } from "expo-router";
 import React, { useEffect, useRef, useState } from "react";
 import {
   Alert,
@@ -215,7 +216,7 @@ const ResultsScreen = () => {
           console.log(error);
         }
 
-        // router.push("/glow-results-screen");
+        router.push("/glow-results-screen");
 
         // Alert.alert("Glow Score", JSON.stringify(response)); // Display the result
       } catch (error) {
