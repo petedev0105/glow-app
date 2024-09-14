@@ -6,6 +6,8 @@ import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import React, { useEffect, useState } from 'react';
 import {
+  Animated,
+  Easing,
   Image,
   ImageBackground,
   Platform,
@@ -20,11 +22,14 @@ import {
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
+const AnimatedLinearGradient = Animated.createAnimatedComponent(LinearGradient);
+
 const GlowResultScreen = () => {
   const { glowResult } = useGlowResultStore();
   const [activeTab, setActiveTab] = useState('Ratings');
   const insets = useSafeAreaInsets();
   const images = useImageStore((state) => state.images);
+  const [unlockBtnAnimatedValue] = useState(new Animated.Value(0));
 
   const { recommendations } = useRecommendationsStore();
 
@@ -337,6 +342,33 @@ const GlowResultScreen = () => {
     }
   };
 
+  // Animate the gradient
+  useEffect(() => {
+    const animateGradient = () => {
+      Animated.loop(
+        Animated.timing(unlockBtnAnimatedValue, {
+          toValue: 1, // Animate from 0 to 1
+          duration: 4000, // Adjust duration as needed for speed
+          easing: Easing.linear, // Linear easing for smooth looping
+          useNativeDriver: false, // Must be false for gradient color animation
+        })
+      ).start();
+    };
+
+    animateGradient();
+  }, [unlockBtnAnimatedValue]);
+
+  // Interpolate the animated value to animate the x-coordinate of the gradient
+  const animatedStartX = unlockBtnAnimatedValue.interpolate({
+    inputRange: [0, 1],
+    outputRange: [0, 1], // Moving from x=0 to x=1 for start
+  });
+
+  const animatedEndX = unlockBtnAnimatedValue.interpolate({
+    inputRange: [0, 1],
+    outputRange: [1, 0], // Moving from x=1 to x=0 for end
+  });
+
   return (
     <ImageBackground
       source={require('@/assets/images/glow-eclipse.png')}
@@ -434,11 +466,11 @@ const GlowResultScreen = () => {
             { paddingBottom: insets.bottom },
           ]}
         >
-          {/* Gradient background */}
-          <LinearGradient
+          {/* Animated gradient background */}
+          <AnimatedLinearGradient
             colors={['#da70d6', '#7b68ee', '#87cefa']}
-            start={{ x: 0, y: 0 }}
-            end={{ x: 1, y: 0 }}
+            start={{ x: animatedStartX, y: 0 }} // Only animate the x-axis
+            end={{ x: animatedEndX, y: 0 }} // Only animate the x-axis
             style={localStyles.gradientBackground}
           >
             {/* White button on top of the gradient */}
@@ -447,7 +479,7 @@ const GlowResultScreen = () => {
                 Unlock Results 🙌
               </Text>
             </View>
-          </LinearGradient>
+          </AnimatedLinearGradient>
         </View>
       </SafeAreaView>
     </ImageBackground>
