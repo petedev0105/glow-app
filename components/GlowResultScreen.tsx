@@ -292,35 +292,42 @@ const GlowResultScreen = () => {
                 <Text style={localStyles.makeupTipExplanation}>
                   {tip.explanation}
                 </Text>
-                {tip.products.map((product: any, index: number) => (
-                  <View key={index} style={localStyles.makeupProductSection}>
-                    <Text style={localStyles.makeupProductCategory}>
-                      {product.category}
-                    </Text>
-                    <View style={localStyles.makeupProductDetails}>
-                      <Text style={localStyles.makeupProductTitle}>
-                        High-End:
+                {tip &&
+                  tip.products &&
+                  tip.products.map((product: any, index: number) => (
+                    <View key={index} style={localStyles.makeupProductSection}>
+                      <Text style={localStyles.makeupProductCategory}>
+                        {product.category}
                       </Text>
-                      <Text>
-                        {product.highEnd.name} - {product.highEnd.price}
-                      </Text>
-                      <Text>
-                        Application Tip: {product.highEnd.applicationTip}
-                      </Text>
+                      <View style={localStyles.makeupProductDetails}>
+                        <Text style={localStyles.makeupProductTitle}>
+                          High-End:
+                        </Text>
+                        <Text>
+                          {product.highEnd.name} - {product.highEnd.price}
+                        </Text>
+                        <Text>
+                          Application Tip: {product.highEnd.applicationTip}
+                        </Text>
+                      </View>
+                      <View style={localStyles.makeupProductDetails}>
+                        <Text style={localStyles.makeupProductTitle}>
+                          Affordable:
+                        </Text>
+                        <Text>
+                          {product.affordable.name} - {product.affordable.price}
+                        </Text>
+                        <Text>
+                          Application Tip: {product.affordable.applicationTip}
+                        </Text>
+                      </View>
                     </View>
-                    <View style={localStyles.makeupProductDetails}>
-                      <Text style={localStyles.makeupProductTitle}>
-                        Affordable:
-                      </Text>
-                      <Text>
-                        {product.affordable.name} - {product.affordable.price}
-                      </Text>
-                      <Text>
-                        Application Tip: {product.affordable.applicationTip}
-                      </Text>
-                    </View>
-                  </View>
-                ))}
+                  ))}
+                {(!tip || !tip.products) && (
+                  <Text className='text-[#666]'>
+                    Could not load any tips. Please try again later
+                  </Text>
+                )}
               </View>
             ))}
           </ScrollView>
@@ -410,11 +417,10 @@ const GlowResultScreen = () => {
               style={localStyles.percentileText}
               className='text-center shadow-lg'
             >
-              You are in the{'\n'}
+              You are in the{' '}
               <Text style={localStyles.percentileHighlight}>
-                {`👉 ${percentile}th percentile 👈`}
-              </Text>
-              {'\n'}
+                {`${percentile}th percentile`}
+              </Text>{' '}
               of all users.
             </Text>
           </View>
@@ -547,11 +553,10 @@ const localStyles = StyleSheet.create({
     lineHeight: 26,
   },
   percentileHighlight: {
-    fontWeight: 'bold',
+    fontWeight: '600',
     // color: '#8835f4',
-    color: '#fff',
+    color: 'black',
     letterSpacing: -0.4,
-    backgroundColor: 'black',
   },
   scoresContainer: {
     // marginBottom: 20,
@@ -578,8 +583,9 @@ const localStyles = StyleSheet.create({
     padding: 15,
     width: '48%',
     marginBottom: 10,
-    borderWidth: 2,
-    borderColor: '#000',
+    borderWidth: 1,
+    // borderColor: '#000',
+    borderColor: '#E7E7E7',
   },
   row: {
     flexDirection: 'row',
@@ -596,10 +602,11 @@ const localStyles = StyleSheet.create({
     fontWeight: 'bold',
   },
   progressBar: {
-    height: 10,
+    height: 6,
     backgroundColor: '#E0E0E0',
     borderRadius: 5,
     overflow: 'hidden',
+    marginTop: 10,
   },
   progressFill: {
     height: '100%',
@@ -651,12 +658,12 @@ const localStyles = StyleSheet.create({
     marginBottom: 5,
   },
   characteristicTitle: {
-    fontSize: 16,
+    fontSize: 14,
     fontWeight: 'bold',
     marginBottom: 10,
   },
   characteristicValue: {
-    fontSize: 16,
+    fontSize: 14,
     fontWeight: 'semibold',
     color: '#000',
   },
@@ -677,8 +684,9 @@ const localStyles = StyleSheet.create({
     marginBottom: 10,
     minHeight: 100,
     justifyContent: 'space-between',
-    borderWidth: 2,
-    borderColor: '#000',
+    borderWidth: 1,
+    // borderColor: '#000',
+    borderColor: '#E7E7E7',
   },
   buttonSpacer: {
     height: 80,
