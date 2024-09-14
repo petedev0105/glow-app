@@ -20,21 +20,21 @@ const Page = () => {
   useEffect(() => {
     if (mounted) {
       if (!userId) {
-        // router.replace("/(auth)/welcome");
+        // router.replace("/(auth)/start");
         router.replace("/(auth)/sign-in");
       } else {
         console.log(user.id);
         fetchPaidStatus(userId);
       }
     }
-    // router.replace("/(auth)/welcome");
+    // router.replace("/(auth)/start");
   }, [userId, mounted]); // Ensure it runs when userId or mounted changes
 
   async function fetchPaidStatus(userId) {
     setLoading(true); // {{ edit_2 }}
     console.log("currently in index file...");
 
-    // router.replace("/(auth)/welcome");
+    // router.replace("/(auth)/start");
 
     // setLoading(false);
     try {
@@ -55,16 +55,16 @@ const Page = () => {
       if (paidStatus && !showOnboarding) {
         router.replace("/(root)/(tabs)/home");
       } else if (!showOnboarding) {
-        router.replace("/(auth)/welcome");
+        router.replace("/(auth)/start");
       } else {
       }
     } catch (error) {
       setLoading(false);
       // console.error("Failed to fetch paid status:", error);
-      router.replace("/(auth)/welcome");
+      router.replace("/(auth)/start");
     } finally {
       setLoading(false); // {{ edit_3 }}
-      router.replace("/(auth)/welcome");
+      router.replace("/(auth)/start");
     }
   } // Ensure userId is defined
 
@@ -97,7 +97,7 @@ const Page = () => {
   //   >
   //     <TouchableOpacity
   //       className="w-full p-5 border pt-12 rounded-full"
-  //       onPress={() => router.replace("/(auth)/welcome")}
+  //       onPress={() => router.replace("/(auth)/start")}
   //     >
   //       <Text className="text-white">Welcome</Text>
   //     </TouchableOpacity>
