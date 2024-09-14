@@ -1,7 +1,7 @@
 import { useAuth, useUser } from "@clerk/clerk-expo";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { useEffect, useLayoutEffect, useState } from "react";
-import { ActivityIndicator, View } from "react-native"; // {{ edit_1 }}
+import { Image, View } from "react-native"; // {{ edit_1 }}
 
 const Page = () => {
   const { isSignedIn } = useAuth();
@@ -73,12 +73,15 @@ const Page = () => {
       <View
         style={{
           flex: 1,
-          backgroundColor: "black",
+          backgroundColor: "white",
           justifyContent: "center",
           alignItems: "center",
         }}
       >
-        <ActivityIndicator size="large" color="#0000ff" />
+        <Image
+          source={require("../assets/images/splash.png")}
+          style={{ width: 100, height: 100 }}
+        ></Image>
       </View>
     );
   }

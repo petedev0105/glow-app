@@ -1,21 +1,20 @@
+import { fetchAPI } from "@/lib/fetch";
+import { Ionicons } from "@expo/vector-icons";
+import * as FileSystem from "expo-file-system";
+import * as ImageManipulator from "expo-image-manipulator";
+import * as ImagePicker from "expo-image-picker";
 import React, { useState } from "react";
 import {
-  View,
-  Text,
-  Image,
-  TouchableOpacity,
-  TextInput,
   ActivityIndicator,
+  Alert,
+  Image,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
 } from "react-native";
-import { Ionicons } from "@expo/vector-icons";
-import { fetchAPI } from "@/lib/fetch";
+import auracheck from "../assets/images/aura/auracheck.png";
 import AuraResultModal from "./AuraResultModal";
-import { LinearGradient } from "expo-linear-gradient";
-import { Alert } from "react-native";
-import * as ImageManipulator from "expo-image-manipulator";
-import * as FileSystem from "expo-file-system";
-import * as ImagePicker from "expo-image-picker";
-import auracheck from "../assets/images/auracheck.png";
 
 const CheckAura = () => {
   const [isExpanded, setIsExpanded] = useState(false);

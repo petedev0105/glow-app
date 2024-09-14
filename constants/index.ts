@@ -23,18 +23,8 @@ import selectedMarker from '@/assets/icons/selected-marker.png';
 import star from '@/assets/icons/star.png';
 import target from '@/assets/icons/target.png';
 import to from '@/assets/icons/to.png';
-import check from '@/assets/images/check.png';
-import getStarted from '@/assets/images/get-started.png';
-import auralogo from '@/assets/images/logo.png';
-import message from '@/assets/images/message.png';
-import noResult from '@/assets/images/no-result.png';
-import onboard1 from '@/assets/images/onboard1.png';
-import onboard2 from '@/assets/images/onboard2.png';
-import onboard3 from '@/assets/images/onboard4.png';
-import onboarding1 from '@/assets/images/onboarding1.png';
-import onboarding2 from '@/assets/images/onboarding2.png';
-import onboarding3 from '@/assets/images/onboarding3.png';
-import signUpCar from '@/assets/images/signup-car.png';
+import auraLogo from '@/assets/images/aura/logo.png';
+import signinBackground from '@/assets/images/signin-bg.png';
 import {
   EXPO_PUBLIC_AWS_ACCESS_KEY_ID,
   EXPO_PUBLIC_AWS_REGION,
@@ -43,18 +33,8 @@ import {
 import { S3 } from 'aws-sdk';
 
 export const images = {
-  onboarding1,
-  onboarding2,
-  onboarding3,
-  getStarted,
-  signUpCar,
-  check,
-  noResult,
-  message,
-  auralogo,
-  onboard1,
-  onboard2,
-  onboard3,
+  auraLogo,
+  signinBackground,
 };
 
 export const icons = {
@@ -83,39 +63,6 @@ export const icons = {
   star,
   target,
   to,
-};
-
-export const onboarding = [
-  // {
-  //   id: 1,
-  //   title: "welcome to aura",
-  //   description:
-  //     "congratulations on taking the first step towards becoming the main character.",
-  //   image: images.auralogo,
-  // },
-  {
-    id: 2,
-    title: `the official way to calculate aura points`,
-    description: 'how many aura points did i lose when i...we have the answer!',
-    image: images.onboard1,
-  },
-  {
-    id: 3,
-    title: 'level up your aura through daily challenges',
-    description: 'we curate a list of tasks to help you gain aura points.',
-    image: images.onboard2,
-  },
-  {
-    id: 4,
-    title: 'personalized self improvement coaches',
-    description:
-      'AI coaches at the tips of your finger ready to help you level up.',
-    image: images.onboard3,
-  },
-];
-
-export const data = {
-  onboarding,
 };
 
 export const s3Bucket = new S3({

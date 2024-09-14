@@ -1,22 +1,20 @@
+import { Ionicons } from "@expo/vector-icons";
+import Slider from "@react-native-community/slider"; // Add import for Slider
+import * as FileSystem from "expo-file-system";
+import * as ImageManipulator from "expo-image-manipulator"; // Add import for ImageManipulator
+import * as ImagePicker from "expo-image-picker"; // Update import
+import { useRouter } from "expo-router";
 import React, { useState } from "react";
 import {
-  View,
-  Text,
-  TextInput,
-  Button,
+  ActivityIndicator,
   Image,
+  SafeAreaView,
   ScrollView,
+  Share,
+  Text,
   TouchableOpacity,
-  SafeAreaView, // Add import
+  View
 } from "react-native";
-import * as ImagePicker from "expo-image-picker"; // Update import
-import { Ionicons } from "@expo/vector-icons";
-import { useRouter } from "expo-router";
-import { ActivityIndicator } from "react-native";
-import { Share } from "react-native"; // Add import for Share
-import * as ImageManipulator from "expo-image-manipulator"; // Add import for ImageManipulator
-import * as FileSystem from "expo-file-system";
-import Slider from "@react-native-community/slider"; // Add import for Slider
 
 const RizzAI = ({ navigation }) => {
   const [image, setImage] = useState(null);
@@ -165,7 +163,7 @@ const RizzAI = ({ navigation }) => {
             <View className="flex-row items-center mb-4">
               <View className="flex justify-center items-center w-full">
                 <Image
-                  source={require("@/assets/images/logo.png")}
+                      source={require("@/assets/images/aura/logo.png")}
                   className="w-10 h-10"
                 />
               </View>
