@@ -46,13 +46,13 @@ const GlowResultScreen = () => {
     potential?: boolean;
   }) =>
     potential ? (
-      // Apply golden gradient as a border without changing the card size
+      // apply golden gradient as a border, keep card size the same
       <LinearGradient
-        colors={['#d0980c', '#fde14a', '#f8efa3', '#fde14a', '#d0980c']} // Darker on the edges, bright gold in the center
-        locations={[0, 0.25, 0.5, 0.75, 1]} // Reflective effect with center highlight
-        start={{ x: 0, y: 1 }} // Horizontal gradient (left to right)
+        colors={['#d0980c', '#fde14a', '#f8efa3', '#fde14a', '#d0980c']}
+        locations={[0, 0.25, 0.5, 0.75, 1]}
+        start={{ x: 0, y: 1 }}
         end={{ x: 1, y: 1 }}
-        style={localStyles.gradientBorderWrapper} // Outer gradient border style
+        style={localStyles.gradientBorderWrapper}
       >
         <View style={localStyles.innerCard}>
           {/* Regular card inside the gradient border */}
@@ -62,7 +62,8 @@ const GlowResultScreen = () => {
           </View>
           <View style={localStyles.progressBar}>
             <LinearGradient
-              colors={['#000']} // Original gradient for progress fill
+              colors={['#d0980c', '#eace39', '#f0d91d', '#eace39', '#d0980c']}
+              locations={[0, 0.25, 0.5, 0.75, 1]}
               start={{ x: 0, y: 0 }}
               end={{ x: 1, y: 0 }}
               style={[
@@ -435,32 +436,32 @@ const localStyles = StyleSheet.create({
     // marginBottom: 20,
   },
   gradientBorderWrapper: {
-    borderRadius: 10, // Outer layer border radius to match card
-    padding: 2, // Padding to simulate the border effect
-    width: '48%', // Keep the same width as the regular card
-    marginBottom: 10, // Same margin as the regular card
+    borderRadius: 10,
+    padding: 2,
+    width: '48%',
+    marginBottom: 10,
   },
   gradientBorder: {
-    borderRadius: 10, // Inner gradient border radius
-    padding: 0, // No padding to ensure the card remains the same size
+    borderRadius: 10,
+    padding: 0,
   },
   innerCard: {
-    backgroundColor: '#F5F5F5', // Same background color as other cards
-    borderRadius: 10, // Ensure same border radius for consistency
-    padding: 15, // Same padding as the regular card
-    borderWidth: 0, // No border since it's inside the gradient
+    backgroundColor: '#F5F5F5',
+    borderRadius: 10,
+    padding: 15,
+    borderWidth: 0,
   },
   scoreCard: {
     backgroundColor: '#F5F5F5',
     borderRadius: 10,
     padding: 15,
-    width: '48%', // Ensure it remains the same width as the gradient card
+    width: '48%',
     marginBottom: 10,
     borderWidth: 2,
-    borderColor: '#000', // Regular card border
+    borderColor: '#000',
   },
   row: {
-    flexDirection: 'row', // Use flex-direction row instead of className for layout
+    flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     marginBottom: 5,
