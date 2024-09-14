@@ -14,6 +14,7 @@ import {
   View,
 } from "react-native";
 import { useRouter } from "expo-router";
+import { useRecommendationsStore } from "@/store/glowRecommendationsStore";
 
 const { width, height } = Dimensions.get("window");
 
@@ -27,6 +28,7 @@ const ResultsScreen = () => {
   const { glowResult, setGlowResult } = useGlowResultStore();
   const [message, setMessage] = useState("Analyzing your features...");
   const [intervalDuration, setIntervalDuration] = useState(125);
+  const { setRecommendations } = useRecommendationsStore();
 
   const fadeAnim = useRef(new Animated.Value(1)).current;
   const rippleAnim = useRef(new Animated.Value(0)).current;
@@ -199,11 +201,16 @@ const ResultsScreen = () => {
           );
 
           console.log(recommendationsResponse);
+          // Store the recommendations in the Zustand store
+          setRecommendations(recommendationsResponse);
+
+          router.push("/(auth)/glow-results-screen");
+
           // Alert and stringify the recommendations response
-          Alert.alert(
-            "Recommendations",
-            JSON.stringify(recommendationsResponse)
-          );
+          // Alert.alert(
+          //   "Recommendations",
+          //   JSON.stringify(recommendationsResponse)
+          // );
         } catch (error) {
           console.log(error);
         }
@@ -223,7 +230,7 @@ const ResultsScreen = () => {
       // Fetch only when progress reaches 100, no result is fetched yet, and imageUri is valid
       fetchGlowResults({ prompt: "", imageUri });
     }
-  }, [loadingProgress, imageUri, glowResult]);
+  }, [loadingProgress, imageUri, glowResult, setRecommendations]);
 
   return (
     <ImageBackground

@@ -1,11 +1,11 @@
-import glowTitle from '@/assets/images/glow-title.png';
-import { images } from '@/constants';
-import { useQuestionStore } from '@/store/onboardingStore';
-import { useUser } from '@clerk/clerk-expo';
-import { useNavigation } from '@react-navigation/native';
-import * as Haptics from 'expo-haptics';
-import { router } from 'expo-router';
-import React, { useCallback, useRef, useState } from 'react';
+import glowTitle from "@/assets/images/glow-title.png";
+import { images } from "@/constants";
+import { useQuestionStore } from "@/store/onboardingStore";
+import { useUser } from "@clerk/clerk-expo";
+import { useNavigation } from "@react-navigation/native";
+import * as Haptics from "expo-haptics";
+import { router } from "expo-router";
+import React, { useCallback, useRef, useState } from "react";
 import {
   ActivityIndicator,
   Image,
@@ -14,21 +14,21 @@ import {
   StatusBar,
   StyleSheet,
   View,
-} from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import Swiper from 'react-native-swiper';
-import { styles } from '../constants/onboarding';
-import { AgeScreen } from './OnboardingScreens/ageScreen';
-import { AuthScreen } from './OnboardingScreens/authScreen';
-import { BeautyGoalsScreen } from './OnboardingScreens/beautyGoalsScreen';
-import { BenefitsScreen } from './OnboardingScreens/benefitsScreen';
-import { FacialAnalysisScreen } from './OnboardingScreens/facialAnalysisScreen';
-import { LeaveRatingScreen } from './OnboardingScreens/leaveRatingScreenWithLogout';
-import { MakeUpPreferencesScreen } from './OnboardingScreens/makeupPreferencesScreen';
-import { ProductPreferencesScreen } from './OnboardingScreens/productPreferencesScreen';
-import { ReferralScreen } from './OnboardingScreens/referralScreen';
-import { SkinConcernsScreen } from './OnboardingScreens/skinConcernsScreen';
-import { TrustedScreen } from './OnboardingScreens/trustedScreen';
+} from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
+import Swiper from "react-native-swiper";
+import { styles } from "../constants/onboarding";
+import { AgeScreen } from "./OnboardingScreens/ageScreen";
+import { AuthScreen } from "./OnboardingScreens/authScreen";
+import { BeautyGoalsScreen } from "./OnboardingScreens/beautyGoalsScreen";
+import { BenefitsScreen } from "./OnboardingScreens/benefitsScreen";
+import { FacialAnalysisScreen } from "./OnboardingScreens/facialAnalysisScreen";
+import { LeaveRatingScreen } from "./OnboardingScreens/leaveRatingScreen";
+import { MakeUpPreferencesScreen } from "./OnboardingScreens/makeupPreferencesScreen";
+import { ProductPreferencesScreen } from "./OnboardingScreens/productPreferencesScreen";
+import { ReferralScreen } from "./OnboardingScreens/referralScreen";
+import { SkinConcernsScreen } from "./OnboardingScreens/skinConcernsScreen";
+import { TrustedScreen } from "./OnboardingScreens/trustedScreen";
 
 export const initialiseScreens = [TrustedScreen, ReferralScreen, AuthScreen];
 
@@ -67,7 +67,7 @@ const OnboardingQuestions = () => {
   if (isLoading) {
     return (
       <View style={localStyles.loadingContainer}>
-        <ActivityIndicator size='large' color='#8400FF' />
+        <ActivityIndicator size="large" color="#8400FF" />
       </View>
     );
   }
@@ -81,13 +81,13 @@ const OnboardingQuestions = () => {
   };
 
   const handleOnboardingComplete = useCallback(() => {
-    router.replace('/(auth)/sign-up'); // Redirect to sign-up after onboarding
+    router.replace("/(auth)/sign-up"); // Redirect to sign-up after onboarding
   }, []);
 
   if (isLoading) {
     return (
       <View style={localStyles.loadingContainer}>
-        <ActivityIndicator size='large' color='#8400FF' />
+        <ActivityIndicator size="large" color="#8400FF" />
       </View>
     );
   }
@@ -106,14 +106,14 @@ const OnboardingQuestions = () => {
   // if (showQuestions) {
   return (
     <ImageBackground
-      resizeMode='cover'
+      resizeMode="cover"
       source={images.screenBg} // Background image with cover mode
       style={styles.container} // Reusing container style
     >
-      <SafeAreaView className='flex h-full'>
-        <StatusBar barStyle='dark-content' backgroundColor='#6a51ae' />
+      <SafeAreaView className="flex h-full">
+        <StatusBar barStyle="dark-content" backgroundColor="#6a51ae" />
 
-        <View className='flex items-center mb-10'>
+        <View className="flex items-center mb-10">
           <Image source={glowTitle} style={styles.logo as ImageStyle} />
         </View>
 
@@ -157,9 +157,9 @@ const OnboardingQuestions = () => {
 const localStyles = StyleSheet.create({
   loadingContainer: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'black',
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "black",
   },
 });
 

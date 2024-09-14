@@ -1,8 +1,8 @@
-import { styles } from '@/constants/onboarding';
-import { useGlowResultStore } from '@/store/glowResultStore';
-import { useImageStore } from '@/store/imageStore';
-import { Ionicons } from '@expo/vector-icons';
-import React, { useState } from 'react';
+import { styles } from "@/constants/onboarding";
+import { useGlowResultStore } from "@/store/glowResultStore";
+import { useImageStore } from "@/store/imageStore";
+import { Ionicons } from "@expo/vector-icons";
+import React, { useEffect, useState } from "react";
 import {
   Image,
   Platform,
@@ -13,14 +13,22 @@ import {
   Text,
   TouchableOpacity,
   View,
-} from 'react-native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
+} from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { useRecommendationsStore } from "@/store/glowRecommendationsStore";
 
 const GlowResultScreen = () => {
   const { glowResult } = useGlowResultStore();
-  const [activeTab, setActiveTab] = useState('Ratings');
+  const [activeTab, setActiveTab] = useState("Ratings");
   const insets = useSafeAreaInsets();
   const images = useImageStore((state) => state.images);
+  const { recommendations } = useRecommendationsStore();
+
+  useEffect(() => {
+    if (recommendations) {
+      console.log("recommendations from results screen: ", recommendations);
+    }
+  }, []);
 
   if (!glowResult) {
     return (
@@ -79,88 +87,197 @@ const GlowResultScreen = () => {
 
   const renderTabContent = () => {
     switch (activeTab) {
-      case 'Ratings':
+      case "Ratings":
         return (
           <View style={localStyles.scoresContainer}>
             <View style={localStyles.scoreRow}>
-              <ScoreCard title='Overall' score={scores.overall} />
-              <ScoreCard title='Potential' score={scores.potential} />
+              <ScoreCard title="Overall" score={scores.overall} />
+              <ScoreCard title="Potential" score={scores.potential} />
             </View>
             <View style={localStyles.scoreRow}>
-              <ScoreCard title='Skin Health' score={scores.skinHealth} />
-              <ScoreCard title='Glow Factor' score={scores.glowFactor} />
+              <ScoreCard title="Skin Health" score={scores.skinHealth} />
+              <ScoreCard title="Glow Factor" score={scores.glowFactor} />
             </View>
             <View style={localStyles.scoreRow}>
               <ScoreCard
-                title='Feature Harmony'
+                title="Feature Harmony"
                 score={scores.featureHarmony}
               />
-              <ScoreCard title='Authenticity' score={scores.authenticity} />
+              <ScoreCard title="Authenticity" score={scores.authenticity} />
             </View>
           </View>
         );
-      case 'Facial Analysis':
+      case "Facial Analysis":
         return (
           <View style={localStyles.scoresContainer}>
             <View style={localStyles.scoreRow}>
               <CharacteristicCard
-                title='Eye Shape'
+                title="Eye Shape"
                 value={facialCharacteristics.eyeShape}
               />
               <CharacteristicCard
-                title='Face Shape'
+                title="Face Shape"
                 value={facialCharacteristics.faceShape}
               />
             </View>
             <View style={localStyles.scoreRow}>
               <CharacteristicCard
-                title='Jawline'
+                title="Jawline"
                 value={facialCharacteristics.jawline}
               />
               <CharacteristicCard
-                title='Lip Shape'
+                title="Lip Shape"
                 value={facialCharacteristics.lipShape}
               />
             </View>
           </View>
         );
-      case 'Skin Analysis':
+      case "Skin Analysis":
         return (
           <View style={localStyles.scoresContainer}>
             <View style={localStyles.scoreRow}>
               <CharacteristicCard
-                title='Skin Type'
+                title="Skin Type"
                 value={skinAnalysis.skinType}
               />
               <CharacteristicCard
-                title='Hydration Level'
+                title="Hydration Level"
                 value={skinAnalysis.hydrationLevel}
               />
             </View>
             <View style={localStyles.scoreRow}>
               <CharacteristicCard
-                title='Skin Texture'
+                title="Skin Texture"
                 value={skinAnalysis.skinTexture}
               />
               <CharacteristicCard
-                title='Skin Tone'
-                value={skinAnalysis.skinToneAndColor.join(', ')}
+                title="Skin Tone"
+                value={skinAnalysis.skinToneAndColor.join(", ")}
               />
             </View>
             <View style={localStyles.scoreRow}>
               <CharacteristicCard
-                title='Skin Vitality'
-                value={skinAnalysis.skinVitalityIndicators.join(', ')}
+                title="Skin Vitality"
+                value={skinAnalysis.skinVitalityIndicators.join(", ")}
               />
             </View>
           </View>
         );
-      case 'Product Recommendations':
-        // Implement Product Recommendations when available
+      case "Glow-Up Tips":
         return (
-          <View style={localStyles.sectionContainer}>
-            <Text>Product Recommendations coming soon...</Text>
-          </View>
+          <ScrollView style={localStyles.scoresContainer}>
+            <Text style={localStyles.summarySectionTitle}>
+              {recommendations?.result[0]?.userFeaturesSummary}
+            </Text>
+            {recommendations?.result[0]?.steps.map((tip: any) => (
+              <View key={tip.id} style={localStyles.tipCard}>
+                <Text style={localStyles.tipTitle}>{tip.name}</Text>
+                <Text style={localStyles.tipDetails}>{tip.details}</Text>
+                <Text style={localStyles.tipImportance}>
+                  Importance: {tip.importance}
+                </Text>
+                <Text style={localStyles.tipRelatedFeature}>
+                  Related Feature: {tip.relatedFeature}
+                </Text>
+                <Text style={localStyles.tipExplanation}>
+                  {tip.explanation}
+                </Text>
+              </View>
+            ))}
+          </ScrollView>
+        );
+      case "Skincare Recommendations":
+        return (
+          <ScrollView style={localStyles.scoresContainer}>
+            <Text style={localStyles.summarySectionTitle}>
+              {recommendations?.result[1]?.userSkinSummary}
+            </Text>
+            {recommendations?.result[1]?.steps.map((rec: any) => (
+              <View key={rec.id} style={localStyles.recCard}>
+                <Text style={localStyles.recTitle}>{rec.name}</Text>
+                <View style={localStyles.productSection}>
+                  <Text style={localStyles.productTitle}>High-End:</Text>
+                  <Text>
+                    {rec.highEnd.product} - {rec.highEnd.price}
+                  </Text>
+                  <Text>How to use: {rec.highEnd.howToUse}</Text>
+                </View>
+                <View style={localStyles.productSection}>
+                  <Text style={localStyles.productTitle}>Affordable:</Text>
+                  <Text>
+                    {rec.affordable.product} - {rec.affordable.price}
+                  </Text>
+                  <Text>How to use: {rec.affordable.howToUse}</Text>
+                </View>
+                <Text style={localStyles.recImportance}>
+                  Importance: {rec.importance}
+                </Text>
+                <Text style={localStyles.recTechnique}>
+                  Technique: {rec.technique}
+                </Text>
+                <Text style={localStyles.recTargetedConcern}>
+                  Targeted Concern: {rec.targetedConcern}
+                </Text>
+                <Text style={localStyles.recExplanation}>
+                  {rec.explanation}
+                </Text>
+              </View>
+            ))}
+          </ScrollView>
+        );
+      case "Makeup Tips":
+        return (
+          <ScrollView style={localStyles.scoresContainer}>
+            <Text style={localStyles.summarySectionTitle}>
+              {recommendations?.result[2]?.userMakeupSummary}
+            </Text>
+            {recommendations?.result[2]?.steps.map((tip: any) => (
+              <View key={tip.id} style={localStyles.makeupTipCard}>
+                <Text style={localStyles.makeupTipTitle}>{tip.name}</Text>
+                <Text style={localStyles.makeupTipTechnique}>
+                  Technique: {tip.technique}
+                </Text>
+                <Text style={localStyles.makeupTipImportance}>
+                  Importance: {tip.importance}
+                </Text>
+                <Text style={localStyles.makeupTipSuitableFor}>
+                  Suitable For: {tip.suitableFor}
+                </Text>
+                <Text style={localStyles.makeupTipExplanation}>
+                  {tip.explanation}
+                </Text>
+                {tip.products.map((product: any, index: number) => (
+                  <View key={index} style={localStyles.makeupProductSection}>
+                    <Text style={localStyles.makeupProductCategory}>
+                      {product.category}
+                    </Text>
+                    <View style={localStyles.makeupProductDetails}>
+                      <Text style={localStyles.makeupProductTitle}>
+                        High-End:
+                      </Text>
+                      <Text>
+                        {product.highEnd.name} - {product.highEnd.price}
+                      </Text>
+                      <Text>
+                        Application Tip: {product.highEnd.applicationTip}
+                      </Text>
+                    </View>
+                    <View style={localStyles.makeupProductDetails}>
+                      <Text style={localStyles.makeupProductTitle}>
+                        Affordable:
+                      </Text>
+                      <Text>
+                        {product.affordable.name} - {product.affordable.price}
+                      </Text>
+                      <Text>
+                        Application Tip: {product.affordable.applicationTip}
+                      </Text>
+                    </View>
+                  </View>
+                ))}
+              </View>
+            ))}
+          </ScrollView>
         );
       default:
         return null;
@@ -175,7 +292,7 @@ const GlowResultScreen = () => {
       >
         <View style={localStyles.header}>
           <TouchableOpacity>
-            <Ionicons name='arrow-back' size={24} color='black' />
+            <Ionicons name="arrow-back" size={24} color="black" />
           </TouchableOpacity>
           <Text style={localStyles.headerTitle}>Glow</Text>
           <View style={{ width: 24 }} />
@@ -193,10 +310,12 @@ const GlowResultScreen = () => {
         >
           <View style={localStyles.tabContainer}>
             {[
-              'Ratings',
-              'Facial Analysis',
-              'Skin Analysis',
-              'Product Recommendations',
+              "Ratings",
+              "Facial Analysis",
+              "Skin Analysis",
+              "Glow-Up Tips",
+              "Skincare Recommendations",
+              "Makeup Tips",
             ].map((tab) => (
               <TouchableOpacity
                 key={tab}
@@ -222,15 +341,15 @@ const GlowResultScreen = () => {
         <View style={localStyles.profileContainer}>
           <Image
             source={{
-              uri: images[0] || 'https://example.com/default-profile-image.jpg',
+              uri: images[0] || "https://example.com/default-profile-image.jpg",
             }}
             style={localStyles.profileImage}
           />
           <Text style={localStyles.percentileText}>
-            You are in the{' '}
+            You are in the{" "}
             <Text style={localStyles.percentileHighlight}>
               {percentile}th percentile
-            </Text>{' '}
+            </Text>{" "}
             of all users.
           </Text>
         </View>
@@ -252,25 +371,25 @@ const GlowResultScreen = () => {
 const localStyles = StyleSheet.create({
   safeArea: {
     flex: 1,
-    backgroundColor: 'white',
+    backgroundColor: "white",
   },
   container: {
     flex: 1,
-    backgroundColor: 'white',
+    backgroundColor: "white",
     padding: 20,
   },
   contentContainer: {
     padding: 20,
   },
   header: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
     marginBottom: 20,
   },
   headerTitle: {
     fontSize: 20,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
   // title: {
   //   fontSize: 24,
@@ -283,7 +402,7 @@ const localStyles = StyleSheet.create({
   //   marginBottom: 20,
   // },
   tabContainer: {
-    flexDirection: 'row',
+    flexDirection: "row",
     marginBottom: 20,
   },
   tab: {
@@ -293,21 +412,21 @@ const localStyles = StyleSheet.create({
     marginRight: 10,
   },
   activeTab: {
-    backgroundColor: '#F0E6FF',
+    backgroundColor: "#F0E6FF",
     paddingVertical: 10,
     paddingHorizontal: 15,
     borderRadius: 20,
     marginRight: 10,
   },
   tabText: {
-    color: '#666',
+    color: "#666",
   },
   activeTabText: {
-    color: '#6200EE',
-    fontWeight: 'bold',
+    color: "#6200EE",
+    fontWeight: "bold",
   },
   profileContainer: {
-    alignItems: 'center',
+    alignItems: "center",
     marginBottom: 20,
   },
   profileImage: {
@@ -318,107 +437,107 @@ const localStyles = StyleSheet.create({
   },
   percentileText: {
     fontSize: 16,
-    textAlign: 'center',
+    textAlign: "center",
   },
   percentileHighlight: {
-    color: '#6200EE',
-    fontWeight: 'bold',
+    color: "#6200EE",
+    fontWeight: "bold",
   },
   scoresContainer: {
     marginBottom: 20,
   },
   scoreCard: {
-    backgroundColor: '#F5F5F5',
+    backgroundColor: "#F5F5F5",
     borderRadius: 10,
     padding: 15,
-    width: '48%', // Adjust this value to control the gap between cards
+    width: "48%", // Adjust this value to control the gap between cards
     marginBottom: 10,
   },
   scoreTitle: {
     fontSize: 16,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     marginBottom: 5,
   },
   scoreValue: {
     fontSize: 24,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     marginBottom: 5,
   },
   progressBar: {
     height: 4,
-    backgroundColor: '#E0E0E0',
+    backgroundColor: "#E0E0E0",
     borderRadius: 2,
   },
   progressFill: {
     height: 4,
-    backgroundColor: '#6200EE',
+    backgroundColor: "#6200EE",
     borderRadius: 2,
   },
   unlockButton: {
-    backgroundColor: '#6200EE',
+    backgroundColor: "#6200EE",
     borderRadius: 25,
     paddingVertical: 15,
-    alignItems: 'center',
+    alignItems: "center",
   },
   unlockButtonText: {
-    color: 'white',
+    color: "white",
     fontSize: 18,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
   sectionContainer: {
     marginBottom: 20,
   },
   sectionTitle: {
     fontSize: 20,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     marginBottom: 10,
   },
   characteristicItem: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    justifyContent: "space-between",
     marginBottom: 5,
   },
   characteristicTitle: {
     fontSize: 16,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
   characteristicValue: {
     fontSize: 18,
-    fontWeight: 'bold',
-    color: '#000',
+    fontWeight: "bold",
+    color: "#000",
   },
   tabScrollView: {
     flexGrow: 0,
     marginBottom: 20,
   },
   scoreRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    justifyContent: "space-between",
     marginBottom: 10,
   },
   characteristicCard: {
-    backgroundColor: '#F5F5F5',
+    backgroundColor: "#F5F5F5",
     borderRadius: 10,
     padding: 15,
-    width: '48%',
+    width: "48%",
     marginBottom: 10,
     minHeight: 100, // Add this to ensure consistent height
-    justifyContent: 'space-between', // Add this for better layout
+    justifyContent: "space-between", // Add this for better layout
   },
   buttonSpacer: {
     height: 80, // Adjust this value based on your button height
   },
   buttonContainer: {
-    position: 'absolute',
+    position: "absolute",
     bottom: 0,
     left: 0,
     right: 0,
-    backgroundColor: 'white',
+    backgroundColor: "white",
     paddingHorizontal: 20,
     paddingTop: 10,
     ...Platform.select({
       ios: {
-        shadowColor: '#000',
+        shadowColor: "#000",
         shadowOffset: { width: 0, height: -3 },
         shadowOpacity: 0.1,
         shadowRadius: 3,
@@ -427,6 +546,120 @@ const localStyles = StyleSheet.create({
         elevation: 5,
       },
     }),
+  },
+  tipCard: {
+    backgroundColor: "#F5F5F5",
+    borderRadius: 10,
+    padding: 15,
+    marginBottom: 10,
+  },
+  tipTitle: {
+    fontSize: 18,
+    fontWeight: "bold",
+    marginBottom: 5,
+  },
+  tipDetails: {
+    fontSize: 14,
+    marginBottom: 5,
+  },
+  tipImportance: {
+    fontSize: 14,
+    fontStyle: "italic",
+  },
+  recCard: {
+    backgroundColor: "#F5F5F5",
+    borderRadius: 10,
+    padding: 15,
+    marginBottom: 10,
+  },
+  recTitle: {
+    fontSize: 18,
+    fontWeight: "bold",
+    marginBottom: 10,
+  },
+  productSection: {
+    marginBottom: 10,
+  },
+  productTitle: {
+    fontSize: 16,
+    fontWeight: "bold",
+  },
+  recImportance: {
+    fontSize: 14,
+    fontStyle: "italic",
+    marginTop: 5,
+  },
+  recTechnique: {
+    fontSize: 14,
+    marginTop: 5,
+  },
+  makeupTipCard: {
+    backgroundColor: "#F5F5F5",
+    borderRadius: 10,
+    padding: 15,
+    marginBottom: 10,
+  },
+  makeupTipTitle: {
+    fontSize: 18,
+    fontWeight: "bold",
+    marginBottom: 5,
+  },
+  makeupTipTechnique: {
+    fontSize: 14,
+    marginBottom: 5,
+  },
+  makeupTipImportance: {
+    fontSize: 14,
+    fontStyle: "italic",
+    marginBottom: 10,
+  },
+  makeupProductSection: {
+    marginBottom: 10,
+  },
+  makeupProductCategory: {
+    fontSize: 16,
+    fontWeight: "bold",
+    marginBottom: 5,
+  },
+  makeupProductDetails: {
+    marginLeft: 10,
+    marginBottom: 5,
+  },
+  makeupProductTitle: {
+    fontSize: 14,
+    fontWeight: "bold",
+  },
+  summarySectionTitle: {
+    fontSize: 16,
+    fontWeight: "bold",
+    marginBottom: 10,
+  },
+  tipRelatedFeature: {
+    fontSize: 14,
+    marginTop: 5,
+  },
+  tipExplanation: {
+    fontSize: 14,
+    marginTop: 5,
+    fontStyle: "italic",
+  },
+  recTargetedConcern: {
+    fontSize: 14,
+    marginTop: 5,
+  },
+  recExplanation: {
+    fontSize: 14,
+    marginTop: 5,
+    fontStyle: "italic",
+  },
+  makeupTipSuitableFor: {
+    fontSize: 14,
+    marginBottom: 5,
+  },
+  makeupTipExplanation: {
+    fontSize: 14,
+    marginBottom: 10,
+    fontStyle: "italic",
   },
 });
 
