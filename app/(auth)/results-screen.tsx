@@ -172,10 +172,7 @@ const ResultsScreen = () => {
 
         const response = await fetchAPI('/(api)/(openai)/glowscore', {
           method: 'POST',
-          body: JSON.stringify({ prompt, imageUri }), // Sending imageUri in the request body
-          headers: {
-            'Content-Type': 'application/json', // Set the correct content type
-          },
+          body: JSON.stringify({ prompt, imageUri }),
         });
 
         console.log('FRR Response2', response);
