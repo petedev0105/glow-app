@@ -227,7 +227,7 @@ const ResultsScreen = () => {
 
   return (
     <ImageBackground
-      source={require('@/assets/images/glow-eclipse.png')} // Replace this with your actual image path
+      source={require('@/assets/images/glow-eclipse.png')}
       style={resultStyles.background}
     >
       {/* Ripple effect */}
