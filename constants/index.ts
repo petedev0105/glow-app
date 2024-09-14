@@ -25,7 +25,9 @@ import target from '@/assets/icons/target.png';
 import to from '@/assets/icons/to.png';
 import auraLogo from '@/assets/images/aura/logo.png';
 import glowTitle from '@/assets/images/glow-title.png';
+import startGlowUpImg from '@/assets/images/glow-up-image.png';
 import onboardingScreenBg from '@/assets/images/onboarding-bg.png';
+import screenBg from '@/assets/images/screen-bg.png';
 import signinBackground from '@/assets/images/signin-bg.png';
 import signinBackgroundSvg from '@/assets/images/signin-bg.svg';
 import {
@@ -41,6 +43,8 @@ export const images = {
   glowTitle,
   signinBackgroundSvg,
   onboardingScreenBg,
+  startGlowUpImg,
+  screenBg,
 };
 
 export const icons = {
