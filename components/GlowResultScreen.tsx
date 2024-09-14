@@ -275,13 +275,19 @@ const GlowResultScreen = () => {
             { paddingBottom: insets.bottom },
           ]}
         >
+          {/* Gradient background */}
           <LinearGradient
             colors={['#da70d6', '#7b68ee', '#87cefa']}
             start={{ x: 0, y: 0 }}
             end={{ x: 1, y: 0 }}
-            style={localStyles.unlockButton}
+            style={localStyles.gradientBackground}
           >
-            <Text style={localStyles.unlockButtonText}>Unlock Results 🙌</Text>
+            {/* White button on top of the gradient */}
+            <View style={localStyles.whiteButton}>
+              <Text style={localStyles.unlockButtonText}>
+                Unlock Results 🙌
+              </Text>
+            </View>
           </LinearGradient>
         </View>
       </SafeAreaView>
@@ -347,7 +353,7 @@ const localStyles = StyleSheet.create({
   activeTab: {
     borderWidth: 2,
     borderColor: 'black',
-    backgroundColor: 'white',
+    backgroundColor: 'black',
     paddingVertical: 10,
     paddingHorizontal: 15,
     borderRadius: 20,
@@ -357,7 +363,7 @@ const localStyles = StyleSheet.create({
     color: '#666',
   },
   activeTabText: {
-    color: 'black',
+    color: 'white',
     fontWeight: 'bold',
   },
   profileContainer: {
@@ -425,7 +431,25 @@ const localStyles = StyleSheet.create({
     borderColor: 'black',
     borderWidth: 2,
   },
+  gradientBackground: {
+    borderRadius: 50,
+    padding: 4,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 16,
+    width: '90%',
+  },
+  whiteButton: {
+    backgroundColor: 'black',
+    borderRadius: 50,
+    paddingVertical: 14,
+    paddingHorizontal: 32,
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: '100%',
+  },
   unlockButtonText: {
+    // color: '#6200EE', // Keep the text in a bold color to stand out
     color: 'white',
     fontSize: 18,
     fontWeight: 'bold',
@@ -479,7 +503,8 @@ const localStyles = StyleSheet.create({
     bottom: 0,
     left: 0,
     right: 0,
-    // backgroundColor: 'white',
+    justifyContent: 'center',
+    alignItems: 'center',
     paddingHorizontal: 20,
     paddingTop: 10,
     ...Platform.select({
