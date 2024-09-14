@@ -47,11 +47,12 @@ const GlowResultScreen = () => {
   }) =>
     potential ? (
       // Apply golden gradient if potential is true
+
       <LinearGradient
-        colors={['#FFD700', '#FFFACD', '#FFD700', '#FFEC8B', '#FFD700']} // Refined gold gradient colors
-        locations={[0, 0.3, 0.5, 0.7, 1]} // Multiple stops for a reflective gold effect
-        start={{ x: 0, y: 0 }} // Horizontal gradient (left to right)
-        end={{ x: 1, y: 0 }}
+        colors={['#d0980c', '#fde14a', '#f8efa3', '#fde14a', '#d0980c']} // Darker on the edges, bright gold in the center
+        locations={[0, 0.25, 0.5, 0.75, 1]} // Reflective effect with center highlight
+        start={{ x: 0, y: 1 }} // Horizontal gradient (left to right)
+        end={{ x: 1, y: 1 }}
         style={localStyles.scoreCard} // Apply the same style as the score card
       >
         <View className='flex flex-row justify-between items-center mb-3 flex-wrap'>
@@ -60,7 +61,7 @@ const GlowResultScreen = () => {
         </View>
         <View style={localStyles.progressBar}>
           <LinearGradient
-            colors={['#da70d6', '#7b68ee', '#87cefa']} // Original gradient for progress fill
+            colors={['#000']} // Original gradient for progress fill
             start={{ x: 0, y: 0 }}
             end={{ x: 1, y: 0 }}
             style={[
