@@ -175,8 +175,6 @@ export const styles = StyleSheet.create({
     borderRadius: 20,
   },
   snapPlaceholder: {
-    width: 260,
-    height: 260,
     backgroundColor: "#E6D8E1", // Placeholder color
     borderRadius: 20,
     marginVertical: 40,
