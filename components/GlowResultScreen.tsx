@@ -195,10 +195,10 @@ const GlowResultScreen = () => {
             <TouchableOpacity style={localStyles.backButton}>
               <Ionicons name='arrow-back' size={24} color='black' />
             </TouchableOpacity>
-            <Text style={localStyles.centeredTitle}>Glow up guide</Text>
+            <Text style={localStyles.centeredTitle}>Glow Profile</Text>
           </View>
           <Text style={styles.subtitle}>
-            Here's your personalized glow up guide based on your facial
+            Here's your personalized glow up profile based on your facial
             analysis.
           </Text>
 
@@ -256,7 +256,7 @@ const GlowResultScreen = () => {
             >
               You are in the{'\n'}
               <Text style={localStyles.percentileHighlight}>
-                {`👉  ${percentile}th percentile  👈`}
+                {`👉 ${percentile}th percentile 👈`}
               </Text>
               {'\n'}
               of all users.
@@ -384,10 +384,11 @@ const localStyles = StyleSheet.create({
   percentileText: {
     width: '80%',
     fontSize: 16,
-    color: 'black',
+    color: '#000',
     letterSpacing: -0.4,
     textAlign: 'center',
     marginVertical: 10,
+    lineHeight: 26,
   },
   percentileHighlight: {
     fontWeight: 'bold',
@@ -405,6 +406,8 @@ const localStyles = StyleSheet.create({
     padding: 15,
     width: '48%',
     marginBottom: 10,
+    borderWidth: 2,
+    borderColor: '#000',
   },
   scoreTitle: {
     fontSize: 12,
@@ -472,8 +475,9 @@ const localStyles = StyleSheet.create({
     marginBottom: 5,
   },
   characteristicTitle: {
-    fontSize: 14,
+    fontSize: 16,
     fontWeight: 'bold',
+    marginBottom: 10,
   },
   characteristicValue: {
     fontSize: 16,
@@ -497,6 +501,8 @@ const localStyles = StyleSheet.create({
     marginBottom: 10,
     minHeight: 100,
     justifyContent: 'space-between',
+    borderWidth: 2,
+    borderColor: '#000',
   },
   buttonSpacer: {
     height: 80,
