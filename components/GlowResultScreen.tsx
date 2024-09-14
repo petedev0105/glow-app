@@ -36,28 +36,60 @@ const GlowResultScreen = () => {
   const { scores, percentile, facialCharacteristics, skinAnalysis } =
     glowResult as any;
 
-  const ScoreCard: React.FC<{ title: string; score: number }> = ({
+  const ScoreCard = ({
     title,
     score,
-  }) => (
-    <View style={localStyles.scoreCard}>
-      <View className='flex flex-row justify-between items-center mb-3 flex-wrap'>
-        <Text style={localStyles.scoreTitle}>{title}</Text>
-        <Text style={localStyles.scoreValue}>{score.toFixed(1)}</Text>
+    potential,
+  }: {
+    title: string;
+    score: number;
+    potential?: boolean;
+  }) =>
+    potential ? (
+      // Apply golden gradient if potential is true
+      <LinearGradient
+        colors={['#FFD700', '#FFFACD', '#FFD700', '#FFEC8B', '#FFD700']} // Refined gold gradient colors
+        locations={[0, 0.3, 0.5, 0.7, 1]} // Multiple stops for a reflective gold effect
+        start={{ x: 0, y: 0 }} // Horizontal gradient (left to right)
+        end={{ x: 1, y: 0 }}
+        style={localStyles.scoreCard} // Apply the same style as the score card
+      >
+        <View className='flex flex-row justify-between items-center mb-3 flex-wrap'>
+          <Text style={localStyles.scoreTitle}>{title}</Text>
+          <Text style={localStyles.scoreValue}>{score.toFixed(1)}</Text>
+        </View>
+        <View style={localStyles.progressBar}>
+          <LinearGradient
+            colors={['#da70d6', '#7b68ee', '#87cefa']} // Original gradient for progress fill
+            start={{ x: 0, y: 0 }}
+            end={{ x: 1, y: 0 }}
+            style={[
+              localStyles.progressFill,
+              { width: `${(score / 10) * 100}%` },
+            ]}
+          />
+        </View>
+      </LinearGradient>
+    ) : (
+      // Regular card without gradient
+      <View style={localStyles.scoreCard}>
+        <View className='flex flex-row justify-between items-center mb-3 flex-wrap'>
+          <Text style={localStyles.scoreTitle}>{title}</Text>
+          <Text style={localStyles.scoreValue}>{score.toFixed(1)}</Text>
+        </View>
+        <View style={localStyles.progressBar}>
+          <LinearGradient
+            colors={['#da70d6', '#7b68ee', '#87cefa']} // Original gradient for progress fill
+            start={{ x: 0, y: 0 }}
+            end={{ x: 1, y: 0 }}
+            style={[
+              localStyles.progressFill,
+              { width: `${(score / 10) * 100}%` },
+            ]}
+          />
+        </View>
       </View>
-      <View style={localStyles.progressBar}>
-        <LinearGradient
-          colors={['#da70d6', '#7b68ee', '#87cefa']}
-          start={{ x: 0, y: 0 }}
-          end={{ x: 1, y: 0 }}
-          style={[
-            localStyles.progressFill,
-            { width: `${(score / 10) * 100}%` },
-          ]}
-        />
-      </View>
-    </View>
-  );
+    );
 
   const CharacteristicItem = ({
     title,
@@ -91,8 +123,8 @@ const GlowResultScreen = () => {
         return (
           <View style={localStyles.scoresContainer}>
             <View style={localStyles.scoreRow}>
+              <ScoreCard title='Potential' score={scores.potential} potential />
               <ScoreCard title='Overall' score={scores.overall} />
-              <ScoreCard title='Potential' score={scores.potential} />
             </View>
             <View style={localStyles.scoreRow}>
               <ScoreCard title='Skin Health' score={scores.skinHealth} />
@@ -198,8 +230,7 @@ const GlowResultScreen = () => {
             <Text style={localStyles.centeredTitle}>Glow Profile</Text>
           </View>
           <Text style={styles.subtitle}>
-            Here's your personalized glow up profile based on your facial
-            analysis.
+            Here's your personalized glow profile based on your facial analysis.
           </Text>
 
           <RNScrollView
