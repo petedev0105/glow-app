@@ -144,25 +144,6 @@ const ResultsScreen = () => {
     outputRange: [0.1, 10], // Adjust the range to control the ripple size
   });
 
-  // Fetch glow results from the API after loading completes
-  // const fetchGlowResults = async () => {
-  //   const { user } = useUser();
-  //   const images = useImageStore((state) => state.images);
-  //   const imageUri = images[0];
-
-  //   try {
-  //     const response = await fetchAPI('/(api)/(openai)/glowscore', {
-  //       method: 'POST',
-  //       body: JSON.stringify({ imageUri }),
-  //     });
-  //     setGlowResult(response);
-  //   } catch (error) {
-  //     console.error('Error fetching glow results:', error);
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
-
   useEffect(() => {
     let isFetchCompleted = false; // Local flag to track fetch status
 
