@@ -17,7 +17,7 @@ export const LeaveRatingScreen = ({
 
   useEffect(() => {
     if (!isSignedIn) {
-      router.replace('/(auth)/sign-in');
+      router.replace('/(auth)/start');
     }
   }, [isSignedIn]);
 

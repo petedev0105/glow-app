@@ -1,3 +1,4 @@
+import OnboardingQuestions from '@/components/OnboardingQuestions';
 import { useUser } from '@clerk/clerk-expo';
 import { useNavigation } from '@react-navigation/native';
 import { useEffect, useRef, useState } from 'react';
@@ -36,8 +37,7 @@ const Home = () => {
     );
   }
 
-  // return <OnboardingQuestions />;
-  return null;
+  return <OnboardingQuestions />;
 };
 
 const styles = StyleSheet.create({
