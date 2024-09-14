@@ -1,8 +1,8 @@
-import { useAuth } from '@clerk/clerk-expo';
-import { router } from 'expo-router';
-import React, { useEffect } from 'react';
-import { Text, TouchableOpacity, View } from 'react-native';
-import { onboardingQuestionsList, styles } from '../../constants/onboarding';
+import { useAuth } from "@clerk/clerk-expo";
+import { router } from "expo-router";
+import React, { useEffect } from "react";
+import { Text, TouchableOpacity, View } from "react-native";
+import { onboardingQuestionsList, styles } from "../../constants/onboarding";
 
 export const LeaveRatingScreen = ({
   navigation,
@@ -17,7 +17,7 @@ export const LeaveRatingScreen = ({
 
   useEffect(() => {
     if (!isSignedIn) {
-      router.replace('/(auth)/start');
+      router.replace("/(auth)/start");
     }
   }, [isSignedIn]);
 
@@ -36,9 +36,10 @@ export const LeaveRatingScreen = ({
         {/* <TouchableOpacity style={styles.button} onPress={onNext}> */}
         <TouchableOpacity
           style={styles.button}
-          onPress={() => {
-            signOut();
-          }}
+          // onPress={() => {
+          //   signOut();
+          // }}
+          onPress={onNext}
         >
           <Text style={styles.buttonText}>
             {onboardingQuestionsList[8].continueButton}

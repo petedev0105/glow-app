@@ -1,25 +1,22 @@
-import axios from 'axios';
-import OpenAI from 'openai';
+import axios from "axios";
+import OpenAI from "openai";
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
 
-export async function POST (request) {
+export async function POST(request) {
   try {
     const { prompt, imageUri } = await request.json(); // Extract the prompt and image URI from the request body
     const result = await checkGlowScore({ prompt, imageUri }); // Call the glow score function
     return Response.json(result);
   } catch (error) {
-    console.error('Error in glow score API:', error);
+    console.error("Error in glow score API:", error);
     return Response.json({ error: error.message }, { status: 500 });
   }
 }
 
-async function checkGlowScore ({
-  prompt,
-  imageUri,
-}) {
+async function checkGlowScore({ prompt, imageUri }) {
   const systemPrompt = `
 
 You are an AI beauty analyst designed to evaluate facial features from photos. Your task is to analyze images and provide ratings for various facial attributes, as well as identify specific facial and skin characteristics. When presented with a face photo, calculate and output the following in JSON format:
@@ -105,48 +102,50 @@ Here's an example of how you should respond in JSON format:
   try {
     let messages = [
       {
-        role: 'system',
+        role: "system",
         content: systemPrompt,
       },
     ];
 
-    if (prompt && prompt !== '') {
-      messages.push({ role: 'user', content: prompt });
+    if (prompt && prompt !== "") {
+      messages.push({ role: "user", content: prompt });
     }
 
     if (imageUri) {
       let imageContent;
-      if (imageUri.startsWith('data:image')) {
+      if (imageUri.startsWith("data:image")) {
         // If it's a base64 encoded image
         imageContent = imageUri;
       } else {
         // Fetch the image and convert to base64
         const response = await axios.get(imageUri, {
-          responseType: 'arraybuffer',
+          responseType: "arraybuffer",
         });
-        const base64Image = Buffer.from(response.data, 'binary').toString(
-          'base64'
+        const base64Image = Buffer.from(response.data, "binary").toString(
+          "base64"
         );
         imageContent = `data:image/jpeg;base64,${base64Image}`;
       }
 
       messages.push({
-        role: 'user',
+        role: "user",
         content: [
           {
-            type: 'text',
-            text: 'Analyze this image and provide an aura score.',
+            type: "text",
+            text: "Do a facial analysis on this image.",
           },
-          { type: 'image_url', image_url: { url: imageContent } },
+          { type: "image_url", image_url: { url: imageContent } },
         ],
       });
     }
 
+    console.log("getting image analysis response from gpt4...");
+
     const response = await openai.chat.completions.create({
-      model: 'gpt-4o-mini',
+      model: "gpt-4o-mini",
       messages: messages,
       max_tokens: 5000,
-      response_format: { type: 'json_object' },
+      response_format: { type: "json_object" },
     });
 
     // Ensure the content is present in the response
@@ -158,7 +157,7 @@ Here's an example of how you should respond in JSON format:
 
     return result;
   } catch (error) {
-    console.error('Error in checkGlowScore:', error);
+    console.error("Error in checkGlowScore:", error);
     throw error;
   }
 }
