@@ -24,7 +24,10 @@ import star from '@/assets/icons/star.png';
 import target from '@/assets/icons/target.png';
 import to from '@/assets/icons/to.png';
 import auraLogo from '@/assets/images/aura/logo.png';
+import glowTitle from '@/assets/images/glow-title.png';
+import onboardingScreenBg from '@/assets/images/onboarding-bg.png';
 import signinBackground from '@/assets/images/signin-bg.png';
+import signinBackgroundSvg from '@/assets/images/signin-bg.svg';
 import {
   EXPO_PUBLIC_AWS_ACCESS_KEY_ID,
   EXPO_PUBLIC_AWS_REGION,
@@ -35,6 +38,9 @@ import { S3 } from 'aws-sdk';
 export const images = {
   auraLogo,
   signinBackground,
+  glowTitle,
+  signinBackgroundSvg,
+  onboardingScreenBg,
 };
 
 export const icons = {
