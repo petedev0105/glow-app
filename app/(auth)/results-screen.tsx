@@ -5,11 +5,15 @@ import React, { useEffect, useRef, useState } from 'react';
 import {
   Alert,
   Animated,
+  Dimensions,
+  Easing,
   ImageBackground,
   StyleSheet,
   Text,
   View,
 } from 'react-native';
+
+const { width, height } = Dimensions.get('window');
 
 const ResultsScreen = () => {
   const [loadingProgress, setLoadingProgress] = useState(0);
@@ -19,6 +23,8 @@ const ResultsScreen = () => {
   const [intervalDuration, setIntervalDuration] = useState(125);
 
   const fadeAnim = useRef(new Animated.Value(1)).current;
+  const rippleAnim = useRef(new Animated.Value(0)).current;
+  const opacityAnim = useRef(new Animated.Value(1)).current;
 
   const messages = [
     'Analyzing your features ✨',
@@ -28,6 +34,28 @@ const ResultsScreen = () => {
   ];
 
   useEffect(() => {
+    // Ripple animation
+    const startRippleAnimation = () => {
+      Animated.loop(
+        Animated.parallel([
+          Animated.timing(rippleAnim, {
+            toValue: 1,
+            duration: 1500,
+            useNativeDriver: false,
+            easing: Easing.out(Easing.ease),
+          }),
+          Animated.timing(opacityAnim, {
+            toValue: 0,
+            duration: 1500,
+            useNativeDriver: false,
+            easing: Easing.out(Easing.ease),
+          }),
+        ])
+      ).start();
+    };
+
+    startRippleAnimation();
+
     // Fade in function
     const fadeIn = () => {
       Animated.timing(fadeAnim, {
@@ -72,6 +100,7 @@ const ResultsScreen = () => {
           if (newProgress >= 100) {
             clearInterval(progressInterval);
             Alert.alert('Analysis complete');
+
             return 100;
           }
 
@@ -99,6 +128,11 @@ const ResultsScreen = () => {
     return () => clearInterval(progressInterval);
   }, [intervalDuration]);
 
+  const rippleScale = rippleAnim.interpolate({
+    inputRange: [0, 1],
+    outputRange: [0.1, 10], // Adjust the range to control the ripple size
+  });
+
   // Fetch glow results from the API after loading completes
   const fetchGlowResults = async () => {
     const { user } = useUser();
@@ -123,6 +157,16 @@ const ResultsScreen = () => {
       source={require('@/assets/images/glow-eclipse.png')} // Replace this with your actual image path
       style={resultStyles.background}
     >
+      {/* Ripple effect */}
+      <Animated.View
+        style={[
+          resultStyles.ripple,
+          {
+            transform: [{ scale: rippleScale }],
+            opacity: opacityAnim,
+          },
+        ]}
+      />
       <View style={resultStyles.container}>
         <View style={resultStyles.contentContainer}>
           {/* <Animated.Text style={[resultStyles.percentage, { opacity: fadeAnim }]}>
@@ -205,6 +249,15 @@ const resultStyles = StyleSheet.create({
     fontSize: 16,
     color: 'white',
     marginTop: 10,
+  },
+  ripple: {
+    position: 'absolute',
+    width: 100,
+    height: 100,
+    borderRadius: 50,
+    backgroundColor: 'rgba(255, 255, 255, 0.3)',
+    top: height / 2 - 50, // Center the ripple
+    left: width / 2 - 50,
   },
 });
 
