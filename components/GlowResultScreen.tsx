@@ -66,7 +66,7 @@ const GlowResultScreen = () => {
     title: string;
     value: string;
   }) => (
-    <View style={localStyles.characteristicItem}>
+    <View style={localStyles.characteristicItem} className='shadow-md'>
       <Text style={localStyles.characteristicTitle}>{title}:</Text>
       <Text style={localStyles.characteristicValue}>{value}</Text>
     </View>
@@ -178,6 +178,7 @@ const GlowResultScreen = () => {
   return (
     <ImageBackground
       source={require('@/assets/images/glow-eclipse.png')}
+      // source={require('@/assets/images/screen-bg.png')}
       style={localStyles.background}
       resizeMode='cover'
     >
@@ -290,14 +291,16 @@ const localStyles = StyleSheet.create({
     flex: 1,
     resizeMode: 'cover',
     justifyContent: 'center',
+    width: '100%',
+    height: '100%',
   },
   safeArea: {
     flex: 1,
-    backgroundColor: 'white',
+    backgroundColor: 'transparent',
   },
   container: {
     flex: 1,
-    backgroundColor: 'white',
+    backgroundColor: 'transparent',
     paddingHorizontal: 20,
   },
   contentContainer: {
@@ -370,7 +373,8 @@ const localStyles = StyleSheet.create({
   },
   percentileHighlight: {
     fontWeight: 'bold',
-    color: '#8835f4',
+    // color: '#8835f4',
+    color: '#000',
     letterSpacing: -0.4,
   },
   scoresContainer: {
