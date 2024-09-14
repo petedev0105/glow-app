@@ -374,7 +374,7 @@ const GlowResultScreen = () => {
 const localStyles = StyleSheet.create({
   overlay: {
     ...StyleSheet.absoluteFillObject, // Makes the overlay cover the entire background
-    backgroundColor: 'rgba(255, 255, 255, 0.5)', // Adjust opacity here (lighter background)
+    backgroundColor: 'rgba(255, 255, 255, 0.6)', // Adjust opacity here (lighter background)
   },
   background: {
     flex: 1,
