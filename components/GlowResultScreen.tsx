@@ -3,7 +3,7 @@ import { useGlowResultStore } from "@/store/glowResultStore";
 import { useImageStore } from "@/store/imageStore";
 import { Ionicons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Image,
   Platform,
