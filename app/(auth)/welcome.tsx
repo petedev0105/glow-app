@@ -3,7 +3,6 @@ import { useNavigation } from '@react-navigation/native';
 import { useEffect, useRef, useState } from 'react';
 import { ActivityIndicator, StyleSheet, View } from 'react-native';
 import Swiper from 'react-native-swiper';
-import OnboardingQuestions from '../../components/OnboardingQuestions';
 
 const Home = () => {
   const { user, isLoaded, isSignedIn } = useUser();
@@ -37,7 +36,8 @@ const Home = () => {
     );
   }
 
-  return <OnboardingQuestions />;
+  // return <OnboardingQuestions />;
+  return null;
 };
 
 const styles = StyleSheet.create({

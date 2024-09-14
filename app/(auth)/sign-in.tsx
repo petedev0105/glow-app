@@ -16,7 +16,7 @@ const SignIn = () => {
 
   useEffect(() => {
     if (isSignedIn) {
-      router.replace('/(auth)/welcome');
+      router.replace('/(auth)/start');
     }
   }, [isSignedIn]);
 
