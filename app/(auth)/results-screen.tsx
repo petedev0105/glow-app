@@ -26,7 +26,7 @@ const ResultsScreen = () => {
   const [loading, setLoading] = useState(true);
   const { glowResult, setGlowResult } = useGlowResultStore();
   const [message, setMessage] = useState('Analyzing your features...');
-  const [intervalDuration, setIntervalDuration] = useState(125);
+  const [intervalDuration, setIntervalDuration] = useState(110);
 
   const fadeAnim = useRef(new Animated.Value(1)).current;
   const rippleAnim = useRef(new Animated.Value(0)).current;
@@ -162,6 +162,8 @@ const ResultsScreen = () => {
   // };
 
   useEffect(() => {
+    let isFetchCompleted = false; // Local flag to track fetch status
+
     const fetchGlowResults = async ({
       prompt,
       imageUri,
@@ -181,10 +183,9 @@ const ResultsScreen = () => {
 
         console.log(response);
 
-        // save to neondb under the user id
+        // Save to neondb under the user id
 
-        // set into global state
-
+        // Set into global state
         const stringResponse = JSON.stringify(response);
 
         try {
@@ -198,19 +199,18 @@ const ResultsScreen = () => {
           );
 
           console.log('recommendationsResponse', recommendationsResponse);
-          // Alert and stringify the recommendations response
           Alert.alert(
             'Recommendations',
             JSON.stringify(recommendationsResponse)
           );
-          setGlowResult(response); // Set the fetched glow result
         } catch (error) {
           console.log(error);
         }
 
-        router.push('/glow-results-screen');
+        setGlowResult(response); // Set the fetched glow result
+        isFetchCompleted = true; // Mark fetch as complete to avoid re-triggering
 
-        // Alert.alert("Glow Score", JSON.stringify(response)); // Display the result
+        router.push('/glow-results-screen'); // Navigate to the results screen
       } catch (error) {
         console.error('Error fetching glow results:', error);
         Alert.alert('Error', 'Could not fetch glow results.');
@@ -221,11 +221,10 @@ const ResultsScreen = () => {
 
     console.log('Effect triggered:', { loadingProgress, glowResult });
 
-    if (loadingProgress >= 100 && !glowResult && imageUri) {
-      // Fetch only when progress reaches 100, no result is fetched yet, and imageUri is valid
+    if (loadingProgress >= 100 && imageUri && !isFetchCompleted) {
       fetchGlowResults({ prompt: '', imageUri });
     }
-  }, [loadingProgress, imageUri, glowResult]);
+  }, [loadingProgress, imageUri]);
 
   return (
     <ImageBackground
