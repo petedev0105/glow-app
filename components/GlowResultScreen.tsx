@@ -182,21 +182,10 @@ const GlowResultScreen = () => {
       style={localStyles.background}
       resizeMode='cover'
     >
-      {/* Add semi-transparent overlay */}
       <View style={localStyles.overlay} />
 
       <SafeAreaView style={localStyles.safeArea}>
         <StatusBar barStyle='dark-content' backgroundColor='#6a51ae' />
-
-        {/* <View className='flex flex-row items-center justify-between'>
-          <TouchableOpacity>
-            <Ionicons name='arrow-back' size={24} color='black' />
-          </TouchableOpacity>
-          <Image
-            source={require('@/assets/images/glow-title.png')}
-            style={{ ...(styles.logo as ImageStyle), marginBottom: 0 }}
-          />
-        </View> */}
 
         <ScrollView
           style={localStyles.container}
@@ -218,65 +207,6 @@ const GlowResultScreen = () => {
             showsHorizontalScrollIndicator={false}
             style={localStyles.tabScrollView}
           >
-            {/* <View style={localStyles.tabContainer}>
-              {[
-                'Ratings',
-                'Facial Analysis',
-                'Skin Analysis',
-                'Product Recommendations',
-              ].map((tab) => (
-                <TouchableOpacity
-                  key={tab}
-                  style={[
-                    localStyles.tab,
-                    activeTab === tab && localStyles.activeTab,
-                  ]}
-                  onPress={() => setActiveTab(tab)}
-                >
-                  <Text
-                    style={[
-                      localStyles.tabText,
-                      activeTab === tab && localStyles.activeTabText,
-                    ]}
-                  >
-                    {tab}
-                  </Text>
-                </TouchableOpacity>
-              ))}
-            </View> */}
-            {/* <View style={localStyles.tabContainer}>
-              {[
-                'Ratings',
-                'Facial Analysis',
-                'Skin Analysis',
-                'Product Recommendations',
-              ].map((tab) => (
-                <LinearGradient
-                  key={tab}
-                  colors={['#da70d6', '#7b68ee', '#87cefa']} // Gradient colors
-                  start={{ x: 0, y: 0 }}
-                  end={{ x: 1, y: 0 }}
-                  style={localStyles.gradientTabBackground}
-                >
-                  <TouchableOpacity
-                    style={[
-                      localStyles.whiteTab,
-                      activeTab === tab && localStyles.activeTab,
-                    ]}
-                    onPress={() => setActiveTab(tab)}
-                  >
-                    <Text
-                      style={[
-                        localStyles.tabText,
-                        activeTab === tab && localStyles.activeTabText,
-                      ]}
-                    >
-                      {tab}
-                    </Text>
-                  </TouchableOpacity>
-                </LinearGradient>
-              ))}
-            </View> */}
             <View style={localStyles.tabContainer}>
               {[
                 'Ratings',
@@ -336,8 +266,9 @@ const GlowResultScreen = () => {
             >
               You are in the{'\n'}
               <Text style={localStyles.percentileHighlight}>
-                {percentile}th percentile
-              </Text>{' '}
+                👉{percentile}th percentile👈
+              </Text>
+              {'\n'}
               of all users.
             </Text>
           </View>
@@ -434,7 +365,7 @@ const localStyles = StyleSheet.create({
     padding: 2,
   },
   whiteTab: {
-    backgroundColor: 'white',
+    backgroundColor: 'black',
     borderRadius: 20,
     paddingVertical: 10,
     paddingHorizontal: 15,
@@ -445,25 +376,9 @@ const localStyles = StyleSheet.create({
     color: '#666',
   },
   activeTabText: {
-    color: 'black',
+    color: 'white',
     fontWeight: 'bold',
   },
-  // activeTab: {
-  //   borderWidth: 2,
-  //   borderColor: 'black',
-  //   backgroundColor: 'white',
-  //   paddingVertical: 10,
-  //   paddingHorizontal: 15,
-  //   borderRadius: 20,
-  //   marginRight: 10,
-  // },
-  // tabText: {
-  //   color: '#666',
-  // },
-  // activeTabText: {
-  //   color: 'black',
-  //   fontWeight: 'bold',
-  // },
   profileContainer: {
     alignItems: 'center',
     marginBottom: 20,
@@ -485,8 +400,9 @@ const localStyles = StyleSheet.create({
   percentileHighlight: {
     fontWeight: 'bold',
     // color: '#8835f4',
-    color: '#000',
+    color: '#fff',
     letterSpacing: -0.4,
+    backgroundColor: 'black',
   },
   scoresContainer: {
     // marginBottom: 20,
@@ -526,8 +442,6 @@ const localStyles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     marginTop: 16,
-    borderColor: 'black',
-    borderWidth: 2,
   },
   gradientBackground: {
     borderRadius: 50,
@@ -538,7 +452,7 @@ const localStyles = StyleSheet.create({
     width: '90%',
   },
   whiteButton: {
-    backgroundColor: 'white',
+    backgroundColor: 'black',
     borderRadius: 50,
     paddingVertical: 14,
     paddingHorizontal: 32,
@@ -548,7 +462,7 @@ const localStyles = StyleSheet.create({
   },
   unlockButtonText: {
     // color: '#6200EE', // Keep the text in a bold color to stand out
-    color: 'black',
+    color: 'white',
     fontSize: 18,
     fontWeight: 'bold',
   },

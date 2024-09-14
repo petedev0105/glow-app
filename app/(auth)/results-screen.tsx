@@ -184,7 +184,6 @@ const ResultsScreen = () => {
         // save to neondb under the user id
 
         // set into global state
-        setGlowResult(response); // Set the fetched glow result
 
         const stringResponse = JSON.stringify(response);
 
@@ -198,12 +197,13 @@ const ResultsScreen = () => {
             }
           );
 
-          console.log(recommendationsResponse);
+          console.log('recommendationsResponse', recommendationsResponse);
           // Alert and stringify the recommendations response
           Alert.alert(
             'Recommendations',
             JSON.stringify(recommendationsResponse)
           );
+          setGlowResult(response); // Set the fetched glow result
         } catch (error) {
           console.log(error);
         }
@@ -218,6 +218,8 @@ const ResultsScreen = () => {
         setLoading(false); // Ensure the loading state is set to false once the request completes
       }
     };
+
+    console.log('Effect triggered:', { loadingProgress, glowResult });
 
     if (loadingProgress >= 100 && !glowResult && imageUri) {
       // Fetch only when progress reaches 100, no result is fetched yet, and imageUri is valid
