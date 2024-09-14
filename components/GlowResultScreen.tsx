@@ -353,7 +353,7 @@ const localStyles = StyleSheet.create({
   activeTab: {
     borderWidth: 2,
     borderColor: 'black',
-    backgroundColor: 'black',
+    backgroundColor: 'white',
     paddingVertical: 10,
     paddingHorizontal: 15,
     borderRadius: 20,
@@ -363,7 +363,7 @@ const localStyles = StyleSheet.create({
     color: '#666',
   },
   activeTabText: {
-    color: 'white',
+    color: 'black',
     fontWeight: 'bold',
   },
   profileContainer: {
@@ -440,7 +440,7 @@ const localStyles = StyleSheet.create({
     width: '90%',
   },
   whiteButton: {
-    backgroundColor: 'black',
+    backgroundColor: 'white',
     borderRadius: 50,
     paddingVertical: 14,
     paddingHorizontal: 32,
