@@ -6,10 +6,12 @@ import { LinearGradient } from 'expo-linear-gradient';
 import React, { useState } from 'react';
 import {
   Image,
+  ImageBackground,
   Platform,
   ScrollView as RNScrollView,
   SafeAreaView,
   ScrollView,
+  StatusBar,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -174,96 +176,127 @@ const GlowResultScreen = () => {
   };
 
   return (
-    <SafeAreaView style={localStyles.safeArea}>
-      <ScrollView
-        style={localStyles.container}
-        contentContainerStyle={localStyles.contentContainer}
-      >
-        <View style={localStyles.header}>
+    <ImageBackground
+      source={require('@/assets/images/glow-eclipse.png')}
+      style={localStyles.background}
+      resizeMode='cover'
+    >
+      <SafeAreaView style={localStyles.safeArea}>
+        <StatusBar barStyle='dark-content' backgroundColor='#6a51ae' />
+
+        {/* <View className='flex flex-row items-center justify-between'>
           <TouchableOpacity>
             <Ionicons name='arrow-back' size={24} color='black' />
           </TouchableOpacity>
-          <Text style={localStyles.headerTitle}>Glow</Text>
-          <View style={{ width: 24 }} />
-        </View>
-
-        <Text style={styles.title}>Glow up guide</Text>
-        <Text style={styles.subtitle}>
-          Here's your personalized glow up guide based on your facial analysis.
-        </Text>
-
-        <RNScrollView
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          style={localStyles.tabScrollView}
-        >
-          <View style={localStyles.tabContainer}>
-            {[
-              'Ratings',
-              'Facial Analysis',
-              'Skin Analysis',
-              'Product Recommendations',
-            ].map((tab) => (
-              <TouchableOpacity
-                key={tab}
-                style={[
-                  localStyles.tab,
-                  activeTab === tab && localStyles.activeTab,
-                ]}
-                onPress={() => setActiveTab(tab)}
-              >
-                <Text
-                  style={[
-                    localStyles.tabText,
-                    activeTab === tab && localStyles.activeTabText,
-                  ]}
-                >
-                  {tab}
-                </Text>
-              </TouchableOpacity>
-            ))}
-          </View>
-        </RNScrollView>
-
-        <View style={localStyles.profileContainer}>
           <Image
-            source={{
-              uri: images[0] || 'https://example.com/default-profile-image.jpg',
-            }}
-            style={localStyles.profileImage}
+            source={require('@/assets/images/glow-title.png')}
+            style={{ ...(styles.logo as ImageStyle), marginBottom: 0 }}
           />
-          <Text style={localStyles.percentileText}>
-            You are in the{' '}
-            <Text style={localStyles.percentileHighlight}>
-              {percentile}th percentile
-            </Text>{' '}
-            of all users.
-          </Text>
-        </View>
+        </View> */}
 
-        {renderTabContent()}
-        <View style={localStyles.buttonSpacer} />
-      </ScrollView>
-      <View
-        style={[localStyles.buttonContainer, { paddingBottom: insets.bottom }]}
-      >
-        <LinearGradient
-          colors={['#da70d6', '#7b68ee', '#87cefa']}
-          start={{ x: 0, y: 0 }}
-          end={{ x: 1, y: 0 }}
-          style={localStyles.unlockButton}
+        <ScrollView
+          style={localStyles.container}
+          contentContainerStyle={localStyles.contentContainer}
         >
-          <Text style={localStyles.unlockButtonText}>Unlock</Text>
-        </LinearGradient>
-      </View>
-    </SafeAreaView>
+          <TouchableOpacity>
+            <Ionicons name='arrow-back' size={24} color='black' />
+          </TouchableOpacity>
+          <View style={localStyles.header}>
+            {/* <Text style={localStyles.headerTitle}>Glow</Text> */}
+            <View style={{ width: 24 }} />
+          </View>
+
+          <Text style={styles.title}>Glow up guide</Text>
+          <Text style={styles.subtitle}>
+            Here's your personalized glow up guide based on your facial
+            analysis.
+          </Text>
+
+          <RNScrollView
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            style={localStyles.tabScrollView}
+          >
+            <View style={localStyles.tabContainer}>
+              {[
+                'Ratings',
+                'Facial Analysis',
+                'Skin Analysis',
+                'Product Recommendations',
+              ].map((tab) => (
+                <TouchableOpacity
+                  key={tab}
+                  style={[
+                    localStyles.tab,
+                    activeTab === tab && localStyles.activeTab,
+                  ]}
+                  onPress={() => setActiveTab(tab)}
+                >
+                  <Text
+                    style={[
+                      localStyles.tabText,
+                      activeTab === tab && localStyles.activeTabText,
+                    ]}
+                  >
+                    {tab}
+                  </Text>
+                </TouchableOpacity>
+              ))}
+            </View>
+          </RNScrollView>
+
+          <View style={localStyles.profileContainer}>
+            <Image
+              source={{
+                uri:
+                  images[0] || 'https://example.com/default-profile-image.jpg',
+              }}
+              style={localStyles.profileImage}
+            />
+            <Text
+              style={localStyles.percentileText}
+              className='text-center shadow-lg'
+            >
+              You are in the{'\n'}
+              <Text style={localStyles.percentileHighlight}>
+                {percentile}th percentile
+              </Text>{' '}
+              of all users.
+            </Text>
+          </View>
+
+          {renderTabContent()}
+          <View style={localStyles.buttonSpacer} />
+        </ScrollView>
+        <View
+          style={[
+            localStyles.buttonContainer,
+            { paddingBottom: insets.bottom },
+          ]}
+        >
+          <LinearGradient
+            colors={['#da70d6', '#7b68ee', '#87cefa']}
+            start={{ x: 0, y: 0 }}
+            end={{ x: 1, y: 0 }}
+            style={localStyles.unlockButton}
+          >
+            <Text style={localStyles.unlockButtonText}>Unlock</Text>
+          </LinearGradient>
+        </View>
+      </SafeAreaView>
+    </ImageBackground>
   );
 };
 
 const localStyles = StyleSheet.create({
+  background: {
+    flex: 1,
+    resizeMode: 'cover',
+    justifyContent: 'center',
+  },
   safeArea: {
     flex: 1,
-    backgroundColor: 'white',
+    // backgroundColor: 'white',
   },
   container: {
     flex: 1,
@@ -315,8 +348,8 @@ const localStyles = StyleSheet.create({
     marginBottom: 20,
   },
   profileImage: {
-    width: 100,
-    height: 100,
+    width: 160,
+    height: 160,
     borderRadius: 50,
     marginBottom: 10,
   },
@@ -330,7 +363,7 @@ const localStyles = StyleSheet.create({
   },
   percentileHighlight: {
     fontWeight: 'bold',
-    color: '#9b5dd9',
+    color: '#8835f4',
     letterSpacing: -0.4,
   },
   scoresContainer: {
