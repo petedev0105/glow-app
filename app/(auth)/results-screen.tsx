@@ -1,5 +1,6 @@
 import { fetchAPI } from "@/lib/fetch";
 import { useImageStore } from "@/store/imageStore";
+import { useGlowResultStore } from "@/store/glowResultStore";
 import { useUser } from "@clerk/clerk-expo";
 import React, { useEffect, useRef, useState } from "react";
 import {
@@ -12,6 +13,7 @@ import {
   Text,
   View,
 } from "react-native";
+import { useRouter } from "expo-router";
 
 const { width, height } = Dimensions.get("window");
 
@@ -22,13 +24,15 @@ const ResultsScreen = () => {
 
   const [loadingProgress, setLoadingProgress] = useState(0);
   const [loading, setLoading] = useState(true);
-  const [glowResult, setGlowResult] = useState(null);
+  const { glowResult, setGlowResult } = useGlowResultStore();
   const [message, setMessage] = useState("Analyzing your features...");
   const [intervalDuration, setIntervalDuration] = useState(125);
 
   const fadeAnim = useRef(new Animated.Value(1)).current;
   const rippleAnim = useRef(new Animated.Value(0)).current;
   const opacityAnim = useRef(new Animated.Value(1)).current;
+
+  const router = useRouter();
 
   const messages = [
     "Analyzing your features ✨",
@@ -175,16 +179,16 @@ const ResultsScreen = () => {
           body: JSON.stringify({ prompt, imageUri }),
         });
 
-        console.log("FRR Response2", response);
+        console.log(response);
 
-        // if (!response.ok) {
-        //   const errorData = await response.json();
-        //   throw new Error(errorData.error || "Unknown error occurred");
-        // }
+        // save to neondb under the user id
 
-        // const result = await response.json(); // Parse the JSON response
+        // set into global state
         setGlowResult(response); // Set the fetched glow result
-        Alert.alert("Glow Score", JSON.stringify(response)); // Display the result
+
+        router.push("/glow-results-screen");
+
+        // Alert.alert("Glow Score", JSON.stringify(response)); // Display the result
       } catch (error) {
         console.error("Error fetching glow results:", error);
         Alert.alert("Error", "Could not fetch glow results.");
@@ -251,7 +255,7 @@ const ResultsScreen = () => {
           )}
         </View>
       )} */}
-        {glowResult ? (
+        {/* {glowResult ? (
           <View>
             <Text style={resultStyles.subtitleCaption}>
               {JSON.stringify(glowResult)}
@@ -266,7 +270,7 @@ const ResultsScreen = () => {
         //     </Text>
         //   </View>
         // )}
-        null}
+        null} */}
       </View>
     </ImageBackground>
   );
