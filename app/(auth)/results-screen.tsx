@@ -2,7 +2,6 @@ import { fetchAPI } from "@/lib/fetch";
 import { useGlowResultStore } from "@/store/glowResultStore";
 import { useImageStore } from "@/store/imageStore";
 import { useUser } from "@clerk/clerk-expo";
-import { useRouter } from "expo-router";
 import React, { useEffect, useRef, useState } from "react";
 import {
   Alert,
