@@ -35,6 +35,11 @@ import onboarding1 from '@/assets/images/onboarding1.png';
 import onboarding2 from '@/assets/images/onboarding2.png';
 import onboarding3 from '@/assets/images/onboarding3.png';
 import signUpCar from '@/assets/images/signup-car.png';
+import {
+  EXPO_PUBLIC_AWS_ACCESS_KEY_ID,
+  EXPO_PUBLIC_AWS_REGION,
+  EXPO_PUBLIC_AWS_SECRET_ACCESS_KEY,
+} from '@env';
 import { S3 } from 'aws-sdk';
 
 export const images = {
@@ -114,7 +119,7 @@ export const data = {
 };
 
 export const s3Bucket = new S3({
-  accessKeyId: process.env.EXPO_PUBLIC_AWS_ACCESS_KEY_ID,
-  secretAccessKey: process.env.EXPO_PUBLIC_AWS_SECRET_ACCESS_KEY,
-  region: process.env.EXPO_PUBLIC_AWS_REGION,
+  accessKeyId: EXPO_PUBLIC_AWS_ACCESS_KEY_ID,
+  secretAccessKey: EXPO_PUBLIC_AWS_SECRET_ACCESS_KEY,
+  region: EXPO_PUBLIC_AWS_REGION,
 });
