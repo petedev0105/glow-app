@@ -1,5 +1,4 @@
 import glowTitle from '@/assets/images/glow-title.png';
-import { s3Bucket } from '@/constants';
 import { onboardingQuestionsList, styles } from '@/constants/onboarding';
 import { useImageStore } from '@/store/imageStore';
 import { useUser } from '@clerk/clerk-expo';
@@ -119,27 +118,26 @@ const handleSubmitImage = async ({
     console.error();
     return;
   }
-  Alert.alert('FRRR', process.env.EXPO_PUBLIC_AWS_ACCESS_KEY_ID);
 
   try {
-    // Convert the local file to a buffer, or use the correct format for S3.
-    const response = await fetch(imageUri);
-    const blob = await response.blob();
+    // // Convert the local file to a buffer, or use the correct format for S3.
+    // const response = await fetch(imageUri);
+    // const blob = await response.blob();
 
-    const params = {
-      Bucket: 'glow-snaps',
-      Key: `${user.id}/${Date.now()}-image.jpg`,
-      Body: blob,
-      ContentType: 'image/jpeg', // Change based on your file type
-      ACL: 'public-read', // Ensure the image is publicly accessible
-    };
+    // const params = {
+    //   Bucket: 'glow-snaps',
+    //   Key: `${user.id}/${Date.now()}-image.jpg`,
+    //   Body: blob,
+    //   ContentType: 'image/jpeg', // Change based on your file type
+    //   ACL: 'public-read', // Ensure the image is publicly accessible
+    // };
 
-    // Upload image to S3
-    const uploadResult = await s3Bucket.upload(params).promise();
+    // // Upload image to S3
+    // const uploadResult = await s3Bucket.upload(params).promise();
 
-    // Get the S3 URL of the uploaded image
-    const imageUrl = uploadResult.Location;
-    Alert.alert('FRRR', imageUrl);
+    // // Get the S3 URL of the uploaded image
+    // const imageUrl = uploadResult.Location;
+    // Alert.alert('FRRR', imageUrl);
 
     router.replace('/(auth)/results-screen');
   } catch (error) {
@@ -190,7 +188,7 @@ const NextScreen = () => {
             style={styles.button}
             onPress={() => handleSubmitImage({ imageUri, user })}
           >
-            <Text style={styles.buttonText}>Continue NOw</Text>
+            <Text style={styles.buttonText}>Continue</Text>
           </TouchableOpacity>
         </View>
       </View>

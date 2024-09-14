@@ -1,33 +1,67 @@
-import { styles } from '@/constants/onboarding';
-import { fetchAPI } from '@/lib/fetch'; // Assuming you have a function to call your API
+import { fetchAPI } from '@/lib/fetch';
 import { useLocalSearchParams } from 'expo-router';
-import React, { useEffect, useState } from 'react';
-import {
-  ActivityIndicator,
-  Image,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import React, { useEffect, useRef, useState } from 'react';
+import { Alert, Animated, StyleSheet, View } from 'react-native';
 
 const ResultsScreen = () => {
   const { imageUri } = useLocalSearchParams();
   const [loadingProgress, setLoadingProgress] = useState(0);
   const [loading, setLoading] = useState(true);
   const [glowResult, setGlowResult] = useState(null);
+  const [message, setMessage] = useState('Analyzing your features...');
+
+  const fadeAnim = useRef(new Animated.Value(0)).current;
+
+  const messages = [
+    'Analyzing your features ✨',
+    'Calculating glow score... 💫',
+    'Just a moment, almost there... ⏳',
+    'Finalizing results... 🌟',
+  ];
 
   useEffect(() => {
-    // Simulate loading progress
+    // Fade in function
+    const fadeIn = () => {
+      Animated.timing(fadeAnim, {
+        toValue: 1,
+        duration: 500,
+        useNativeDriver: true,
+      }).start();
+    };
+
+    // Fade out function
+    const fadeOut = (callback: { (): void; (): void }) => {
+      Animated.timing(fadeAnim, {
+        toValue: 0,
+        duration: 500,
+        useNativeDriver: true,
+      }).start(() => {
+        if (callback) callback();
+      });
+    };
+
+    // Simulate loading progress and update messages
     const progressInterval = setInterval(() => {
       setLoadingProgress((prev) => {
-        if (prev >= 100) {
+        const newProgress = prev + 1;
+        if (newProgress >= 100) {
           clearInterval(progressInterval);
-          fetchGlowResults(); // Call the API once loading reaches 100%
-          return prev;
+          Alert.alert('Analysis complete');
+          // fetchGlowResults(); // Call the API once loading reaches 100%
+          return 100;
         }
-        return prev + 1;
+        const messageIndex = Math.floor(newProgress / 25);
+        setMessage(messages[messageIndex]);
+        fadeIn();
+
+        // fadeOut(() => {
+        //   setMessage(messages[messageIndex]); // Update the message after fading out
+        //   fadeIn(); // Fade the new message in
+        // });
+
+        return newProgress;
       });
-    }, 50); // Adjust the interval for faster/slower progress
+    }, 50);
 
     return () => clearInterval(progressInterval);
   }, []);
@@ -48,60 +82,82 @@ const ResultsScreen = () => {
   };
 
   return (
-    <View style={styles.container}>
-      {loading ? (
-        <View style={styles.contentContainer}>
-          <Text style={styles.title}>Analyzing your glow...</Text>
-          <View style={styles.imagePlaceholder}>
-            <Image
-              source={{ uri: imageUri as string }}
-              style={{ width: '100%', height: 300, borderRadius: 10 }}
-            />
-          </View>
-          <Text style={styles.subtitleCaption}>
-            Progress: {loadingProgress}%
+    <View style={resultStyles.container}>
+      <View style={resultStyles.contentContainer}>
+        <Animated.Text style={[resultStyles.percentage, { opacity: fadeAnim }]}>
+          {loadingProgress}%
+        </Animated.Text>
+        <Animated.Text
+          style={[resultStyles.caption, { opacity: fadeAnim }]}
+          className='tracking-tight'
+        >
+          {message}
+        </Animated.Text>
+      </View>
+      {/* {!loading ? (
+        <View style={resultStyles.contentContainer}>
+          <Text style={resultStyles.percentage}>{loadingProgress}%</Text>
+          <Text style={resultStyles.caption} className='tracking-tight'>
+            Analyzing your features...
           </Text>
-          <ActivityIndicator size='large' color='#0000ff' />
         </View>
       ) : (
-        <View style={styles.contentContainer}>
-          <Text style={styles.title}>Glow Analysis Results</Text>
+        <View style={resultStyles.contentContainer}>
+          <Text style={resultStyles.title}>Glow Analysis Results</Text>
           {glowResult ? (
-            // <View style={styles.resultsContainer}>
-            //   <Text style={styles.subtitleCaption}>
-            //     Glow Score: {glowResult.score}
-            //   </Text>
-            //   <Text style={styles.subtitleCaption}>
-            //     Insights: {glowResult.insights}
-            //   </Text>
-            //   <TouchableOpacity
-            //     style={styles.button}
-            //     // onPress={() => router.push('/(auth)/facial-analysis')}
-            //     onPress={() => {}}
-            //   >
-            //     <Text style={styles.buttonText}>Analyze Another</Text>
-            //   </TouchableOpacity>
-            // </View>
             <View>
-              <Text style={styles.subtitleCaption}>Glow Score:</Text>
-              <Text style={styles.subtitleCaption}>Insights:</Text>
-              <TouchableOpacity
-                style={styles.button}
-                // onPress={() => router.push('/(auth)/facial-analysis')}
-                onPress={() => {}}
-              >
-                <Text style={styles.buttonText}>Analyze Another</Text>
-              </TouchableOpacity>
+              <Text style={resultStyles.subtitleCaption}>Glow Score:</Text>
+              <Text style={resultStyles.subtitleCaption}>Insights:</Text>
             </View>
           ) : (
-            <Text style={styles.subtitleCaption}>
-              Could not retrieve glow results. Please try again.
-            </Text>
+            <View>
+              <Text style={resultStyles.subtitleCaption}>
+                Could not retrieve glow results. Please try again.
+              </Text>
+            </View>
           )}
         </View>
-      )}
+      )} */}
     </View>
   );
 };
+
+const resultStyles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    // backgroundColor: '#FFFFFF',
+    backgroundColor: 'black',
+  },
+  contentContainer: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 20,
+  },
+  percentage: {
+    fontSize: 85,
+    fontWeight: 'bold',
+    color: 'white',
+    textAlign: 'center',
+    marginBottom: 10,
+  },
+  caption: {
+    fontSize: 16,
+    color: 'white',
+    textAlign: 'center',
+  },
+  title: {
+    fontSize: 30,
+    color: 'white',
+    fontWeight: 'bold',
+    marginBottom: 20,
+  },
+  subtitleCaption: {
+    fontSize: 16,
+    color: 'white',
+    marginTop: 10,
+  },
+});
 
 export default ResultsScreen;
