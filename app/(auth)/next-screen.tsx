@@ -119,6 +119,7 @@ const handleSubmitImage = async ({
     console.error();
     return;
   }
+  Alert.alert('FRRR', process.env.EXPO_PUBLIC_AWS_ACCESS_KEY_ID);
 
   try {
     // Convert the local file to a buffer, or use the correct format for S3.
@@ -138,6 +139,9 @@ const handleSubmitImage = async ({
 
     // Get the S3 URL of the uploaded image
     const imageUrl = uploadResult.Location;
+    Alert.alert('FRRR', imageUrl);
+
+    router.replace('/(auth)/results-screen');
   } catch (error) {
     console.error('Error uploading image:', error);
     Alert.alert('Error uploading image');
@@ -184,14 +188,9 @@ const NextScreen = () => {
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.button}
-            onPress={() => router.replace('/')}
+            onPress={() => handleSubmitImage({ imageUri, user })}
           >
-            <Text
-              style={styles.buttonText}
-              onPress={() => handleSubmitImage({ imageUri, user })}
-            >
-              Continue
-            </Text>
+            <Text style={styles.buttonText}>Continue NOw</Text>
           </TouchableOpacity>
         </View>
       </View>

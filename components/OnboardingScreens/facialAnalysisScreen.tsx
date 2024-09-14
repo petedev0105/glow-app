@@ -11,7 +11,7 @@ import { onboardingQuestionsList, styles } from '../../constants/onboarding';
 export const FacialAnalysisScreen = () => {
   const [image, setImage] = useState<string | null>(null);
   const { user } = useUser();
-  // Compress the image if needed
+  // compress image
   const compressImage = async (uri: string) => {
     try {
       const fileInfo = await FileSystem.getInfoAsync(uri);
@@ -32,7 +32,7 @@ export const FacialAnalysisScreen = () => {
     }
   };
 
-  // Handle camera capture permissions and selfie capture
+  // handle camera capture permissions and selfie capture
   const handleCameraCapture = async () => {
     const permissionResult = await ImagePicker.requestCameraPermissionsAsync();
     if (!permissionResult.granted) {
@@ -83,11 +83,10 @@ export const FacialAnalysisScreen = () => {
     }
 
     try {
-      // Store the image URL in your Zustand store
+      // store image URL in Zustand store
       useImageStore.getState().clearImages();
       useImageStore.getState().addImage(imageUri);
 
-      // Optionally navigate to the next screen after successful upload
       router.replace('/(auth)/next-screen');
     } catch (error: any) {
       console.error('Error uploading image:', error);
@@ -95,7 +94,6 @@ export const FacialAnalysisScreen = () => {
     }
   };
 
-  // Show options to take a selfie or choose from the library
   const showImagePickerOptions = () => {
     Alert.alert(
       'Upload Image',
