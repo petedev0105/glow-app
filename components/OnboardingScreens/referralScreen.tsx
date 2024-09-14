@@ -41,7 +41,7 @@ export const ReferralScreen = ({
           }}
           className='font-semibold text-[#836E89] shadow-xs'
           placeholder='E.g. A1X2Y3'
-          placeholderTextColor='#a695ab'
+          placeholderTextColor='black'
           value={referralCode.toUpperCase()}
           onChangeText={(text) => {
             setReferralCode(text);

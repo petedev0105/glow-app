@@ -24,7 +24,6 @@ export const BeautyGoalsScreen = ({
       <View
         style={{
           ...styles.contentContainer,
-          marginHorizontal: 20,
           marginTop: 40,
           justifyContent: 'flex-start',
         }}
