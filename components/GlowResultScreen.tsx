@@ -2,7 +2,8 @@ import { styles } from "@/constants/onboarding";
 import { useGlowResultStore } from "@/store/glowResultStore";
 import { useImageStore } from "@/store/imageStore";
 import { Ionicons } from "@expo/vector-icons";
-import React, { useEffect, useState } from "react";
+import { LinearGradient } from "expo-linear-gradient";
+import React, { useState } from "react";
 import {
   Image,
   Platform,
@@ -46,10 +47,15 @@ const GlowResultScreen = () => {
     score,
   }) => (
     <View style={localStyles.scoreCard}>
-      <Text style={localStyles.scoreTitle}>{title}</Text>
-      <Text style={localStyles.scoreValue}>{score.toFixed(1)}</Text>
+      <View className="flex flex-row justify-between items-center mb-3 flex-wrap">
+        <Text style={localStyles.scoreTitle}>{title}</Text>
+        <Text style={localStyles.scoreValue}>{score.toFixed(1)}</Text>
+      </View>
       <View style={localStyles.progressBar}>
-        <View
+        <LinearGradient
+          colors={["#da70d6", "#7b68ee", "#87cefa"]}
+          start={{ x: 0, y: 0 }}
+          end={{ x: 1, y: 0 }}
           style={[
             localStyles.progressFill,
             { width: `${(score / 10) * 100}%` },
@@ -100,7 +106,7 @@ const GlowResultScreen = () => {
             </View>
             <View style={localStyles.scoreRow}>
               <ScoreCard
-                title="Feature Harmony"
+                title={`Feature${"\n"}Harmony`}
                 score={scores.featureHarmony}
               />
               <ScoreCard title="Authenticity" score={scores.authenticity} />
@@ -360,9 +366,14 @@ const GlowResultScreen = () => {
       <View
         style={[localStyles.buttonContainer, { paddingBottom: insets.bottom }]}
       >
-        <TouchableOpacity style={localStyles.unlockButton}>
-          <Text style={localStyles.unlockButtonText}>Unlock My Results</Text>
-        </TouchableOpacity>
+        <LinearGradient
+          colors={["#da70d6", "#7b68ee", "#87cefa"]}
+          start={{ x: 0, y: 0 }}
+          end={{ x: 1, y: 0 }}
+          style={localStyles.unlockButton}
+        >
+          <Text style={localStyles.unlockButtonText}>Unlock</Text>
+        </LinearGradient>
       </View>
     </SafeAreaView>
   );
@@ -391,19 +402,10 @@ const localStyles = StyleSheet.create({
     fontSize: 20,
     fontWeight: "bold",
   },
-  // title: {
-  //   fontSize: 24,
-  //   fontWeight: "bold",
-  //   marginBottom: 10,
-  // },
-  // subtitle: {
-  //   fontSize: 16,
-  //   color: "#666",
-  //   marginBottom: 20,
-  // },
   tabContainer: {
     flexDirection: "row",
-    marginBottom: 20,
+    marginTop: 20,
+    marginBottom: 0,
   },
   tab: {
     paddingVertical: 10,
@@ -412,7 +414,9 @@ const localStyles = StyleSheet.create({
     marginRight: 10,
   },
   activeTab: {
-    backgroundColor: "#F0E6FF",
+    borderWidth: 2,
+    borderColor: "black",
+    backgroundColor: "white",
     paddingVertical: 10,
     paddingHorizontal: 15,
     borderRadius: 20,
@@ -422,7 +426,7 @@ const localStyles = StyleSheet.create({
     color: "#666",
   },
   activeTabText: {
-    color: "#6200EE",
+    color: "black",
     fontWeight: "bold",
   },
   profileContainer: {
@@ -436,30 +440,35 @@ const localStyles = StyleSheet.create({
     marginBottom: 10,
   },
   percentileText: {
+    width: "80%",
     fontSize: 16,
+    color: "black",
+    letterSpacing: -0.4,
     textAlign: "center",
+    marginVertical: 10,
   },
   percentileHighlight: {
-    color: "#6200EE",
     fontWeight: "bold",
+    color: "#9b5dd9",
+    letterSpacing: -0.4,
   },
   scoresContainer: {
-    marginBottom: 20,
+    // marginBottom: 20,
   },
   scoreCard: {
     backgroundColor: "#F5F5F5",
     borderRadius: 10,
     padding: 15,
-    width: "48%", // Adjust this value to control the gap between cards
+    width: "48%",
     marginBottom: 10,
   },
   scoreTitle: {
-    fontSize: 16,
+    fontSize: 12,
     fontWeight: "bold",
     marginBottom: 5,
   },
   scoreValue: {
-    fontSize: 24,
+    fontSize: 21,
     fontWeight: "bold",
     marginBottom: 5,
   },
@@ -467,17 +476,20 @@ const localStyles = StyleSheet.create({
     height: 4,
     backgroundColor: "#E0E0E0",
     borderRadius: 2,
+    overflow: "hidden",
   },
   progressFill: {
-    height: 4,
-    backgroundColor: "#6200EE",
+    height: "100%",
     borderRadius: 2,
   },
   unlockButton: {
-    backgroundColor: "#6200EE",
-    borderRadius: 25,
-    paddingVertical: 15,
+    backgroundColor: "linear-gradient(to right, #da70d6, #7b68ee, #87cefa)",
+    borderRadius: 50,
+    padding: 20,
+    display: "flex",
+    justifyContent: "center",
     alignItems: "center",
+    marginTop: 16,
   },
   unlockButtonText: {
     color: "white",
@@ -494,16 +506,16 @@ const localStyles = StyleSheet.create({
   },
   characteristicItem: {
     flexDirection: "row",
-    justifyContent: "space-between",
+    justifyContent: "center",
     marginBottom: 5,
   },
   characteristicTitle: {
-    fontSize: 16,
+    fontSize: 14,
     fontWeight: "bold",
   },
   characteristicValue: {
-    fontSize: 18,
-    fontWeight: "bold",
+    fontSize: 16,
+    fontWeight: "semibold",
     color: "#000",
   },
   tabScrollView: {
@@ -521,25 +533,26 @@ const localStyles = StyleSheet.create({
     padding: 15,
     width: "48%",
     marginBottom: 10,
-    minHeight: 100, // Add this to ensure consistent height
-    justifyContent: "space-between", // Add this for better layout
+    minHeight: 100,
+    justifyContent: "space-between",
   },
   buttonSpacer: {
-    height: 80, // Adjust this value based on your button height
+    height: 80,
   },
   buttonContainer: {
     position: "absolute",
+    width: "100%",
     bottom: 0,
     left: 0,
     right: 0,
-    backgroundColor: "white",
+    // backgroundColor: 'white',
     paddingHorizontal: 20,
     paddingTop: 10,
     ...Platform.select({
       ios: {
         shadowColor: "#000",
-        shadowOffset: { width: 0, height: -3 },
-        shadowOpacity: 0.1,
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.2,
         shadowRadius: 3,
       },
       android: {
