@@ -46,35 +46,37 @@ const GlowResultScreen = () => {
     potential?: boolean;
   }) =>
     potential ? (
-      // Apply golden gradient if potential is true
-
+      // Apply golden gradient as a border without changing the card size
       <LinearGradient
         colors={['#d0980c', '#fde14a', '#f8efa3', '#fde14a', '#d0980c']} // Darker on the edges, bright gold in the center
         locations={[0, 0.25, 0.5, 0.75, 1]} // Reflective effect with center highlight
         start={{ x: 0, y: 1 }} // Horizontal gradient (left to right)
         end={{ x: 1, y: 1 }}
-        style={localStyles.scoreCard} // Apply the same style as the score card
+        style={localStyles.gradientBorderWrapper} // Outer gradient border style
       >
-        <View className='flex flex-row justify-between items-center mb-3 flex-wrap'>
-          <Text style={localStyles.scoreTitle}>{title}</Text>
-          <Text style={localStyles.scoreValue}>{score.toFixed(1)}</Text>
-        </View>
-        <View style={localStyles.progressBar}>
-          <LinearGradient
-            colors={['#000']} // Original gradient for progress fill
-            start={{ x: 0, y: 0 }}
-            end={{ x: 1, y: 0 }}
-            style={[
-              localStyles.progressFill,
-              { width: `${(score / 10) * 100}%` },
-            ]}
-          />
+        <View style={localStyles.innerCard}>
+          {/* Regular card inside the gradient border */}
+          <View style={localStyles.row}>
+            <Text style={localStyles.scoreTitle}>{title}</Text>
+            <Text style={localStyles.scoreValue}>{score.toFixed(1)}</Text>
+          </View>
+          <View style={localStyles.progressBar}>
+            <LinearGradient
+              colors={['#000']} // Original gradient for progress fill
+              start={{ x: 0, y: 0 }}
+              end={{ x: 1, y: 0 }}
+              style={[
+                localStyles.progressFill,
+                { width: `${(score / 10) * 100}%` },
+              ]}
+            />
+          </View>
         </View>
       </LinearGradient>
     ) : (
       // Regular card without gradient
       <View style={localStyles.scoreCard}>
-        <View className='flex flex-row justify-between items-center mb-3 flex-wrap'>
+        <View style={localStyles.row}>
           <Text style={localStyles.scoreTitle}>{title}</Text>
           <Text style={localStyles.scoreValue}>{score.toFixed(1)}</Text>
         </View>
@@ -432,34 +434,54 @@ const localStyles = StyleSheet.create({
   scoresContainer: {
     // marginBottom: 20,
   },
+  gradientBorderWrapper: {
+    borderRadius: 10, // Outer layer border radius to match card
+    padding: 2, // Padding to simulate the border effect
+    width: '48%', // Keep the same width as the regular card
+    marginBottom: 10, // Same margin as the regular card
+  },
+  gradientBorder: {
+    borderRadius: 10, // Inner gradient border radius
+    padding: 0, // No padding to ensure the card remains the same size
+  },
+  innerCard: {
+    backgroundColor: '#F5F5F5', // Same background color as other cards
+    borderRadius: 10, // Ensure same border radius for consistency
+    padding: 15, // Same padding as the regular card
+    borderWidth: 0, // No border since it's inside the gradient
+  },
   scoreCard: {
     backgroundColor: '#F5F5F5',
     borderRadius: 10,
     padding: 15,
-    width: '48%',
+    width: '48%', // Ensure it remains the same width as the gradient card
     marginBottom: 10,
     borderWidth: 2,
-    borderColor: '#000',
+    borderColor: '#000', // Regular card border
+  },
+  row: {
+    flexDirection: 'row', // Use flex-direction row instead of className for layout
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 5,
   },
   scoreTitle: {
     fontSize: 12,
     fontWeight: 'bold',
-    marginBottom: 5,
   },
   scoreValue: {
     fontSize: 21,
     fontWeight: 'bold',
-    marginBottom: 5,
   },
   progressBar: {
-    height: 4,
+    height: 10,
     backgroundColor: '#E0E0E0',
-    borderRadius: 2,
+    borderRadius: 5,
     overflow: 'hidden',
   },
   progressFill: {
     height: '100%',
-    borderRadius: 2,
+    borderRadius: 5,
   },
   unlockButton: {
     backgroundColor: 'linear-gradient(to right, #da70d6, #7b68ee, #87cefa)',
