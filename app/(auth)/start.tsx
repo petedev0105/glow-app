@@ -22,7 +22,7 @@ const Start = () => {
       <View style={styles.footerContainer}>
         <TouchableOpacity
           style={styles.button}
-          onPress={() => router.push('/(auth)/welcome')}
+          onPress={() => router.push('/(auth)/sign-in')}
         >
           <Text style={styles.buttonText}>Continue</Text>
         </TouchableOpacity>
