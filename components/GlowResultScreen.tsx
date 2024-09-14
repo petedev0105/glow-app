@@ -198,15 +198,12 @@ const GlowResultScreen = () => {
           style={localStyles.container}
           contentContainerStyle={localStyles.contentContainer}
         >
-          <TouchableOpacity>
-            <Ionicons name='arrow-back' size={24} color='black' />
-          </TouchableOpacity>
           <View style={localStyles.header}>
-            {/* <Text style={localStyles.headerTitle}>Glow</Text> */}
-            <View style={{ width: 24 }} />
+            <TouchableOpacity style={localStyles.backButton}>
+              <Ionicons name='arrow-back' size={24} color='black' />
+            </TouchableOpacity>
+            <Text style={localStyles.centeredTitle}>Glow up guide</Text>
           </View>
-
-          <Text style={styles.title}>Glow up guide</Text>
           <Text style={styles.subtitle}>
             Here's your personalized glow up guide based on your facial
             analysis.
@@ -296,21 +293,31 @@ const localStyles = StyleSheet.create({
   },
   safeArea: {
     flex: 1,
-    // backgroundColor: 'white',
+    backgroundColor: 'white',
   },
   container: {
     flex: 1,
     backgroundColor: 'white',
-    padding: 20,
+    paddingHorizontal: 20,
   },
   contentContainer: {
     padding: 20,
   },
   header: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+    position: 'relative',
+    justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: 20,
+    height: 50,
+    marginBottom: 0,
+  },
+  backButton: {
+    position: 'absolute',
+    left: 0,
+    padding: 10,
+  },
+  centeredTitle: {
+    fontSize: 24,
+    fontWeight: 'bold',
   },
   headerTitle: {
     fontSize: 20,
