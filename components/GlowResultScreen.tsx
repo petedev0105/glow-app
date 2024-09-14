@@ -365,11 +365,12 @@ const localStyles = StyleSheet.create({
   },
   unlockButton: {
     backgroundColor: 'linear-gradient(to right, #da70d6, #7b68ee, #87cefa)',
-    borderRadius: 25,
-    padding: 15,
+    borderRadius: 50,
+    padding: 20,
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
+    marginTop: 16,
   },
   unlockButtonText: {
     color: 'white',
@@ -421,17 +422,18 @@ const localStyles = StyleSheet.create({
   },
   buttonContainer: {
     position: 'absolute',
+    width: '100%',
     bottom: 0,
     left: 0,
     right: 0,
-    backgroundColor: 'white',
+    // backgroundColor: 'white',
     paddingHorizontal: 20,
     paddingTop: 10,
     ...Platform.select({
       ios: {
         shadowColor: '#000',
-        shadowOffset: { width: 0, height: -3 },
-        shadowOpacity: 0.1,
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.2,
         shadowRadius: 3,
       },
       android: {
