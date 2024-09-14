@@ -218,7 +218,7 @@ const GlowResultScreen = () => {
             showsHorizontalScrollIndicator={false}
             style={localStyles.tabScrollView}
           >
-            <View style={localStyles.tabContainer}>
+            {/* <View style={localStyles.tabContainer}>
               {[
                 'Ratings',
                 'Facial Analysis',
@@ -243,6 +243,82 @@ const GlowResultScreen = () => {
                   </Text>
                 </TouchableOpacity>
               ))}
+            </View> */}
+            {/* <View style={localStyles.tabContainer}>
+              {[
+                'Ratings',
+                'Facial Analysis',
+                'Skin Analysis',
+                'Product Recommendations',
+              ].map((tab) => (
+                <LinearGradient
+                  key={tab}
+                  colors={['#da70d6', '#7b68ee', '#87cefa']} // Gradient colors
+                  start={{ x: 0, y: 0 }}
+                  end={{ x: 1, y: 0 }}
+                  style={localStyles.gradientTabBackground}
+                >
+                  <TouchableOpacity
+                    style={[
+                      localStyles.whiteTab,
+                      activeTab === tab && localStyles.activeTab,
+                    ]}
+                    onPress={() => setActiveTab(tab)}
+                  >
+                    <Text
+                      style={[
+                        localStyles.tabText,
+                        activeTab === tab && localStyles.activeTabText,
+                      ]}
+                    >
+                      {tab}
+                    </Text>
+                  </TouchableOpacity>
+                </LinearGradient>
+              ))}
+            </View> */}
+            <View style={localStyles.tabContainer}>
+              {[
+                'Ratings',
+                'Facial Analysis',
+                'Skin Analysis',
+                'Product Recommendations',
+              ].map((tab) => {
+                const isActive = activeTab === tab;
+                return (
+                  <View key={tab} style={localStyles.tabWrapper}>
+                    {isActive ? (
+                      <LinearGradient
+                        colors={['#da70d6', '#7b68ee', '#87cefa']} // Gradient for active tab
+                        start={{ x: 0, y: 0 }}
+                        end={{ x: 1, y: 0 }}
+                        style={localStyles.gradientTabBackground}
+                      >
+                        <TouchableOpacity
+                          style={localStyles.whiteTab}
+                          onPress={() => setActiveTab(tab)}
+                        >
+                          <Text
+                            style={[
+                              localStyles.tabText,
+                              localStyles.activeTabText,
+                            ]}
+                          >
+                            {tab}
+                          </Text>
+                        </TouchableOpacity>
+                      </LinearGradient>
+                    ) : (
+                      <TouchableOpacity
+                        style={localStyles.whiteTab}
+                        onPress={() => setActiveTab(tab)}
+                      >
+                        <Text style={localStyles.tabText}>{tab}</Text>
+                      </TouchableOpacity>
+                    )}
+                  </View>
+                );
+              })}
             </View>
           </RNScrollView>
 
@@ -350,14 +426,20 @@ const localStyles = StyleSheet.create({
     borderRadius: 20,
     marginRight: 10,
   },
-  activeTab: {
-    borderWidth: 2,
-    borderColor: 'black',
+  tabWrapper: {
+    marginRight: 10,
+  },
+  gradientTabBackground: {
+    borderRadius: 20,
+    padding: 2,
+  },
+  whiteTab: {
     backgroundColor: 'white',
+    borderRadius: 20,
     paddingVertical: 10,
     paddingHorizontal: 15,
-    borderRadius: 20,
-    marginRight: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   tabText: {
     color: '#666',
@@ -366,6 +448,22 @@ const localStyles = StyleSheet.create({
     color: 'black',
     fontWeight: 'bold',
   },
+  // activeTab: {
+  //   borderWidth: 2,
+  //   borderColor: 'black',
+  //   backgroundColor: 'white',
+  //   paddingVertical: 10,
+  //   paddingHorizontal: 15,
+  //   borderRadius: 20,
+  //   marginRight: 10,
+  // },
+  // tabText: {
+  //   color: '#666',
+  // },
+  // activeTabText: {
+  //   color: 'black',
+  //   fontWeight: 'bold',
+  // },
   profileContainer: {
     alignItems: 'center',
     marginBottom: 20,
@@ -450,7 +548,7 @@ const localStyles = StyleSheet.create({
   },
   unlockButtonText: {
     // color: '#6200EE', // Keep the text in a bold color to stand out
-    color: 'white',
+    color: 'black',
     fontSize: 18,
     fontWeight: 'bold',
   },
