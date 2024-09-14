@@ -15,11 +15,11 @@ export const LeaveRatingScreen = ({
 }) => {
   const { signOut, isSignedIn } = useAuth();
 
-  useEffect(() => {
-    if (!isSignedIn) {
-      router.replace("/(auth)/start");
-    }
-  }, [isSignedIn]);
+  // useEffect(() => {
+  //   if (!isSignedIn) {
+  //     router.replace("/(auth)/start");
+  //   }
+  // }, [isSignedIn]);
 
   return (
     <View style={styles.container}>
