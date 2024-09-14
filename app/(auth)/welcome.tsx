@@ -1,6 +1,5 @@
 import { useUser } from '@clerk/clerk-expo';
 import { useNavigation } from '@react-navigation/native';
-import { router } from 'expo-router';
 import { useEffect, useRef, useState } from 'react';
 import { ActivityIndicator, StyleSheet, View } from 'react-native';
 import Swiper from 'react-native-swiper';
@@ -20,8 +19,8 @@ const Home = () => {
     if (isLoaded) {
       // setShowQuestions(isSignedIn);
       setIsLoading(false);
-      // TODO REMOVE THIS, TEMPORARY
-      router.replace('/(auth)/results-screen');
+      // // TODO REMOVE THIS, TEMPORARY
+      // router.replace('/(auth)/results-screen');
     }
   }, [isLoaded]);
 

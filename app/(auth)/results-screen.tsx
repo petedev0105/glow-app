@@ -16,6 +16,10 @@ import {
 const { width, height } = Dimensions.get('window');
 
 const ResultsScreen = () => {
+  const { user } = useUser(); // Get the user outside the async function
+  const images = useImageStore((state) => state.images); // Get the images outside the async function
+  const imageUri = images[0]; // Assuming the first image is what you want to send
+
   const [loadingProgress, setLoadingProgress] = useState(0);
   const [loading, setLoading] = useState(true);
   const [glowResult, setGlowResult] = useState(null);
@@ -91,15 +95,16 @@ const ResultsScreen = () => {
             setIntervalDuration(100);
           } else if (newProgress === 20) {
             clearInterval(progressInterval);
-            setIntervalDuration(80);
+            setIntervalDuration(75);
           } else if (newProgress === 30) {
             clearInterval(progressInterval);
-            setIntervalDuration(60);
+            setIntervalDuration(50);
           }
 
           if (newProgress >= 100) {
             clearInterval(progressInterval);
-            Alert.alert('Analysis complete');
+            // Alert.alert('Analysis complete');
+            // fetchGlowResults();
 
             return 100;
           }
@@ -134,23 +139,69 @@ const ResultsScreen = () => {
   });
 
   // Fetch glow results from the API after loading completes
-  const fetchGlowResults = async () => {
-    const { user } = useUser();
-    const images = useImageStore((state) => state.images);
-    const imageUri = images[0];
+  // const fetchGlowResults = async () => {
+  //   const { user } = useUser();
+  //   const images = useImageStore((state) => state.images);
+  //   const imageUri = images[0];
 
-    try {
-      const response = await fetchAPI('/(api)/(openai)/glowscore', {
-        method: 'POST',
-        body: JSON.stringify({ imageUri }),
-      });
-      setGlowResult(response);
-    } catch (error) {
-      console.error('Error fetching glow results:', error);
-    } finally {
-      setLoading(false);
+  //   try {
+  //     const response = await fetchAPI('/(api)/(openai)/glowscore', {
+  //       method: 'POST',
+  //       body: JSON.stringify({ imageUri }),
+  //     });
+  //     setGlowResult(response);
+  //   } catch (error) {
+  //     console.error('Error fetching glow results:', error);
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
+
+  useEffect(() => {
+    const fetchGlowResults = async ({
+      prompt,
+      imageUri,
+    }: {
+      prompt: string;
+      imageUri: string;
+    }) => {
+      try {
+        if (!imageUri) {
+          throw new Error('Image URI is missing');
+        }
+
+        const response = await fetchAPI('/(api)/(openai)/glowscore', {
+          method: 'POST',
+          body: JSON.stringify({ prompt, imageUri }), // Sending imageUri in the request body
+          headers: {
+            'Content-Type': 'application/json', // Set the correct content type
+          },
+        });
+
+        console.log('FRR Response2', response);
+
+        if (!response.ok) {
+          console.log('FRR Response', response);
+          const errorData = await response.json();
+          throw new Error(errorData.error || 'Unknown error occurred');
+        }
+
+        // const result = await response.json(); // Parse the JSON response
+        setGlowResult(response); // Set the fetched glow result
+        Alert.alert('Glow Score', JSON.stringify(response)); // Display the result
+      } catch (error) {
+        console.error('Error fetching glow results:', error);
+        Alert.alert('Error', 'Could not fetch glow results.');
+      } finally {
+        setLoading(false); // Ensure the loading state is set to false once the request completes
+      }
+    };
+
+    if (loadingProgress >= 100 && !glowResult && imageUri) {
+      // Fetch only when progress reaches 100, no result is fetched yet, and imageUri is valid
+      fetchGlowResults({ prompt: '', imageUri });
     }
-  };
+  }, [loadingProgress, imageUri, glowResult]);
 
   return (
     <ImageBackground
@@ -204,6 +255,22 @@ const ResultsScreen = () => {
           )}
         </View>
       )} */}
+        {glowResult ? (
+          <View>
+            <Text style={resultStyles.subtitleCaption}>
+              {JSON.stringify(glowResult)}
+            </Text>
+            <Text style={resultStyles.subtitleCaption}>Glow Score:</Text>
+            <Text style={resultStyles.subtitleCaption}>Insights:</Text>
+          </View>
+        ) : // (
+        //   <View>
+        //     <Text style={resultStyles.subtitleCaption}>
+        //       Could not retrieve glow results. Please try again.
+        //     </Text>
+        //   </View>
+        // )}
+        null}
       </View>
     </ImageBackground>
   );
