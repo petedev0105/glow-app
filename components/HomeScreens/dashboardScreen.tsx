@@ -56,7 +56,7 @@ const DashboardScreen = () => {
 
         {/* Main Card */}
         <View style={styles.contentContainer}>
-          <View style={localStyles.mainCard}>
+          <View style={localStyles.mainCard} className='shadow-sm'>
             {/* Image */}
             <View style={localStyles.imageContainer}>
               <Image source={images.dashboardGirl} style={localStyles.image} />
