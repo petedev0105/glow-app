@@ -27,8 +27,7 @@ const ResultsScreen = () => {
   const [loading, setLoading] = useState(true);
   const { glowResult, setGlowResult } = useGlowResultStore();
   const [message, setMessage] = useState('Analyzing your features...');
-  // const [intervalDuration, setIntervalDuration] = useState(80);
-  const [intervalDuration, setIntervalDuration] = useState(280);
+  const [intervalDuration, setIntervalDuration] = useState(80);
   const { setRecommendations } = useRecommendationsStore();
 
   const [apiCallsStarted, setApiCallsStarted] = useState<boolean>(false);
