@@ -1,4 +1,5 @@
 import DashboardScreen from '@/components/HomeScreens/dashboardScreen';
+import ScansScreen from '@/components/HomeScreens/scansScreen';
 import { Ionicons } from '@expo/vector-icons'; // for icons
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import React from 'react';
@@ -74,7 +75,7 @@ const Layout = () => {
       />
       <Tab.Screen
         name='scan-circle-outline'
-        component={DashboardScreen}
+        component={ScansScreen}
         options={{
           headerShown: false,
         }}
