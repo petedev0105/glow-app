@@ -26,7 +26,11 @@ const compressImage = async (uri: string) => {
     if ('size' in fileInfo && fileInfo.size > 1000000) {
       const manipResult = await ImageManipulator.manipulateAsync(
         uri,
-        [{ resize: { width: 1000 } }],
+        [
+          { resize: { width: 1000 } },
+          { rotate: 180 },
+          { flip: ImageManipulator.FlipType.Vertical },
+        ],
         { compress: 0.7, format: ImageManipulator.SaveFormat.JPEG }
       );
       return manipResult.uri;
