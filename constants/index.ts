@@ -24,8 +24,11 @@ import star from '@/assets/icons/star.png';
 import target from '@/assets/icons/target.png';
 import to from '@/assets/icons/to.png';
 import auraLogo from '@/assets/images/aura/logo.png';
+import dashboardGirl from '@/assets/images/dashboard-girl.png';
 import glowTitle from '@/assets/images/glow-title.png';
 import startGlowUpImg from '@/assets/images/glow-up-image.png';
+import homeBgLarger from '@/assets/images/home-bg-larger.png';
+import homeBg from '@/assets/images/home-bg.png';
 import modelDifferenceImg from '@/assets/images/model-difference.png';
 import modelFacialAnalysis from '@/assets/images/model-facial-analysis.png';
 import model from '@/assets/images/model.png';
@@ -53,6 +56,9 @@ export const images = {
   modelFacialAnalysis,
   unlockBlur,
   model,
+  homeBgLarger,
+  homeBg,
+  dashboardGirl,
 };
 
 export const icons = {

@@ -391,7 +391,7 @@ const GlowResultScreen = () => {
             <TouchableOpacity
               style={localStyles.backButton}
               // TODO NAVIGATE TO DASHBOARD HOME SCREEN
-              onPress={() => router.replace('/(home)/dashboard')}
+              onPress={() => router.replace('/(home)')}
             >
               <Ionicons name='arrow-back' size={24} color='black' />
             </TouchableOpacity>
