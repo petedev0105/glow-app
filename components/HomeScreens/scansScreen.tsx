@@ -6,6 +6,7 @@ import {
   ImageBackground,
   ImageStyle,
   SafeAreaView,
+  ScrollView,
   StatusBar,
   StyleSheet,
   Text,
@@ -34,18 +35,18 @@ const ScansScreen = () => {
       potential: 90,
       image: images.dashboardGirl,
     },
-    // {
-    //   id: 4,
-    //   score: 85,
-    //   potential: 90,
-    //   image: images.dashboardGirl,
-    // },
-    // {
-    //   id: 5,
-    //   score: 85,
-    //   potential: 90,
-    //   image: images.dashboardGirl,
-    // },
+    {
+      id: 4,
+      score: 85,
+      potential: 90,
+      image: images.dashboardGirl,
+    },
+    {
+      id: 5,
+      score: 85,
+      potential: 90,
+      image: images.dashboardGirl,
+    },
   ];
 
   return (
@@ -88,51 +89,63 @@ const ScansScreen = () => {
         </View>
 
         {/* Main Content */}
-        <View style={{ ...styles.contentContainer, paddingHorizontal: 20 }}>
-          {/* <ScrollView> */}
-          {scans.map((scan) => (
-            <View key={scan.id} style={localStyles.scanCard}>
-              <Image source={scan.image} style={localStyles.scanImage} />
+        {/* <View style={{ ...styles.contentContainer, paddingHorizontal: 20 }}> */}
+        <View style={{ ...styles.contentContainer, marginTop: 20, flex: 4.5 }}>
+          <ScrollView
+            style={localStyles.scrollView}
+            contentContainerStyle={{
+              // ...styles.contentContainer,
+              paddingHorizontal: 20,
+              paddingBottom: 30,
+              width: '100%',
+              marginBottom: 10,
+            }}
+          >
+            {scans.map((scan) => (
+              <View key={scan.id} style={localStyles.scanCard}>
+                <Image source={scan.image} style={localStyles.scanImage} />
 
-              <View style={localStyles.scanDetails}>
-                <Text style={localStyles.scanTitle}>Glow Up Scan</Text>
-                <Text style={localStyles.scanDate}>15 Sep 2024</Text>
+                <View style={localStyles.scanDetails}>
+                  <Text style={localStyles.scanTitle}>Glow Up Scan</Text>
+                  <Text style={localStyles.scanDate}>15 Sep 2024</Text>
 
-                <View style={localStyles.scoreContainer}>
-                  <Text style={localStyles.scoreText}>Overall</Text>
-                  <Text style={localStyles.scoreValue}>{scan.score}</Text>
-                  <Text style={localStyles.scoreText}>Potential</Text>
-                  <Text style={localStyles.scoreValue}>{scan.potential}</Text>
-                  <Text style={localStyles.scoreText}>+4</Text>
-                </View>
+                  <View style={localStyles.scoreContainer}>
+                    <Text style={localStyles.scoreText}>Overall</Text>
+                    <Text style={localStyles.scoreValue}>{scan.score}</Text>
+                    <Text style={localStyles.scoreText}>Potential</Text>
+                    <Text style={localStyles.scoreValue}>{scan.potential}</Text>
+                    <Text style={localStyles.scoreText}>+4</Text>
+                  </View>
 
-                <View style={localStyles.progressBar}>
-                  <LinearGradient
-                    colors={['#9B84FF', '#9B84FF']} // Match color for overall progress (purple)
-                    style={[
-                      localStyles.progressFill,
-                      { width: `${(scan.score / 100) * 100}%` }, // Width based on overall score
-                    ]}
-                  />
-                  <LinearGradient
-                    colors={['#C7E9FF', '#C7E9FF']} // Match color for potential progress (light blue)
-                    style={[
-                      localStyles.progressFill,
-                      {
-                        width: `${(scan.potential / 100) * 100}%`, // Width based on potential score
-                        position: 'absolute', // Position to overlay on the same bar
-                        left: `${(scan.score / 100) * 100}%`, // Start where the overall score ends
-                      },
-                    ]}
-                  />
+                  <View style={localStyles.progressBar}>
+                    <LinearGradient
+                      colors={['#9B84FF', '#9B84FF']} // Match color for overall progress (purple)
+                      style={[
+                        localStyles.progressFill,
+                        { width: `${(scan.score / 100) * 100}%` }, // Width based on overall score
+                      ]}
+                    />
+                    <LinearGradient
+                      colors={['#C7E9FF', '#C7E9FF']} // Match color for potential progress (light blue)
+                      style={[
+                        localStyles.progressFill,
+                        {
+                          width: `${(scan.potential / 100) * 100}%`, // Width based on potential score
+                          position: 'absolute', // Position to overlay on the same bar
+                          left: `${(scan.score / 100) * 100}%`, // Start where the overall score ends
+                        },
+                      ]}
+                    />
+                  </View>
                 </View>
               </View>
-            </View>
-          ))}
-          {/* </ScrollView> */}
+            ))}
+          </ScrollView>
+          {/* <View className='flex justify-center items-center bg-white rounded-full w-10 h-10'>
+            <Ionicons name='caret-down-outline' size={30}></Ionicons>
+          </View> */}
         </View>
-        {/* Footer with button */}
-        <View style={styles.footerContainer}></View>
+        <View style={{ ...styles.footerContainer, flex: 0.7 }}></View>
       </SafeAreaView>
     </ImageBackground>
   );
@@ -157,6 +170,7 @@ const localStyles = StyleSheet.create({
     marginVertical: 10,
     borderColor: '#dbdbdb',
     borderWidth: 1,
+    width: '100%',
   },
   scanImage: {
     width: 60,
@@ -203,6 +217,9 @@ const localStyles = StyleSheet.create({
   progressFill: {
     height: '100%',
     borderRadius: 5,
+  },
+  scrollView: {
+    flex: 1,
   },
 });
 
