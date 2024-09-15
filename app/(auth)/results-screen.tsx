@@ -196,7 +196,7 @@ const ResultsScreen = () => {
         setGlowResult(response); // Set the fetched glow result
         isFetchCompleted = true; // Mark fetch as complete to avoid re-triggering
 
-        router.push('/glow-results-screen'); // Navigate to the results screen
+        router.push('/unlock-results-screen'); // Navigate to the FAKE results screen
       } catch (error) {
         console.error('Error fetching glow results:', error);
         Alert.alert('Error', 'Could not fetch glow results.');

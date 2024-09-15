@@ -26,10 +26,14 @@ import to from '@/assets/icons/to.png';
 import auraLogo from '@/assets/images/aura/logo.png';
 import glowTitle from '@/assets/images/glow-title.png';
 import startGlowUpImg from '@/assets/images/glow-up-image.png';
+import modelDifferenceImg from '@/assets/images/model-difference.png';
+import modelFacialAnalysis from '@/assets/images/model-facial-analysis.png';
+import model from '@/assets/images/model.png';
 import onboardingScreenBg from '@/assets/images/onboarding-bg.png';
 import screenBg from '@/assets/images/screen-bg.png';
 import signinBackground from '@/assets/images/signin-bg.png';
 import signinBackgroundSvg from '@/assets/images/signin-bg.svg';
+import unlockBlur from '@/assets/images/unlock-blur.png';
 import {
   EXPO_PUBLIC_AWS_ACCESS_KEY_ID,
   EXPO_PUBLIC_AWS_REGION,
@@ -45,6 +49,10 @@ export const images = {
   onboardingScreenBg,
   startGlowUpImg,
   screenBg,
+  modelDifferenceImg,
+  modelFacialAnalysis,
+  unlockBlur,
+  model,
 };
 
 export const icons = {

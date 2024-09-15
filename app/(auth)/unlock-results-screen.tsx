@@ -1,11 +1,8 @@
 import { images } from '@/constants';
 import { styles } from '@/constants/onboarding';
-import { useRecommendationsStore } from '@/store/glowRecommendationsStore';
-import { useGlowResultStore } from '@/store/glowResultStore';
 import { useImageStore } from '@/store/imageStore';
-import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
-import { router } from 'expo-router';
+import { router, useNavigation } from 'expo-router';
 import React, { useEffect, useState } from 'react';
 import {
   Animated,
@@ -27,41 +24,52 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 const AnimatedLinearGradient = Animated.createAnimatedComponent(LinearGradient);
 
 const GlowResultScreen = () => {
-  const { glowResult } = useGlowResultStore();
   const [activeTab, setActiveTab] = useState('Ratings');
   const insets = useSafeAreaInsets();
-  const storeImages = useImageStore((state) => state.images);
   const [unlockBtnAnimatedValue] = useState(new Animated.Value(0));
+  const storeImages = useImageStore((state) => state.images);
 
-  const { recommendations } = useRecommendationsStore();
+  const percentile = 70; // Dummy percentile value
+
+  const navigation = useNavigation();
 
   useEffect(() => {
-    if (recommendations) {
-      console.log('recommendations from results screen: ', recommendations);
-    }
-  }, []);
+    const animateGradient = () => {
+      Animated.loop(
+        Animated.timing(unlockBtnAnimatedValue, {
+          toValue: 1,
+          duration: 4000,
+          easing: Easing.linear,
+          useNativeDriver: false,
+        })
+      ).start();
+    };
 
-  if (!glowResult) {
-    return (
-      <View style={localStyles.container}>
-        <Text>No glow result available</Text>
-      </View>
-    );
-  }
+    animateGradient();
+  }, [unlockBtnAnimatedValue]);
 
-  const { scores, percentile, facialCharacteristics, skinAnalysis } =
-    glowResult as any;
+  const animatedStartX = unlockBtnAnimatedValue.interpolate({
+    inputRange: [0, 1],
+    outputRange: [0, 1],
+  });
+
+  const animatedEndX = unlockBtnAnimatedValue.interpolate({
+    inputRange: [0, 1],
+    outputRange: [1, 0],
+  });
 
   const ScoreCard = ({
     title,
-    score,
+    score = 0,
     potential,
   }: {
     title: string;
-    score: number;
+    score?: number;
     potential?: boolean;
-  }) =>
-    potential ? (
+  }) => {
+    // const randomScore = Math.random() * (10 - 8.5) + 8.5;
+
+    return potential ? (
       // apply golden gradient as a border, keep card size the same
       <LinearGradient
         colors={['#d0980c', '#fde14a', '#f8efa3', '#fde14a', '#d0980c']}
@@ -74,7 +82,18 @@ const GlowResultScreen = () => {
           {/* Regular card inside the gradient border */}
           <View style={localStyles.row}>
             <Text style={localStyles.scoreTitle}>{title}</Text>
-            <Text style={localStyles.scoreValue}>{score.toFixed(1)}</Text>
+            {/* <Text style={localStyles.scoreValue}>
+              {score ? score.toFixed(1) : randomScore.toFixed(1)}
+            </Text> */}
+            <Image
+              source={images.unlockBlur}
+              style={{
+                width: 60,
+                height: 40,
+                resizeMode: 'stretch',
+                margin: 0,
+              }}
+            />
           </View>
           <View style={localStyles.progressBar}>
             <LinearGradient
@@ -84,7 +103,9 @@ const GlowResultScreen = () => {
               end={{ x: 1, y: 0 }}
               style={[
                 localStyles.progressFill,
-                { width: `${(score / 10) * 100}%` },
+                {
+                  width: `${(score / 10) * 100}%`,
+                },
               ]}
             />
           </View>
@@ -95,7 +116,19 @@ const GlowResultScreen = () => {
       <View style={localStyles.scoreCard}>
         <View style={localStyles.row}>
           <Text style={localStyles.scoreTitle}>{title}</Text>
-          <Text style={localStyles.scoreValue}>{score.toFixed(1)}</Text>
+          {/* <Text style={localStyles.scoreValue}>
+            {score ? score.toFixed(1) : randomScore.toFixed(1)}
+          </Text> */}
+          {/* <Image source={} */}
+          <Image
+            source={images.unlockBlur}
+            style={{
+              width: 60,
+              height: 40,
+              resizeMode: 'stretch',
+              margin: 0,
+            }}
+          />
         </View>
         <View style={localStyles.progressBar}>
           <LinearGradient
@@ -104,36 +137,38 @@ const GlowResultScreen = () => {
             end={{ x: 1, y: 0 }}
             style={[
               localStyles.progressFill,
-              { width: `${(score / 10) * 100}%` },
+              {
+                width: `${(score / 10) * 100}%`,
+              },
             ]}
           />
         </View>
       </View>
     );
-
-  const CharacteristicItem = ({
-    title,
-    value,
-  }: {
-    title: string;
-    value: string;
-  }) => (
-    <View style={localStyles.characteristicItem} className='shadow-md'>
-      <Text style={localStyles.characteristicTitle}>{title}:</Text>
-      <Text style={localStyles.characteristicValue}>{value}</Text>
-    </View>
-  );
+  };
 
   const CharacteristicCard = ({
     title,
     value,
   }: {
     title: string;
-    value: string;
+    value?: any;
   }) => (
     <View style={localStyles.characteristicCard}>
       <Text style={localStyles.characteristicTitle}>{title}</Text>
-      <Text style={localStyles.characteristicValue}>{value}</Text>
+      {value ? (
+        <Text style={localStyles.characteristicValue}>{value}</Text>
+      ) : (
+        <Image
+          source={images.unlockBlur}
+          style={{
+            width: 60,
+            height: 40,
+            resizeMode: 'stretch',
+            margin: 0,
+          }}
+        />
+      )}
     </View>
   );
 
@@ -143,19 +178,16 @@ const GlowResultScreen = () => {
         return (
           <View style={localStyles.scoresContainer}>
             <View style={localStyles.scoreRow}>
-              <ScoreCard title='Potential' score={scores.potential} potential />
-              <ScoreCard title='Overall' score={scores.overall} />
+              <ScoreCard title='Potential' potential />
+              <ScoreCard title='Overall' />
             </View>
             <View style={localStyles.scoreRow}>
-              <ScoreCard title='Skin Health' score={scores.skinHealth} />
-              <ScoreCard title='Glow Factor' score={scores.glowFactor} />
+              <ScoreCard title='Skin Health' />
+              <ScoreCard title='Glow Factor' />
             </View>
             <View style={localStyles.scoreRow}>
-              <ScoreCard
-                title={`Feature${'\n'}Harmony`}
-                score={scores.featureHarmony}
-              />
-              <ScoreCard title='Authenticity' score={scores.authenticity} />
+              <ScoreCard title={`Feature${'\n'}Harmony`} />
+              <ScoreCard title='Authenticity' />
             </View>
           </View>
         );
@@ -163,24 +195,12 @@ const GlowResultScreen = () => {
         return (
           <View style={localStyles.scoresContainer}>
             <View style={localStyles.scoreRow}>
-              <CharacteristicCard
-                title='Eye Shape'
-                value={facialCharacteristics.eyeShape}
-              />
-              <CharacteristicCard
-                title='Face Shape'
-                value={facialCharacteristics.faceShape}
-              />
+              <CharacteristicCard title='Eye Shape' />
+              <CharacteristicCard title='Face Shape' />
             </View>
             <View style={localStyles.scoreRow}>
-              <CharacteristicCard
-                title='Jawline'
-                value={facialCharacteristics.jawline}
-              />
-              <CharacteristicCard
-                title='Lip Shape'
-                value={facialCharacteristics.lipShape}
-              />
+              <CharacteristicCard title='Jawline' />
+              <CharacteristicCard title='Lip Shape' />
             </View>
           </View>
         );
@@ -188,30 +208,15 @@ const GlowResultScreen = () => {
         return (
           <View style={localStyles.scoresContainer}>
             <View style={localStyles.scoreRow}>
-              <CharacteristicCard
-                title='Skin Type'
-                value={skinAnalysis.skinType}
-              />
-              <CharacteristicCard
-                title='Hydration Level'
-                value={skinAnalysis.hydrationLevel}
-              />
+              <CharacteristicCard title='Skin Type' />
+              <CharacteristicCard title='Hydration Level' />
             </View>
             <View style={localStyles.scoreRow}>
-              <CharacteristicCard
-                title='Skin Texture'
-                value={skinAnalysis.skinTexture}
-              />
-              <CharacteristicCard
-                title='Skin Tone'
-                value={skinAnalysis.skinToneAndColor.join(', ')}
-              />
+              <CharacteristicCard title='Skin Texture' />
+              <CharacteristicCard title='Skin Tone' />
             </View>
             <View style={localStyles.scoreRow}>
-              <CharacteristicCard
-                title='Skin Vitality'
-                value={skinAnalysis.skinVitalityIndicators.join(', ')}
-              />
+              <CharacteristicCard title='Skin Vitality' />
             </View>
           </View>
         );
@@ -219,7 +224,7 @@ const GlowResultScreen = () => {
         // Implement Product Recommendations when available
         return (
           <ScrollView style={localStyles.scoresContainer}>
-            <Text style={localStyles.summarySectionTitle}>
+            {/* <Text style={localStyles.summarySectionTitle}>
               {recommendations?.result[0]?.userFeaturesSummary}
             </Text>
             {recommendations?.result[0]?.steps.map((tip: any) => (
@@ -236,16 +241,16 @@ const GlowResultScreen = () => {
                   {tip.explanation}
                 </Text>
               </View>
-            ))}
+            ))} */}
           </ScrollView>
         );
       case 'Skincare Recommendations':
         return (
           <ScrollView style={localStyles.scoresContainer}>
             <Text style={localStyles.summarySectionTitle}>
-              {recommendations?.result[1]?.userSkinSummary}
+              {/* {recommendations?.result[1]?.userSkinSummary} */}
             </Text>
-            {recommendations?.result[1]?.steps.map((rec: any) => (
+            {/* {recommendations?.result[1]?.steps.map((rec: any) => (
               <View key={rec.id} style={localStyles.recCard}>
                 <Text style={localStyles.recTitle}>{rec.name}</Text>
                 <View style={localStyles.productSection}>
@@ -275,13 +280,13 @@ const GlowResultScreen = () => {
                   {rec.explanation}
                 </Text>
               </View>
-            ))}
+            ))} */}
           </ScrollView>
         );
       case 'Makeup Tips':
         return (
           <ScrollView style={localStyles.scoresContainer}>
-            <Text style={localStyles.summarySectionTitle}>
+            {/* <Text style={localStyles.summarySectionTitle}>
               {recommendations?.result[2]?.userMakeupSummary}
             </Text>
             {recommendations?.result[2]?.steps.map((tip: any) => (
@@ -336,7 +341,7 @@ const GlowResultScreen = () => {
                   </Text>
                 )}
               </View>
-            ))}
+            ))} */}
           </ScrollView>
         );
       default:
@@ -344,41 +349,13 @@ const GlowResultScreen = () => {
     }
   };
 
-  // Animate the gradient
-  useEffect(() => {
-    const animateGradient = () => {
-      Animated.loop(
-        Animated.timing(unlockBtnAnimatedValue, {
-          toValue: 1, // Animate from 0 to 1
-          duration: 4000, // Adjust duration as needed for speed
-          easing: Easing.linear, // Linear easing for smooth looping
-          useNativeDriver: false, // Must be false for gradient color animation
-        })
-      ).start();
-    };
-
-    animateGradient();
-  }, [unlockBtnAnimatedValue]);
-
-  // Interpolate the animated value to animate the x-coordinate of the gradient
-  const animatedStartX = unlockBtnAnimatedValue.interpolate({
-    inputRange: [0, 1],
-    outputRange: [0, 1], // Moving from x=0 to x=1 for start
-  });
-
-  const animatedEndX = unlockBtnAnimatedValue.interpolate({
-    inputRange: [0, 1],
-    outputRange: [1, 0], // Moving from x=1 to x=0 for end
-  });
-
   return (
     <ImageBackground
       source={images.screenBg}
-      // source={require('@/assets/images/screen-bg.png')}
       style={localStyles.background}
       resizeMode='cover'
     >
-      <View style={localStyles.overlay} />
+      {/* <View style={localStyles.overlay} /> */}
 
       <SafeAreaView style={localStyles.safeArea}>
         <StatusBar barStyle='dark-content' backgroundColor='#6a51ae' />
@@ -388,19 +365,13 @@ const GlowResultScreen = () => {
           contentContainerStyle={localStyles.contentContainer}
         >
           <View style={localStyles.header}>
-            <TouchableOpacity
-              style={localStyles.backButton}
-              // TODO NAVIGATE TO DASHBOARD HOME SCREEN
-              onPress={() => router.replace('/(auth)/welcome')}
-            >
-              <Ionicons name='arrow-back' size={24} color='black' />
-            </TouchableOpacity>
             <Text style={localStyles.centeredTitle}>Glow Profile</Text>
           </View>
           <Text style={styles.subtitle}>
             Here's your personalized glow profile based on your facial analysis.
           </Text>
 
+          {/* Tabs */}
           <RNScrollView
             horizontal
             showsHorizontalScrollIndicator={false}
@@ -443,30 +414,66 @@ const GlowResultScreen = () => {
             </View>
           </RNScrollView>
 
+          {/* Placeholder Profile Image */}
           <View style={localStyles.profileContainer}>
             <Image
-              source={{
-                uri:
-                  storeImages[0] ||
-                  'https://example.com/default-profile-image.jpg',
-              }}
+              source={storeImages[0] ? { uri: storeImages[0] } : images.model}
               style={localStyles.profileImage}
             />
-            <Text
-              style={localStyles.percentileText}
-              className='text-center shadow-lg'
-            >
+            {/* <Text style={localStyles.percentileText}>
               You are in the{' '}
               <Text style={localStyles.percentileHighlight}>
                 {`${percentile}th percentile`}
               </Text>{' '}
               of all users.
+            </Text> */}
+            <Text style={localStyles.percentileText}>
+              You are in the{''}
+              {/* Replacing the percentile text with a gradient */}
+              {/* <LinearGradient
+                colors={[
+                  'rgba(150,150,150,0.4)', // Darker gray in the center for more depth
+                  'rgba(150,150,150,0.2)', // Medium gray toward the outer area
+                  'rgba(200,200,200,0.2)', // Lighter gray towards the very edge
+                  'rgba(255,255,255,0.6)', // Almost transparent at the edges for blur effect
+                ]}
+                start={{ x: 0.5, y: 0.5 }} // Start from the center
+                end={{ x: 1, y: 1 }} // End at the outer corners for a smooth radial effect
+                style={localStyles.gradientText}
+              >
+                <View style={{ width: 30, height: 20 }} />
+              </LinearGradient> */}
+              <Text className='font-bold mx-0 px-0'>{' 🔒th percentile '}</Text>
+              of all users.
             </Text>
           </View>
 
+          {/* Render content based on active tab */}
           {renderTabContent()}
+
           <View style={localStyles.buttonSpacer} />
         </ScrollView>
+
+        <TouchableOpacity
+          style={[
+            localStyles.buttonContainer,
+            { paddingBottom: insets.bottom },
+          ]}
+          onPress={() => router.replace('/glow-results-screen')}
+        >
+          <AnimatedLinearGradient
+            colors={['#da70d6', '#7b68ee', '#87cefa']}
+            start={{ x: animatedStartX, y: 0 }}
+            end={{ x: animatedEndX, y: 0 }}
+            style={localStyles.gradientBackground}
+          >
+            <View style={localStyles.whiteButton}>
+              <Text style={localStyles.unlockButtonText}>
+                Unlock Results 🙌
+              </Text>
+            </View>
+          </AnimatedLinearGradient>
+        </TouchableOpacity>
       </SafeAreaView>
     </ImageBackground>
   );
@@ -573,11 +580,23 @@ const localStyles = StyleSheet.create({
   percentileHighlight: {
     fontWeight: '600',
     // color: '#8835f4',
-    color: 'black',
+    color: '#ADADAD',
     letterSpacing: -0.4,
+    backgroundColor: '#ADADAD',
   },
   scoresContainer: {
     // marginBottom: 20,
+  },
+  // gradientText: {
+  //   borderRadius: 4, // Rounding the edges if needed
+  //   marginLeft: 0, // Add spacing if necessary
+  //   marginRight: 2, // Add spacing if necessary
+  // },
+  gradientText: {
+    borderRadius: 25, // Creates the elliptical shape
+    marginRight: 2, // Adds space on either side
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   gradientBorderWrapper: {
     borderRadius: 10,
