@@ -1,10 +1,10 @@
-import { fetchAPI } from "@/lib/fetch";
+import { fetchAPI } from '@/lib/fetch';
 import { useRecommendationsStore } from '@/store/glowRecommendationsStore';
 import { useGlowResultStore } from '@/store/glowResultStore';
 import { useImageStore } from '@/store/imageStore';
 import { useUser } from '@clerk/clerk-expo';
 import { useRouter } from 'expo-router';
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from 'react';
 import {
   Alert,
   Animated,
@@ -28,9 +28,11 @@ const ResultsScreen = () => {
   const { glowResult, setGlowResult } = useGlowResultStore();
   const [message, setMessage] = useState('Analyzing your features...');
   const [intervalDuration, setIntervalDuration] = useState(80);
+  // const [intervalDuration, setIntervalDuration] = useState(280);
   const { setRecommendations } = useRecommendationsStore();
 
   const [apiCallsStarted, setApiCallsStarted] = useState<boolean>(false);
+  const [apiCallsComplete, setApiCallsComplete] = useState<boolean>(false);
 
   const fadeAnim = useRef(new Animated.Value(1)).current;
   const rippleAnim = useRef(new Animated.Value(0)).current;
@@ -99,6 +101,10 @@ const ResultsScreen = () => {
     // Progress logic
     const startProgressInterval = () => {
       return setInterval(() => {
+        if (apiCallsComplete) {
+          setLoadingProgress(100);
+        }
+
         setLoadingProgress((prev) => {
           const newProgress = prev + 1;
 
@@ -131,7 +137,7 @@ const ResultsScreen = () => {
 
     // Cleanup
     return () => clearInterval(progressInterval);
-  }, [intervalDuration]);
+  }, [intervalDuration, apiCallsComplete]);
 
   useEffect(() => {
     const fetchGlowResults = async ({
@@ -182,6 +188,7 @@ const ResultsScreen = () => {
         // setApiCallsDone(true);
 
         // Navigate to the next screen after setting both results
+        setApiCallsComplete(true);
         router.push('/unlock-results-screen');
       } catch (error) {
         console.error('Error fetching glow results:', error);
@@ -227,7 +234,7 @@ const ResultsScreen = () => {
             className='tracking-tight'
           >
             {loadingProgress >= 100
-              ? 'Get ready for some \nawesome things... 💗'
+              ? 'Get ready for some \nawesome things 💗'
               : message}
           </Animated.Text>
         </View>
@@ -279,50 +286,50 @@ const ResultsScreen = () => {
 const resultStyles = StyleSheet.create({
   background: {
     flex: 1,
-    resizeMode: "cover",
-    justifyContent: "center",
+    resizeMode: 'cover',
+    justifyContent: 'center',
   },
   container: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
     // backgroundColor: '#FFFFFF',
     // backgroundColor: 'black',
   },
   contentContainer: {
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
     padding: 20,
   },
   percentage: {
     fontSize: 85,
-    fontWeight: "bold",
-    color: "white",
-    textAlign: "center",
+    fontWeight: 'bold',
+    color: 'white',
+    textAlign: 'center',
     marginBottom: 10,
   },
   caption: {
     fontSize: 16,
-    color: "white",
-    textAlign: "center",
+    color: 'white',
+    textAlign: 'center',
   },
   title: {
     fontSize: 30,
-    color: "white",
-    fontWeight: "bold",
+    color: 'white',
+    fontWeight: 'bold',
     marginBottom: 20,
   },
   subtitleCaption: {
     fontSize: 16,
-    color: "white",
+    color: 'white',
     marginTop: 10,
   },
   ripple: {
-    position: "absolute",
+    position: 'absolute',
     width: 100,
     height: 100,
     borderRadius: 50,
-    backgroundColor: "rgba(255, 255, 255, 0.3)",
+    backgroundColor: 'rgba(255, 255, 255, 0.3)',
     top: height / 2 - 50, // Center the ripple
     left: width / 2 - 50,
   },
