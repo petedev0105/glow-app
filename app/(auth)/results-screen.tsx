@@ -145,8 +145,6 @@ const ResultsScreen = () => {
   });
 
   useEffect(() => {
-    let isFetchCompleted = false; // Local flag to track fetch status
-
     const fetchGlowResults = async ({
       prompt,
       imageUri,
@@ -154,11 +152,15 @@ const ResultsScreen = () => {
       prompt: string;
       imageUri: string;
     }) => {
-      try {
-        if (!imageUri) {
-          throw new Error('Image URI is missing');
-        }
+      if (!imageUri) {
+        Alert.alert('Error', 'Image URI is missing');
+        return;
+      }
 
+      setLoading(true); // Set loading true before making the API call
+
+      try {
+        // Fetch glow score
         const response = await fetchAPI('/(api)/(openai)/glowscore', {
           method: 'POST',
           body: JSON.stringify({ prompt, imageUri }),
@@ -166,11 +168,10 @@ const ResultsScreen = () => {
 
         console.log(response);
 
-        // Save to neondb under the user id
-
-        // Set into global state
         const stringResponse = JSON.stringify(response);
+        setGlowResult(response); // Set the fetched glow result
 
+        // Fetch recommendations based on the glow score
         try {
           console.log('running recommendations api...');
           const recommendationsResponse = await fetchAPI(
@@ -182,35 +183,28 @@ const ResultsScreen = () => {
           );
 
           console.log('recommendationsResponse', recommendationsResponse);
-          // Store the recommendations in the Zustand store
-          setRecommendations(recommendationsResponse);
-
-          // Alert.alert(
-          //   'Recommendations',
-          //   JSON.stringify(recommendationsResponse)
-          // );
-        } catch (error) {
-          console.log(error);
+          setRecommendations(recommendationsResponse); // Store the recommendations
+        } catch (recommendationError) {
+          console.error('Error fetching recommendations:', recommendationError);
         }
 
-        setGlowResult(response); // Set the fetched glow result
-        isFetchCompleted = true; // Mark fetch as complete to avoid re-triggering
-
-        router.push('/unlock-results-screen'); // Navigate to the FAKE results screen
+        // Navigate to the next screen after setting the results
+        router.push('/unlock-results-screen');
       } catch (error) {
         console.error('Error fetching glow results:', error);
         Alert.alert('Error', 'Could not fetch glow results.');
       } finally {
-        setLoading(false); // Ensure the loading state is set to false once the request completes
+        setLoading(false); // Ensure loading is set to false once the request completes
       }
     };
 
     console.log('Effect triggered:', { loadingProgress, glowResult });
 
-    if (loadingProgress >= 100 && imageUri && !isFetchCompleted) {
+    if (loadingProgress >= 100 && imageUri) {
       fetchGlowResults({ prompt: '', imageUri });
     }
   }, [loadingProgress, imageUri, setRecommendations]);
+
 
   return (
     <ImageBackground
