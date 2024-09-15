@@ -8,6 +8,7 @@ import {
   SafeAreaView,
   StatusBar,
   Text,
+  TouchableOpacity,
   View,
 } from 'react-native';
 import { styles } from '../../constants/onboarding';
@@ -16,21 +17,17 @@ const DashboardScreen = () => {
   return (
     <ImageBackground
       resizeMode='cover'
-      source={images.homeBgLarger} // Background image with cover mode
-      style={styles.container} // Reusing container style
+      source={images.homeBgLarger}
+      style={styles.container}
     >
       <SafeAreaView className='flex h-full'>
         <StatusBar barStyle='dark-content' backgroundColor='#6a51ae' />
 
-        {/* Header section */}
-        {/* <View style={styles.headerContainer}>
-        <Image source={images.glowTitle} style={styles.logo as ImageStyle} />
-      </View> */}
         <View className='flex items-center mb-10'>
           <Image source={images.glowTitle} style={styles.logo as ImageStyle} />
         </View>
 
-        {/* Title section */}
+        {/* Title */}
         <View style={styles.headerContainer}>
           <Text style={{ ...styles.title, fontSize: 30, fontWeight: 600 }}>
             Ready to glow up?
@@ -43,18 +40,27 @@ const DashboardScreen = () => {
           </Text>
         </View>
 
+        {/* Main Card */}
         <View style={styles.contentContainer}>
-          {/* Before/After Image section */}
           <View
-            className='flex flex-col shadow gap-2 mt-5 justify-center rounded-3xl items-center card border-[#CACACA] border-2 p-2'
-            style={{ width: '85%', height: 350 }}
+            className='shadow-lg flex flex-col justify-center items-center rounded-3xl'
+            style={{
+              width: '85%',
+              height: 380,
+              backgroundColor: '#fff',
+              borderRadius: 20,
+              padding: 20,
+              borderWidth: 2,
+              borderColor: '#dbdbdb',
+            }}
           >
+            {/* Image */}
             <View
               style={{
-                ...styles.imagePlaceholder,
-                backgroundColor: 'transparent',
                 width: 130,
                 height: 130,
+                borderRadius: 10,
+                backgroundColor: 'transparent',
               }}
             >
               <Image
@@ -62,39 +68,64 @@ const DashboardScreen = () => {
                 style={{
                   width: '100%',
                   height: '100%',
-                  borderRadius: 10,
                   resizeMode: 'contain',
+                  borderRadius: 10,
                 }}
               />
             </View>
 
+            {/* Card Title */}
             <Text
               style={{
-                ...styles.title,
                 textAlign: 'center',
                 fontSize: 20,
-                fontWeight: 600,
+                fontWeight: '600',
+                marginTop: 15,
               }}
             >
               Personalized Glow Up Guide
             </Text>
+
+            {/* Card Subtitle */}
             <Text
-              className='text-center p-2 px-5'
-              style={styles.subtitleCaption}
+              style={{
+                textAlign: 'center',
+                padding: 10,
+                fontSize: 14,
+                color: '#6c757d',
+              }}
             >
               Understand more about your characteristics and how to make them
               glow.
             </Text>
 
-            <View className='flex flex-row gap-2 items-center justify-center rounded-3xl card border-gray-300 border-2 p-2'>
-              <Ionicons name='scan' size={20}></Ionicons>
-              <Text style={{ ...styles.title, fontSize: 16, fontWeight: 500 }}>
+            {/* Start Facial Analysis Button */}
+            <TouchableOpacity
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+                justifyContent: 'center',
+                marginVertical: 10,
+                paddingVertical: 10,
+                paddingHorizontal: 20,
+                borderRadius: 25,
+                borderWidth: 2,
+                borderColor: '#dbdbdb',
+              }}
+            >
+              <Ionicons name='scan' size={20} />
+              <Text
+                style={{
+                  fontSize: 16,
+                  fontWeight: '500',
+                  marginLeft: 10,
+                }}
+              >
                 Start Facial Analysis
               </Text>
-            </View>
+            </TouchableOpacity>
           </View>
         </View>
-
         {/* Footer with button */}
         <View style={styles.footerContainer}></View>
       </SafeAreaView>
