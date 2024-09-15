@@ -39,9 +39,9 @@ export const ReferralScreen = ({
             textAlign: 'center',
             textAlignVertical: 'top',
           }}
-          className='font-semibold text-[#836E89] shadow-xs'
+          className='font-semibold text-black shadow-xs'
           placeholder='E.g. A1X2Y3'
-          placeholderTextColor='black'
+          placeholderTextColor='#666'
           value={referralCode.toUpperCase()}
           onChangeText={(text) => {
             setReferralCode(text);
@@ -51,7 +51,7 @@ export const ReferralScreen = ({
             Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
           }}
         />
-        <Text style={styles.subtitleCaption}>
+        <Text style={[styles.subtitleCaption, { color: '#666' }]}>
           {onboardingQuestionsList[1].subtitle}
         </Text>
       </KeyboardAvoidingView>

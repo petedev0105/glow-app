@@ -185,7 +185,9 @@ export const styles = StyleSheet.create({
     padding: 10,
     width: "100%",
     marginVertical: 10,
-    backgroundColor: "#F2F2F2",
+    borderWidth: 1,
+    borderColor: "#666",
+    backgroundColor: "#fff",
   },
   footerContainer: {
     flex: 1.2,
@@ -271,5 +273,42 @@ export const styles = StyleSheet.create({
     flex: 1,
     textAlign: 'left',
     letterSpacing: '-0.4%',
+  },
+  optionCard: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: 15,
+    marginBottom: 15,
+    backgroundColor: 'white',
+    borderRadius: 15,
+    shadowColor: '#8A2BE2',
+    shadowOpacity: 0.1,
+    shadowRadius: 10,
+    shadowOffset: { width: 0, height: 5 },
+    paddingHorizontal: 20,
+    width: '100%',
+    paddingRight: 50,
+    borderWidth: 1,
+    borderColor: '#F2F2F2',
+  },
+  optionCardSelected: {
+    backgroundColor: '#E5D4FA', // Change the background if selected
+    borderColor: '#8A2BE2',
+    borderWidth: 1,
+  },
+  optionTitle: {
+    fontSize: 14,
+    fontWeight: 600,
+  },
+  optionTitleSelected: {
+    color: '#8A2BE2',
+  },
+  optionDescription: {
+    fontSize: 12,
+    color: '#666',
+    marginTop: 5,
+  },
+  buttonDisabled: {
+    backgroundColor: '#CCC',
   },
 });
