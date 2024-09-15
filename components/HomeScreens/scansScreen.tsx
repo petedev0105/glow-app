@@ -89,6 +89,7 @@ const ScansScreen = () => {
 
         {/* Main Content */}
         <View style={{ ...styles.contentContainer, paddingHorizontal: 20 }}>
+          {/* <ScrollView> */}
           {scans.map((scan) => (
             <View key={scan.id} style={localStyles.scanCard}>
               <Image source={scan.image} style={localStyles.scanImage} />
@@ -128,6 +129,7 @@ const ScansScreen = () => {
               </View>
             </View>
           ))}
+          {/* </ScrollView> */}
         </View>
         {/* Footer with button */}
         <View style={styles.footerContainer}></View>
@@ -151,15 +153,16 @@ const localStyles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: '#fff',
     borderRadius: 12,
-    padding: 10,
+    padding: 12,
     marginVertical: 10,
     borderColor: '#dbdbdb',
     borderWidth: 1,
   },
   scanImage: {
-    width: 50,
-    height: 50,
+    width: 60,
+    height: 60,
     borderRadius: 8,
+    resizeMode: 'contain',
   },
   scanDetails: {
     flex: 1,
@@ -168,6 +171,7 @@ const localStyles = StyleSheet.create({
   scanTitle: {
     fontSize: 16,
     fontWeight: '600',
+    marginBottom: 5,
   },
   scanDate: {
     fontSize: 12,
