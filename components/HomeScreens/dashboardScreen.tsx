@@ -12,6 +12,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
+import { homeStyles } from '../../constants/home';
 import { styles } from '../../constants/onboarding';
 
 const DashboardScreen = () => {
@@ -56,19 +57,17 @@ const DashboardScreen = () => {
 
         {/* Main Card */}
         <View style={styles.contentContainer}>
-          <View style={localStyles.mainCard} className='shadow-sm'>
+          <View style={homeStyles.mainCard} className='shadow-sm'>
             {/* Image */}
             <View style={localStyles.imageContainer}>
               <Image source={images.dashboardGirl} style={localStyles.image} />
             </View>
 
             {/* Card Title */}
-            <Text style={localStyles.cardTitle}>
-              Personalized Glow Up Guide
-            </Text>
+            <Text style={homeStyles.cardTitle}>Personalized Glow Up Guide</Text>
 
             {/* Card Subtitle */}
-            <Text style={localStyles.cardSubtitle}>
+            <Text style={homeStyles.cardSubtitle}>
               Understand more about your characteristics and how to make them
               glow.
             </Text>
@@ -76,7 +75,7 @@ const DashboardScreen = () => {
             {/* Start Facial Analysis Button */}
             <TouchableOpacity style={localStyles.startButton}>
               <Ionicons name='scan' size={20} />
-              <Text style={localStyles.buttonText}>Start Facial Analysis</Text>
+              <Text style={homeStyles.buttonText}>Start Facial Analysis</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -97,18 +96,6 @@ const localStyles = StyleSheet.create({
     marginBottom: 10,
     marginVertical: 20,
   },
-  mainCard: {
-    width: '85%',
-    height: 380,
-    backgroundColor: '#fff',
-    borderRadius: 30,
-    padding: 20,
-    borderWidth: 1,
-    borderColor: '#dbdbdb',
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginTop: '10%',
-  },
   imageContainer: {
     width: 130,
     height: 130,
@@ -121,21 +108,6 @@ const localStyles = StyleSheet.create({
     resizeMode: 'contain',
     borderRadius: 10,
   },
-  cardTitle: {
-    textAlign: 'center',
-    fontSize: 16,
-    fontWeight: '600',
-    marginTop: 18,
-    paddingHorizontal: 10,
-    letterSpacing: -0.8,
-  },
-  cardSubtitle: {
-    textAlign: 'center',
-    padding: 10,
-    fontSize: 14,
-    letterSpacing: -0.4,
-    color: '#6c757d',
-  },
   startButton: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -147,12 +119,6 @@ const localStyles = StyleSheet.create({
     borderRadius: 25,
     borderWidth: 1,
     borderColor: '#dbdbdb',
-  },
-  buttonText: {
-    fontSize: 16,
-    fontWeight: '500',
-    marginLeft: 10,
-    paddingVertical: 5,
   },
 });
 
