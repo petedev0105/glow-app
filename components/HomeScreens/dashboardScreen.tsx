@@ -36,6 +36,7 @@ const DashboardScreen = () => {
               fontSize: 30,
               fontWeight: '600',
               marginTop: 20,
+              letterSpacing: -0.8,
             }}
           >
             Ready to glow up?
@@ -46,6 +47,7 @@ const DashboardScreen = () => {
               fontSize: 20,
               fontWeight: '400',
               marginTop: 16,
+              letterSpacing: -0.8,
             }}
           >
             Choose a scan to start
