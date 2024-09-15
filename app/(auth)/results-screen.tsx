@@ -27,8 +27,8 @@ const ResultsScreen = () => {
   const [loading, setLoading] = useState(true);
   const { glowResult, setGlowResult } = useGlowResultStore();
   const [message, setMessage] = useState('Analyzing your features...');
-  const [intervalDuration, setIntervalDuration] = useState(80);
-  // const [intervalDuration, setIntervalDuration] = useState(280);
+  // const [intervalDuration, setIntervalDuration] = useState(80);
+  const [intervalDuration, setIntervalDuration] = useState(280);
   const { setRecommendations } = useRecommendationsStore();
 
   const [apiCallsStarted, setApiCallsStarted] = useState<boolean>(false);
@@ -180,16 +180,13 @@ const ResultsScreen = () => {
 
           console.log('Recommendations Response:', recommendationsResponse);
           setRecommendations(recommendationsResponse); // Set recommendations
+          setApiCallsComplete(true);
         } catch (recommendationError) {
           console.error('Error fetching recommendations:', recommendationError);
         }
 
         // API Calls are complete, just take us to the next screen
         // setApiCallsDone(true);
-
-        // Navigate to the next screen after setting both results
-        setApiCallsComplete(true);
-        router.push('/unlock-results-screen');
       } catch (error) {
         console.error('Error fetching glow results:', error);
         Alert.alert('Error', 'Could not fetch glow results.');
@@ -207,6 +204,13 @@ const ResultsScreen = () => {
       fetchGlowResults({ prompt: '', imageUri });
     }
   }, [loadingProgress, imageUri, setRecommendations]);
+
+  useEffect(() => {
+    if (apiCallsComplete && loadingProgress >= 100) {
+      console.log('Navigating to unlock-results-screen');
+      router.push('/unlock-results-screen');
+    }
+  }, [apiCallsComplete, loadingProgress]);
 
   return (
     <ImageBackground
