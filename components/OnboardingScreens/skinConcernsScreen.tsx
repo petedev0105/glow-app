@@ -1,3 +1,4 @@
+import { Ionicons } from '@expo/vector-icons'; // For adding icons if needed
 import * as Haptics from 'expo-haptics';
 import React, { useState } from 'react';
 import { Text, TouchableOpacity, View } from 'react-native';
@@ -37,28 +38,50 @@ export const SkinConcernsScreen = ({
               );
               setSelectedGoal(goal);
             }}
-            style={
-              selectedGoal === goal
-                ? styles.radioButtonSelected
-                : styles.radioButton
-            }
+            style={[
+              styles.optionCard, // Apply the default card style
+              selectedGoal === goal && styles.optionCardSelected, // Apply the selected style when active
+            ]}
           >
-            <View className='flex flex-row gap-2 items-center'>
-              {selectedGoal !== goal && (
-                <View style={styles.radioInactiveDot} />
-              )}
-              {selectedGoal === goal && <View style={styles.radioActiveDot} />}
-              <Text style={styles.radioButtonText}>{goal}</Text>
+            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+              {/* Optionally add icons based on the goal */}
+              <Ionicons
+                name={goal === 'Sensitive' ? 'leaf-outline' : 'shield-outline'}
+                size={24}
+                color={selectedGoal === goal ? '#8A2BE2' : 'black'}
+              />
+              <View style={{ marginLeft: 12 }}>
+                <Text
+                  style={[
+                    styles.optionTitle, // Default title style
+                    selectedGoal === goal && styles.optionTitleSelected, // Apply selected title style
+                  ]}
+                >
+                  {goal}
+                </Text>
+                <Text
+                  style={[
+                    styles.optionDescription,
+                    selectedGoal === goal ? styles.optionTitleSelected : {},
+                  ]}
+                >
+                  {goal === 'Sensitive'
+                    ? 'My skin has reacted negatively to some skincare in the past.'
+                    : 'My skin shows no reaction to certain ingredients.'}
+                </Text>
+              </View>
             </View>
           </TouchableOpacity>
         ))}
       </View>
 
       <View style={styles.footerContainer}>
-        <TouchableOpacity style={styles.button} onPress={onNext}>
-          <Text style={styles.buttonText} disabled={selectedGoal === ''}>
-            Continue
-          </Text>
+        <TouchableOpacity
+          style={[styles.button, selectedGoal === '' && styles.buttonDisabled]}
+          onPress={onNext}
+          disabled={selectedGoal === ''}
+        >
+          <Text style={styles.buttonText}>Continue</Text>
         </TouchableOpacity>
       </View>
     </View>
