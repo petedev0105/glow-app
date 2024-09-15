@@ -27,12 +27,19 @@ const ResultsScreen = () => {
   const [loading, setLoading] = useState(true);
   const { glowResult, setGlowResult } = useGlowResultStore();
   const [message, setMessage] = useState('Analyzing your features...');
-  const [intervalDuration, setIntervalDuration] = useState(110);
+  const [intervalDuration, setIntervalDuration] = useState(80);
   const { setRecommendations } = useRecommendationsStore();
+
+  const [apiCallsStarted, setApiCallsStarted] = useState<boolean>(false);
 
   const fadeAnim = useRef(new Animated.Value(1)).current;
   const rippleAnim = useRef(new Animated.Value(0)).current;
   const opacityAnim = useRef(new Animated.Value(1)).current;
+
+  const rippleScale = rippleAnim.interpolate({
+    inputRange: [0, 1],
+    outputRange: [0.1, 10],
+  });
 
   const router = useRouter();
 
@@ -66,7 +73,7 @@ const ResultsScreen = () => {
 
     startRippleAnimation();
 
-    // Fade in function
+    // Fade in and out functions
     const fadeIn = () => {
       Animated.timing(fadeAnim, {
         toValue: 1,
@@ -75,8 +82,7 @@ const ResultsScreen = () => {
       }).start();
     };
 
-    // Fade out function
-    const fadeOut = (callback: { (): void; (): void }) => {
+    const fadeOut = (callback: () => void) => {
       Animated.timing(fadeAnim, {
         toValue: 0,
         duration: 500,
@@ -90,30 +96,23 @@ const ResultsScreen = () => {
     setMessage(messages[0]);
     fadeIn();
 
+    // Progress logic
     const startProgressInterval = () => {
       return setInterval(() => {
         setLoadingProgress((prev) => {
           const newProgress = prev + 1;
 
-          // Switch to 50ms interval after 40% progress
-          if (newProgress === 10) {
-            clearInterval(progressInterval);
-            setIntervalDuration(100);
-          } else if (newProgress === 20) {
-            clearInterval(progressInterval);
-            setIntervalDuration(75);
-          } else if (newProgress === 30) {
-            clearInterval(progressInterval);
-            setIntervalDuration(50);
-          }
-
-          if (newProgress >= 100) {
-            clearInterval(progressInterval);
-            // Alert.alert('Analysis complete');
-            // fetchGlowResults();
-
-            return 100;
-          }
+          // Adjust interval duration based on progress
+          // if (newProgress === 10) {
+          //   clearInterval(progressInterval);
+          //   setIntervalDuration(100);
+          // } else if (newProgress === 20) {
+          //   clearInterval(progressInterval);
+          //   setIntervalDuration(75);
+          // } else if (newProgress === 30) {
+          //   clearInterval(progressInterval);
+          //   setIntervalDuration(50);
+          // }
 
           if (newProgress % 25 === 0) {
             const messageIndex = Math.floor(newProgress / 25);
@@ -123,26 +122,16 @@ const ResultsScreen = () => {
             });
           }
 
-          return newProgress;
+          return newProgress >= 100 ? 100 : newProgress;
         });
       }, intervalDuration);
     };
 
     let progressInterval = startProgressInterval();
 
-    // Update interval once the progress reaches 40%
-    if (loadingProgress >= 25) {
-      clearInterval(progressInterval); // Clear the old interval
-      progressInterval = startProgressInterval(); // Start a new interval with 50ms
-    }
-
+    // Cleanup
     return () => clearInterval(progressInterval);
   }, [intervalDuration]);
-
-  const rippleScale = rippleAnim.interpolate({
-    inputRange: [0, 1],
-    outputRange: [0.1, 10], // Adjust the range to control the ripple size
-  });
 
   useEffect(() => {
     const fetchGlowResults = async ({
@@ -157,23 +146,24 @@ const ResultsScreen = () => {
         return;
       }
 
-      setLoading(true); // Set loading true before making the API call
+      setLoading(true); // Start loading state
+      setApiCallsStarted(true);
 
       try {
-        // Fetch glow score
-        const response = await fetchAPI('/(api)/(openai)/glowscore', {
+        // Fetch glow score first
+        const glowScoreResponse = await fetchAPI('/(api)/(openai)/glowscore', {
           method: 'POST',
           body: JSON.stringify({ prompt, imageUri }),
         });
 
-        console.log(response);
+        console.log('Glow Score Response:', glowScoreResponse);
+        setGlowResult(glowScoreResponse); // Set glow result
 
-        const stringResponse = JSON.stringify(response);
-        setGlowResult(response); // Set the fetched glow result
+        const stringResponse = JSON.stringify(glowScoreResponse);
 
         // Fetch recommendations based on the glow score
         try {
-          console.log('running recommendations api...');
+          console.log('running recommendations API...');
           const recommendationsResponse = await fetchAPI(
             '/(api)/(openai)/glowrecommendations',
             {
@@ -182,29 +172,34 @@ const ResultsScreen = () => {
             }
           );
 
-          console.log('recommendationsResponse', recommendationsResponse);
-          setRecommendations(recommendationsResponse); // Store the recommendations
+          console.log('Recommendations Response:', recommendationsResponse);
+          setRecommendations(recommendationsResponse); // Set recommendations
         } catch (recommendationError) {
           console.error('Error fetching recommendations:', recommendationError);
         }
 
-        // Navigate to the next screen after setting the results
+        // API Calls are complete, just take us to the next screen
+        // setApiCallsDone(true);
+
+        // Navigate to the next screen after setting both results
         router.push('/unlock-results-screen');
       } catch (error) {
         console.error('Error fetching glow results:', error);
         Alert.alert('Error', 'Could not fetch glow results.');
       } finally {
-        setLoading(false); // Ensure loading is set to false once the request completes
+        setLoading(false); // Stop loading state
       }
     };
 
-    console.log('Effect triggered:', { loadingProgress, glowResult });
+    if (loadingProgress % 10 === 0) {
+      console.log('Effect triggered:', { loadingProgress });
+    }
 
-    if (loadingProgress >= 100 && imageUri) {
+    // If loading progress is
+    if (loadingProgress >= 1 && imageUri && !apiCallsStarted) {
       fetchGlowResults({ prompt: '', imageUri });
     }
   }, [loadingProgress, imageUri, setRecommendations]);
-
 
   return (
     <ImageBackground
@@ -231,7 +226,9 @@ const ResultsScreen = () => {
             style={[resultStyles.caption, { opacity: fadeAnim }]}
             className='tracking-tight'
           >
-            {message}
+            {loadingProgress >= 100
+              ? 'Get ready for some \nawesome things... 💗'
+              : message}
           </Animated.Text>
         </View>
         {/* {!loading ? (
