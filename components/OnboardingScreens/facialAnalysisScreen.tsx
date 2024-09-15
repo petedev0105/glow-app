@@ -6,9 +6,7 @@ import * as ImagePicker from "expo-image-picker";
 import { router } from "expo-router";
 import React, { useState } from "react";
 import { Alert, Image, Text, TouchableOpacity, View } from "react-native";
-import { onboardingQuestionsList, styles } from "../../constants/onboarding";
-import { fetchAPI } from "@/lib/fetch";
-import _ from "lodash";
+import { onboardingQuestionsList, styles } from '../../constants/onboarding';
 
 export const FacialAnalysisScreen = () => {
   const [image, setImage] = useState<string | null>(null);
@@ -18,10 +16,14 @@ export const FacialAnalysisScreen = () => {
     try {
       const fileInfo = await FileSystem.getInfoAsync(uri);
 
-      if ("size" in fileInfo && fileInfo.size > 1000000) {
+      if ('size' in fileInfo && fileInfo.size > 1000000) {
         const manipResult = await ImageManipulator.manipulateAsync(
           uri,
-          [{ resize: { width: 1000 } }],
+          [
+            { resize: { width: 1000 } },
+            { rotate: 180 },
+            { flip: ImageManipulator.FlipType.Vertical },
+          ],
           { compress: 0.7, format: ImageManipulator.SaveFormat.JPEG }
         );
         return manipResult.uri;
@@ -29,7 +31,7 @@ export const FacialAnalysisScreen = () => {
         return uri;
       }
     } catch (error) {
-      console.error("Error compressing image:", error);
+      console.error('Error compressing image:', error);
       return uri;
     }
   };
@@ -38,7 +40,7 @@ export const FacialAnalysisScreen = () => {
     if (image) {
       console.log(image);
       await handleImageUpload(image);
-      router.push("/(auth)/results-screen");
+      router.push('/(auth)/results-screen');
 
       // try {
       //   console.log("calling image analysis api");
@@ -58,7 +60,7 @@ export const FacialAnalysisScreen = () => {
   const handleCameraCapture = async () => {
     const permissionResult = await ImagePicker.requestCameraPermissionsAsync();
     if (!permissionResult.granted) {
-      Alert.alert("Permission to access camera is required!");
+      Alert.alert('Permission to access camera is required!');
       return;
     }
 
@@ -85,7 +87,7 @@ export const FacialAnalysisScreen = () => {
     const permissionResult =
       await ImagePicker.requestMediaLibraryPermissionsAsync();
     if (!permissionResult.granted) {
-      Alert.alert("Permission to access gallery is required!");
+      Alert.alert('Permission to access gallery is required!');
       return;
     }
 
@@ -108,7 +110,7 @@ export const FacialAnalysisScreen = () => {
 
   const handleImageUpload = async (imageUri: string) => {
     if (!user || !user.id) {
-      console.error("User is not logged in");
+      console.error('User is not logged in');
       return;
     }
 
@@ -120,19 +122,19 @@ export const FacialAnalysisScreen = () => {
 
       // router.replace("/(auth)/next-screen");
     } catch (error: any) {
-      console.error("Error uploading image:", error);
-      Alert.alert("Error uploading image", error.message);
+      console.error('Error uploading image:', error);
+      Alert.alert('Error uploading image', error.message);
     }
   };
 
   const showImagePickerOptions = () => {
     Alert.alert(
-      "Upload Image",
-      "Choose an option",
+      'Upload Image',
+      'Choose an option',
       [
-        { text: "Take a Selfie", onPress: handleCameraCapture },
-        { text: "Choose Existing Image", onPress: handleGalleryUpload },
-        { text: "Cancel", style: "cancel" },
+        { text: 'Take a Selfie', onPress: handleCameraCapture },
+        { text: 'Choose Existing Image', onPress: handleGalleryUpload },
+        { text: 'Cancel', style: 'cancel' },
       ],
       { cancelable: true }
     );
@@ -150,12 +152,12 @@ export const FacialAnalysisScreen = () => {
           {image ? (
             <Image
               source={{ uri: image }}
-              style={{ width: "100%", height: "100%", borderRadius: 10 }}
+              style={{ width: '100%', height: '100%', borderRadius: 10 }}
             />
           ) : (
             <Image
-              source={require("../../assets/images/model.png")}
-              style={{ width: "100%", height: "100%", borderRadius: 10 }}
+              source={require('../../assets/images/model.png')}
+              style={{ width: '100%', height: '100%', borderRadius: 10 }}
             />
           )}
         </View>
@@ -166,14 +168,14 @@ export const FacialAnalysisScreen = () => {
           <TouchableOpacity
             style={[
               styles.button,
-              { backgroundColor: "#E0E0E0", marginBottom: 10 },
+              { backgroundColor: '#E0E0E0', marginBottom: 10 },
             ]}
             onPress={() => {
               setImage(null);
               useImageStore.getState().clearImages();
             }}
           >
-            <Text style={[styles.buttonText, { color: "#333" }]}>
+            <Text style={[styles.buttonText, { color: '#333' }]}>
               Choose Another
             </Text>
           </TouchableOpacity>
