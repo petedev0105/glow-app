@@ -21,6 +21,7 @@ const Page = () => {
     if (mounted) {
       if (!userId) {
         // router.replace("/(auth)/welcome");
+        console.log('app/index: User ID not found!')
         router.replace("/(auth)/start");
       } else {
         console.log(user.id);
