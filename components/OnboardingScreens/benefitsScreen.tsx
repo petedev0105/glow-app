@@ -1,3 +1,4 @@
+import { router } from 'expo-router';
 import React from 'react';
 import { Text, TouchableOpacity, View } from 'react-native';
 import { onboardingQuestionsList, styles } from '../../constants/onboarding';
@@ -34,7 +35,12 @@ export const BenefitsScreen = ({
       </View>
 
       <View style={styles.footerContainer}>
-        <TouchableOpacity style={styles.button} onPress={onNext}>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => {
+            router.replace('/(auth)/facial-analysis-screen');
+          }}
+        >
           <Text style={styles.buttonText}>
             {onboardingQuestionsList[9].continueButton}
           </Text>
