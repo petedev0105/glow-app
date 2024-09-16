@@ -246,9 +246,12 @@ const GlowResultScreen = () => {
         return (
           <ScrollView style={localStyles.scoresContainer}>
             <View style={localStyles.summarySectionCard}>
-              <Text style={localStyles.summarySectionTitle}>
-                {recommendations?.result[0]?.userFeaturesSummary}
-              </Text>
+              <Image
+                source={images.summaryImg}
+                style={localStyles.summaryImage}
+              />
+              <Text style={localStyles.summaryTitle}>Summary</Text>
+              <Text>{recommendations?.result[0]?.userFeaturesSummary}</Text>
             </View>
             {recommendations?.result[0]?.steps.map((tip: any) => (
               <AccordionItem key={tip.id} title={tip.name}>
@@ -270,9 +273,12 @@ const GlowResultScreen = () => {
         return (
           <ScrollView style={localStyles.scoresContainer}>
             <View style={localStyles.summarySectionCard}>
-              <Text style={localStyles.summarySectionTitle}>
-                {recommendations?.result[1]?.userSkinSummary}
-              </Text>
+              <Image
+                source={images.summaryImg}
+                style={localStyles.summaryImage}
+              />
+              <Text style={localStyles.summaryTitle}>Summary</Text>
+              <Text>{recommendations?.result[1]?.userSkinSummary}</Text>
             </View>
             {recommendations?.result[1]?.steps.map((rec: any) => (
               <AccordionItem key={rec.id} title={rec.name}>
@@ -314,9 +320,12 @@ const GlowResultScreen = () => {
         return (
           <ScrollView style={localStyles.scoresContainer}>
             <View style={localStyles.summarySectionCard}>
-              <Text style={localStyles.summarySectionTitle}>
-                {recommendations?.result[2]?.userMakeupSummary}
-              </Text>
+              <Image
+                source={images.summaryImg}
+                style={localStyles.summaryImage}
+              />
+              <Text style={localStyles.summaryTitle}>Summary</Text>
+              <Text>{recommendations?.result[2]?.userMakeupSummary}</Text>
             </View>
             {recommendations?.result[2]?.steps.map((tip: any) => (
               <AccordionItem key={tip.id} title={tip.name}>
@@ -849,17 +858,26 @@ const localStyles = StyleSheet.create({
   summarySectionCard: {
     backgroundColor: 'transparent',
     borderRadius: 10,
-    padding: 15,
+    paddingVertical: 25,
+    paddingHorizontal: 30,
     marginBottom: 20,
     borderWidth: 1,
     borderColor: '#E7E7E7',
+    position: 'relative',
   },
-  summarySectionTitle: {
-    fontSize: 16,
+  summaryTitle: {
+    fontSize: 18,
     fontWeight: 'bold',
-    marginBottom: 10,
-    color: '#333',
     textAlign: 'center',
+    marginBottom: 20,
+  },
+  summaryImage: {
+    width: 40,
+    height: 40,
+    borderRadius: 15,
+    position: 'absolute',
+    top: 18,
+    left: 25,
   },
   tipRelatedFeature: {
     fontSize: 14,
