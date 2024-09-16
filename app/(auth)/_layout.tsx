@@ -1,15 +1,34 @@
-import { Stack } from "expo-router";
+import { useAuth } from '@clerk/clerk-expo';
+import { Stack } from 'expo-router';
+import { useEffect, useState } from 'react';
 
 const Layout = () => {
+  const { isSignedIn } = useAuth();
+  const [initialRouteName, setInitialRouteName] = useState('start');
+
+  useEffect(() => {
+    if (isSignedIn) {
+      setInitialRouteName('welcome');
+    }
+  }, [isSignedIn]);
+
   return (
-    <Stack>
-      <Stack.Screen name='start' options={{ headerShown: false }} />
-      <Stack.Screen name='next-screen' options={{ headerShown: false }} />
-      <Stack.Screen name='results-screen' options={{ headerShown: false }} />
+    <Stack
+      // screenOptions={{
+      //   headerShown: false, // This will hide the header for all screens
+      // }}
+      screenOptions={{
+        headerShadowVisible: false,
+      }}
+      initialRouteName={initialRouteName}
+    >
       <Stack.Screen
         name='facial-analysis-screen'
         options={{ headerShown: false }}
       />
+      <Stack.Screen name='start' options={{ headerShown: false }} />
+      <Stack.Screen name='next-screen' options={{ headerShown: false }} />
+      <Stack.Screen name='results-screen' options={{ headerShown: false }} />
       <Stack.Screen
         name='unlock-results-screen'
         options={{ headerShown: false }}
