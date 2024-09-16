@@ -195,12 +195,12 @@ const GlowResultScreen = () => {
         return (
           <View style={localStyles.scoresContainer}>
             <View style={localStyles.scoreRow}>
-              <CharacteristicCard title='Eye Shape' />
-              <CharacteristicCard title='Face Shape' />
+              <CharacteristicCard title='Eye Shape 👁️' />
+              <CharacteristicCard title='Face Shape 👩' />
             </View>
             <View style={localStyles.scoreRow}>
-              <CharacteristicCard title='Jawline' />
-              <CharacteristicCard title='Lip Shape' />
+              <CharacteristicCard title='Jawline 🧏‍♀️' />
+              <CharacteristicCard title='Lip Shape 💋' />
             </View>
           </View>
         );
