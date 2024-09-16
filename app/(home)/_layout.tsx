@@ -1,4 +1,5 @@
 import DashboardScreen from '@/components/HomeScreens/dashboardScreen';
+import ProfileScreen from '@/components/HomeScreens/profileScreen';
 import ScansScreen from '@/components/HomeScreens/scansScreen';
 import { Ionicons } from '@expo/vector-icons'; // for icons
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -82,7 +83,7 @@ const Layout = () => {
       />
       <Tab.Screen
         name='Profile'
-        component={DashboardScreen}
+        component={ProfileScreen}
         options={{
           headerShown: false,
         }}

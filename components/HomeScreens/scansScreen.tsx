@@ -100,6 +100,7 @@ const ScansScreen = () => {
               width: '100%',
               marginBottom: 10,
             }}
+            showsVerticalScrollIndicator={false}
           >
             {scans.map((scan) => (
               <View key={scan.id} style={localStyles.scanCard}>
