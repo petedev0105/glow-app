@@ -22,10 +22,6 @@ const Layout = () => {
       }}
       initialRouteName={initialRouteName}
     >
-      <Stack.Screen
-        name='facial-analysis-screen'
-        options={{ headerShown: false }}
-      />
       <Stack.Screen name='start' options={{ headerShown: false }} />
       <Stack.Screen name='next-screen' options={{ headerShown: false }} />
       <Stack.Screen name='results-screen' options={{ headerShown: false }} />
@@ -40,6 +36,10 @@ const Layout = () => {
       <Stack.Screen name='welcome' options={{ headerShown: false }} />
       <Stack.Screen name='sign-up' options={{ headerShown: false }} />
       <Stack.Screen name='sign-in' options={{ headerShown: false }} />
+      <Stack.Screen
+        name='facial-analysis-screen'
+        options={{ headerShown: false }}
+      />
     </Stack>
   );
 };
