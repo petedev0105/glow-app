@@ -7,7 +7,7 @@ const Layout = () => {
       <Stack.Screen name='next-screen' options={{ headerShown: false }} />
       <Stack.Screen name='results-screen' options={{ headerShown: false }} />
       <Stack.Screen
-        name='glow-results-screen'
+        name='facial-analysis-screen'
         options={{ headerShown: false }}
       />
       <Stack.Screen
@@ -15,7 +15,7 @@ const Layout = () => {
         options={{ headerShown: false }}
       />
       <Stack.Screen
-        name='facial-analysis-screen'
+        name='glow-results-screen'
         options={{ headerShown: false }}
       />
       <Stack.Screen name='welcome' options={{ headerShown: false }} />

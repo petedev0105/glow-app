@@ -21,14 +21,13 @@ import { styles } from "../constants/onboarding";
 import { AgeScreen } from "./OnboardingScreens/ageScreen";
 import { AuthScreen } from "./OnboardingScreens/authScreen";
 import { BeautyGoalsScreen } from "./OnboardingScreens/beautyGoalsScreen";
-import { BenefitsScreen } from "./OnboardingScreens/benefitsScreen";
-import { FacialAnalysisScreen } from "./OnboardingScreens/facialAnalysisScreen";
+import { BenefitsScreen } from './OnboardingScreens/benefitsScreen';
 import { LeaveRatingScreen } from './OnboardingScreens/leaveRatingScreen';
-import { MakeUpPreferencesScreen } from "./OnboardingScreens/makeupPreferencesScreen";
-import { ProductPreferencesScreen } from "./OnboardingScreens/productPreferencesScreen";
-import { ReferralScreen } from "./OnboardingScreens/referralScreen";
-import { SkinConcernsScreen } from "./OnboardingScreens/skinConcernsScreen";
-import { TrustedScreen } from "./OnboardingScreens/trustedScreen";
+import { MakeUpPreferencesScreen } from './OnboardingScreens/makeupPreferencesScreen';
+import { ProductPreferencesScreen } from './OnboardingScreens/productPreferencesScreen';
+import { ReferralScreen } from './OnboardingScreens/referralScreen';
+import { SkinConcernsScreen } from './OnboardingScreens/skinConcernsScreen';
+import { TrustedScreen } from './OnboardingScreens/trustedScreen';
 
 export const initialiseScreens = [TrustedScreen, ReferralScreen, AuthScreen];
 
@@ -42,7 +41,6 @@ export const onboardingQuestionsScreens = [
   MakeUpPreferencesScreen,
   LeaveRatingScreen,
   BenefitsScreen,
-  FacialAnalysisScreen,
 ];
 
 const OnboardingQuestions = () => {
