@@ -32,6 +32,7 @@ const GlowResultScreen = () => {
   const insets = useSafeAreaInsets();
   const storeImages = useImageStore((state) => state.images);
   const [unlockBtnAnimatedValue] = useState(new Animated.Value(0));
+  const [openAccordion, setOpenAccordion] = useState<number | null>(null);
 
   const { recommendations } = useRecommendationsStore();
 
@@ -141,18 +142,20 @@ const GlowResultScreen = () => {
     title,
     children,
     index,
+    isOpen,
+    onToggle,
   }: {
     title: string;
     children: any;
     index: number;
+    isOpen: boolean;
+    onToggle: () => void;
   }) => {
-    const [isOpen, setIsOpen] = useState(false);
-
     return (
       <View style={localStyles.accordionItem}>
         <TouchableOpacity
           style={localStyles.accordionHeader}
-          onPress={() => setIsOpen(!isOpen)}
+          onPress={onToggle}
         >
           <View>
             <Text style={localStyles.accordionStepTitle}>Step {index + 1}</Text>
@@ -168,6 +171,10 @@ const GlowResultScreen = () => {
         {isOpen && <View style={localStyles.accordionContent}>{children}</View>}
       </View>
     );
+  };
+
+  const toggleAccordion = (index: number) => {
+    setOpenAccordion(openAccordion === index ? null : index);
   };
 
   const renderTabContent = () => {
@@ -261,7 +268,13 @@ const GlowResultScreen = () => {
             </View>
             {recommendations?.result[0]?.steps.map(
               (tip: any, index: number) => (
-                <AccordionItem key={tip.id} title={tip.name} index={index}>
+                <AccordionItem
+                  key={tip.id}
+                  title={tip.name}
+                  index={index}
+                  isOpen={openAccordion === index}
+                  onToggle={() => toggleAccordion(index)}
+                >
                   <Text style={localStyles.boldText}>Explanation</Text>
                   <Text style={localStyles.tipDetails}>{tip.details}</Text>
                   <Text style={localStyles.tipImportance}>
@@ -293,7 +306,13 @@ const GlowResultScreen = () => {
             </View>
             {recommendations?.result[1]?.steps.map(
               (rec: any, index: number) => (
-                <AccordionItem key={rec.id} title={rec.name} index={index}>
+                <AccordionItem
+                  key={rec.id}
+                  title={rec.name}
+                  index={index}
+                  isOpen={openAccordion === index}
+                  onToggle={() => toggleAccordion(index)}
+                >
                   <View style={localStyles.productSection}>
                     <Text style={localStyles.productTitle}>High-End:</Text>
                     <Text>
@@ -344,7 +363,13 @@ const GlowResultScreen = () => {
             </View>
             {recommendations?.result[2]?.steps.map(
               (tip: any, index: number) => (
-                <AccordionItem key={tip.id} title={tip.name} index={index}>
+                <AccordionItem
+                  key={tip.id}
+                  title={tip.name}
+                  index={index}
+                  isOpen={openAccordion === index}
+                  onToggle={() => toggleAccordion(index)}
+                >
                   <Text style={localStyles.makeupTipTechnique}>
                     <Text style={localStyles.boldText}>Technique: </Text>
                     {tip.technique}
