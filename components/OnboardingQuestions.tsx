@@ -57,13 +57,6 @@ const OnboardingQuestions = () => {
   // Last slide check
   const isLastSlide = activeIndex === onboardingQuestionsScreens.length - 1;
 
-  // useEffect(() => {
-  //   if (isLoaded) {
-  //     setShowQuestions(isSignedIn);
-  //     setIsLoading(false);
-  //   }
-  // }, [isLoaded, isSignedIn]);
-
   if (isLoading) {
     return (
       <View style={localStyles.loadingContainer}>
