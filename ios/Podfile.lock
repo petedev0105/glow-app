@@ -1,5 +1,7 @@
 PODS:
   - boost (1.83.0)
+  - BVLinearGradient (2.8.3):
+    - React-Core
   - DoubleConversion (1.1.6)
   - EASClient (0.12.0):
     - ExpoModulesCore
@@ -21,6 +23,10 @@ PODS:
     - ExpoModulesCore
   - ExpoBlur (13.0.2):
     - ExpoModulesCore
+  - ExpoCamera (15.0.15):
+    - ExpoModulesCore
+    - ZXingObjC/OneD
+    - ZXingObjC/PDF417
   - ExpoCrypto (13.0.2):
     - ExpoModulesCore
   - ExpoDevice (6.0.2):
@@ -28,6 +34,8 @@ PODS:
   - ExpoFileSystem (17.0.1):
     - ExpoModulesCore
   - ExpoFont (12.0.10):
+    - ExpoModulesCore
+  - ExpoHaptics (13.0.1):
     - ExpoModulesCore
   - ExpoHead (3.5.23):
     - ExpoModulesCore
@@ -1333,6 +1341,10 @@ PODS:
     - React-Core
   - RNCClipboard (1.5.1):
     - React-Core
+  - RNCMaskedView (0.3.1):
+    - React-Core
+  - RNCPicker (2.7.5):
+    - React-Core
   - RNGestureHandler (2.16.2):
     - DoubleConversion
     - glog
@@ -1445,9 +1457,15 @@ PODS:
   - StripeUICore (23.28.3):
     - StripeCore (= 23.28.3)
   - Yoga (0.0.0)
+  - ZXingObjC/Core (3.6.9)
+  - ZXingObjC/OneD (3.6.9):
+    - ZXingObjC/Core
+  - ZXingObjC/PDF417 (3.6.9):
+    - ZXingObjC/Core
 
 DEPENDENCIES:
   - boost (from `../node_modules/react-native/third-party-podspecs/boost.podspec`)
+  - BVLinearGradient (from `../node_modules/react-native-linear-gradient`)
   - DoubleConversion (from `../node_modules/react-native/third-party-podspecs/DoubleConversion.podspec`)
   - EASClient (from `../node_modules/expo-eas-client/ios`)
   - EXApplication (from `../node_modules/expo-application/ios`)
@@ -1459,10 +1477,12 @@ DEPENDENCIES:
   - Expo (from `../node_modules/expo`)
   - ExpoAsset (from `../node_modules/expo-asset/ios`)
   - ExpoBlur (from `../node_modules/expo-blur/ios`)
+  - ExpoCamera (from `../node_modules/expo-camera/ios`)
   - ExpoCrypto (from `../node_modules/expo-crypto/ios`)
   - ExpoDevice (from `../node_modules/expo-device/ios`)
   - ExpoFileSystem (from `../node_modules/expo-file-system/ios`)
   - ExpoFont (from `../node_modules/expo-font/ios`)
+  - ExpoHaptics (from `../node_modules/expo-haptics/ios`)
   - ExpoHead (from `../node_modules/expo-router/ios`)
   - ExpoImageManipulator (from `../node_modules/expo-image-manipulator/ios`)
   - ExpoImagePicker (from `../node_modules/expo-image-picker/ios`)
@@ -1535,6 +1555,8 @@ DEPENDENCIES:
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
   - "RNCAsyncStorage (from `../node_modules/@react-native-async-storage/async-storage`)"
   - "RNCClipboard (from `../node_modules/@react-native-community/clipboard`)"
+  - "RNCMaskedView (from `../node_modules/@react-native-masked-view/masked-view`)"
+  - "RNCPicker (from `../node_modules/@react-native-picker/picker`)"
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
   - RNPurchases (from `../node_modules/react-native-purchases`)
   - RNReanimated (from `../node_modules/react-native-reanimated`)
@@ -1560,10 +1582,13 @@ SPEC REPOS:
     - StripePaymentSheet
     - StripePaymentsUI
     - StripeUICore
+    - ZXingObjC
 
 EXTERNAL SOURCES:
   boost:
     :podspec: "../node_modules/react-native/third-party-podspecs/boost.podspec"
+  BVLinearGradient:
+    :path: "../node_modules/react-native-linear-gradient"
   DoubleConversion:
     :podspec: "../node_modules/react-native/third-party-podspecs/DoubleConversion.podspec"
   EASClient:
@@ -1586,6 +1611,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/expo-asset/ios"
   ExpoBlur:
     :path: "../node_modules/expo-blur/ios"
+  ExpoCamera:
+    :path: "../node_modules/expo-camera/ios"
   ExpoCrypto:
     :path: "../node_modules/expo-crypto/ios"
   ExpoDevice:
@@ -1594,6 +1621,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/expo-file-system/ios"
   ExpoFont:
     :path: "../node_modules/expo-font/ios"
+  ExpoHaptics:
+    :path: "../node_modules/expo-haptics/ios"
   ExpoHead:
     :path: "../node_modules/expo-router/ios"
   ExpoImageManipulator:
@@ -1735,6 +1764,10 @@ EXTERNAL SOURCES:
     :path: "../node_modules/@react-native-async-storage/async-storage"
   RNCClipboard:
     :path: "../node_modules/@react-native-community/clipboard"
+  RNCMaskedView:
+    :path: "../node_modules/@react-native-masked-view/masked-view"
+  RNCPicker:
+    :path: "../node_modules/@react-native-picker/picker"
   RNGestureHandler:
     :path: "../node_modules/react-native-gesture-handler"
   RNPurchases:
@@ -1750,6 +1783,7 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   boost: d3f49c53809116a5d38da093a8aa78bf551aed09
+  BVLinearGradient: 880f91a7854faff2df62518f0281afb1c60d49a3
   DoubleConversion: 76ab83afb40bddeeee456813d9c04f67f78771b5
   EASClient: 1509a9a6b48b932ec61667644634daf2562983b8
   EXApplication: c08200c34daca7af7fd76ac4b9d606077410e8ad
@@ -1761,10 +1795,12 @@ SPEC CHECKSUMS:
   Expo: 33132a667698a3259a4e6c0af1b4936388e5fa33
   ExpoAsset: 323700f291684f110fb55f0d4022a3362ea9f875
   ExpoBlur: fa53f874e7b208bc3756d1bf07903c12e790beb1
+  ExpoCamera: 470eeb1c0170f5a5b96c7179b0285f0ef5e9e161
   ExpoCrypto: 156078f266bf28f80ecf5e2a9c3a0d6ffce07a1c
   ExpoDevice: fc94f0e42ecdfd897e7590f2874fc64dfa7e9b1c
   ExpoFileSystem: 80bfe850b1f9922c16905822ecbf97acd711dc51
   ExpoFont: 00756e6c796d8f7ee8d211e29c8b619e75cbf238
+  ExpoHaptics: 5a3a88971af384255baf2504f38b41189cec6984
   ExpoHead: fcb28a68ed4ba28f177394d2dfb8a0a8824cd103
   ExpoImageManipulator: aea99205c66043a00a0af90e345395637b9902fa
   ExpoImagePicker: 12a420923383ae38dccb069847218f27a3b87816
@@ -1839,6 +1875,8 @@ SPEC CHECKSUMS:
   RevenueCat: b2d2555cbb1f4116d341af4c5f82269c8e4e499a
   RNCAsyncStorage: d35c79ffba52c1013013e16b1fc295aec2feabb6
   RNCClipboard: 41d8d918092ae8e676f18adada19104fa3e68495
+  RNCMaskedView: 090213d32d8b3bb83a4dcb7d12c18f0152591906
+  RNCPicker: 3e2c37a8328f368ce14da050cdc8231deb5fc9f9
   RNGestureHandler: 2282cfbcf86c360d29f44ace393203afd5c6cff7
   RNPurchases: 277c724906082c16065d90c04124a0b2a9d4a05c
   RNReanimated: 35f9ac9c3ac42d0497ebd1cce5c39d7687a8493e
@@ -1857,6 +1895,7 @@ SPEC CHECKSUMS:
   StripePaymentsUI: c24f990b03a68a7f6fe704b15dd487e7bb6b603e
   StripeUICore: f2d514e900c37436dc5427fdf2c29d68ab1c2935
   Yoga: 950bbfd7e6f04790fdb51149ed51df41f329fcc8
+  ZXingObjC: 8898711ab495761b2dbbdec76d90164a6d7e14c5
 
 PODFILE CHECKSUM: c245addcdc93ee4b9f35bacdc2c8e63089c62e04
 
