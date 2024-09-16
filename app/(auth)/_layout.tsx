@@ -14,6 +14,10 @@ const Layout = () => {
         name='unlock-results-screen'
         options={{ headerShown: false }}
       />
+      <Stack.Screen
+        name='facial-analysis-screen'
+        options={{ headerShown: false }}
+      />
       <Stack.Screen name='welcome' options={{ headerShown: false }} />
       <Stack.Screen name='sign-up' options={{ headerShown: false }} />
       <Stack.Screen name='sign-in' options={{ headerShown: false }} />
