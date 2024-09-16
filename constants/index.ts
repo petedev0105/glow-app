@@ -36,6 +36,7 @@ import onboardingScreenBg from '@/assets/images/onboarding-bg.png';
 import screenBg from '@/assets/images/screen-bg.png';
 import signinBackground from '@/assets/images/signin-bg.png';
 import signinBackgroundSvg from '@/assets/images/signin-bg.svg';
+import summaryImg from '@/assets/images/summary-img.png';
 import unlockBlur from '@/assets/images/unlock-blur.png';
 import {
   EXPO_PUBLIC_AWS_ACCESS_KEY_ID,
@@ -59,6 +60,7 @@ export const images = {
   homeBgLarger,
   homeBg,
   dashboardGirl,
+  summaryImg,
 };
 
 export const icons = {

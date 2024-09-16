@@ -245,9 +245,11 @@ const GlowResultScreen = () => {
       case 'Glow-Up Tips':
         return (
           <ScrollView style={localStyles.scoresContainer}>
-            <Text style={localStyles.summarySectionTitle}>
-              {recommendations?.result[0]?.userFeaturesSummary}
-            </Text>
+            <View style={localStyles.summarySectionCard}>
+              <Text style={localStyles.summarySectionTitle}>
+                {recommendations?.result[0]?.userFeaturesSummary}
+              </Text>
+            </View>
             {recommendations?.result[0]?.steps.map((tip: any) => (
               <AccordionItem key={tip.id} title={tip.name}>
                 <Text style={localStyles.tipDetails}>{tip.details}</Text>
@@ -267,9 +269,11 @@ const GlowResultScreen = () => {
       case 'Skincare Recommendations':
         return (
           <ScrollView style={localStyles.scoresContainer}>
-            <Text style={localStyles.summarySectionTitle}>
-              {recommendations?.result[1]?.userSkinSummary}
-            </Text>
+            <View style={localStyles.summarySectionCard}>
+              <Text style={localStyles.summarySectionTitle}>
+                {recommendations?.result[1]?.userSkinSummary}
+              </Text>
+            </View>
             {recommendations?.result[1]?.steps.map((rec: any) => (
               <AccordionItem key={rec.id} title={rec.name}>
                 <View style={localStyles.productSection}>
@@ -309,9 +313,11 @@ const GlowResultScreen = () => {
       case 'Makeup Tips':
         return (
           <ScrollView style={localStyles.scoresContainer}>
-            <Text style={localStyles.summarySectionTitle}>
-              {recommendations?.result[2]?.userMakeupSummary}
-            </Text>
+            <View style={localStyles.summarySectionCard}>
+              <Text style={localStyles.summarySectionTitle}>
+                {recommendations?.result[2]?.userMakeupSummary}
+              </Text>
+            </View>
             {recommendations?.result[2]?.steps.map((tip: any) => (
               <AccordionItem key={tip.id} title={tip.name}>
                 <Text style={localStyles.makeupTipTechnique}>
@@ -840,10 +846,20 @@ const localStyles = StyleSheet.create({
     fontSize: 14,
     fontWeight: 'bold',
   },
+  summarySectionCard: {
+    backgroundColor: 'transparent',
+    borderRadius: 10,
+    padding: 15,
+    marginBottom: 20,
+    borderWidth: 1,
+    borderColor: '#E7E7E7',
+  },
   summarySectionTitle: {
     fontSize: 16,
     fontWeight: 'bold',
     marginBottom: 10,
+    color: '#333',
+    textAlign: 'center',
   },
   tipRelatedFeature: {
     fontSize: 14,
