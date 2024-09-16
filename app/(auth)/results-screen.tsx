@@ -23,6 +23,9 @@ const ResultsScreen = () => {
   const images = useImageStore((state) => state.images); // Get the images outside the async function
   const imageUri = images[0]; // Assuming the first image is what you want to send
 
+  // TODO ACTUALLY CHECK IF THE USER HAS PAYED AND REROUTES TO RESULTS AUTOMATICALLY
+  const payedUser = true;
+
   const [loadingProgress, setLoadingProgress] = useState(0);
   const [loading, setLoading] = useState(true);
   const { glowResult, setGlowResult } = useGlowResultStore();
@@ -207,7 +210,12 @@ const ResultsScreen = () => {
   useEffect(() => {
     if (apiCallsComplete && loadingProgress >= 100) {
       console.log('Navigating to unlock-results-screen');
-      router.replace('/unlock-results-screen');
+      console.log('User has Payed.');
+      if (!payedUser) {
+        router.replace('/unlock-results-screen');
+      } else {
+        router.replace('/glow-results-screen');
+      }
     }
   }, [apiCallsComplete, loadingProgress]);
 
