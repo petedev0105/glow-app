@@ -1,10 +1,10 @@
-import { fetchAPI } from '@/lib/fetch';
-import { useRecommendationsStore } from '@/store/glowRecommendationsStore';
-import { useGlowResultStore } from '@/store/glowResultStore';
-import { useImageStore } from '@/store/imageStore';
-import { useUser } from '@clerk/clerk-expo';
-import { useRouter } from 'expo-router';
-import React, { useEffect, useRef, useState } from 'react';
+import { fetchAPI } from "@/lib/fetch";
+import { useRecommendationsStore } from "@/store/glowRecommendationsStore";
+import { useGlowResultStore } from "@/store/glowResultStore";
+import { useImageStore } from "@/store/imageStore";
+import { useUser } from "@clerk/clerk-expo";
+import { useRouter } from "expo-router";
+import React, { useEffect, useRef, useState } from "react";
 import {
   Alert,
   Animated,
@@ -14,9 +14,9 @@ import {
   StyleSheet,
   Text,
   View,
-} from 'react-native';
+} from "react-native";
 
-const { width, height } = Dimensions.get('window');
+const { width, height } = Dimensions.get("window");
 
 const ResultsScreen = () => {
   const { user } = useUser(); // Get the user outside the async function
@@ -29,7 +29,7 @@ const ResultsScreen = () => {
   const [loadingProgress, setLoadingProgress] = useState(0);
   const [loading, setLoading] = useState(true);
   const { glowResult, setGlowResult } = useGlowResultStore();
-  const [message, setMessage] = useState('Analyzing your features...');
+  const [message, setMessage] = useState("Analyzing your features...");
   const [intervalDuration, setIntervalDuration] = useState(80);
   const { setRecommendations } = useRecommendationsStore();
 
@@ -48,10 +48,10 @@ const ResultsScreen = () => {
   const router = useRouter();
 
   const messages = [
-    'Analyzing your features ✨',
-    'Calculating glow score... 💫',
-    'Just a moment, almost there... ⏳',
-    'Finalizing results... 🌟',
+    "Analyzing your features ✨",
+    "Calculating glow score... 💫",
+    "Just a moment, almost there... ⏳",
+    "Finalizing results... 🌟",
   ];
 
   useEffect(() => {
@@ -150,7 +150,7 @@ const ResultsScreen = () => {
       imageUri: string;
     }) => {
       if (!imageUri) {
-        Alert.alert('Error', 'Image URI is missing');
+        Alert.alert("Error", "Image URI is missing");
         return;
       }
 
@@ -159,69 +159,73 @@ const ResultsScreen = () => {
 
       try {
         // Fetch glow score first
-        const glowScoreResponse = await fetchAPI('/(api)/(openai)/glowscore', {
-          method: 'POST',
-          body: JSON.stringify({ prompt, imageUri }),
-        });
+        // const glowScoreResponse = await fetchAPI('/(api)/(openai)/glowscore', {
+        const glowScoreResponse = await fetchAPI(
+          "https://wandering-sun-9736.kiettran255.workers.dev/api/glow-score",
+          {
+            method: "POST",
+            body: JSON.stringify({ prompt, imageUri }),
+          }
+        );
 
-        console.log('Glow Score Response:', glowScoreResponse);
+        console.log("Glow Score Response:", glowScoreResponse);
         setGlowResult(glowScoreResponse); // Set glow result
 
         const stringResponse = JSON.stringify(glowScoreResponse);
 
         // Fetch recommendations based on the glow score
         try {
-          console.log('running recommendations API...');
+          console.log("running recommendations API...");
           const recommendationsResponse = await fetchAPI(
-            '/(api)/(openai)/glowrecommendations',
+            "/(api)/(openai)/glowrecommendations",
             {
-              method: 'POST',
+              method: "POST",
               body: JSON.stringify({ stringResponse }),
             }
           );
 
-          console.log('Recommendations Response:', recommendationsResponse);
+          console.log("Recommendations Response:", recommendationsResponse);
           setRecommendations(recommendationsResponse); // Set recommendations
           setApiCallsComplete(true);
         } catch (recommendationError) {
-          console.error('Error fetching recommendations:', recommendationError);
+          console.error("Error fetching recommendations:", recommendationError);
         }
 
         // API Calls are complete, just take us to the next screen
         // setApiCallsDone(true);
       } catch (error) {
-        console.error('Error fetching glow results:', error);
-        Alert.alert('Error', 'Could not fetch glow results.');
+        console.error("Error fetching glow results:", error);
+        Alert.alert("Error", "Could not fetch glow results.");
       } finally {
         setLoading(false); // Stop loading state
       }
     };
 
     if (loadingProgress % 10 === 0) {
-      console.log('Effect triggered:', { loadingProgress });
+      console.log("Effect triggered:", { loadingProgress });
     }
 
     // If loading progress is
     if (loadingProgress >= 1 && imageUri && !apiCallsStarted) {
-      fetchGlowResults({ prompt: '', imageUri });
+      fetchGlowResults({ prompt: "", imageUri });
     }
   }, [loadingProgress, imageUri, setRecommendations]);
 
   useEffect(() => {
     if (apiCallsComplete && loadingProgress >= 100) {
-      console.log('Navigating to unlock-results-screen');
-      console.log('User has Payed.');
+      console.log("Navigating to unlock-results-screen");
+      console.log("User has Payed.");
       if (!payedUser) {
-        router.replace('/unlock-results-screen');
+        router.replace("/unlock-results-screen");
       } else {
-        router.replace('/glow-results-screen');
+        router.replace("/glow-results-screen");
       }
     }
   }, [apiCallsComplete, loadingProgress]);
 
   return (
     <ImageBackground
-      source={require('@/assets/images/glow-eclipse.png')}
+      source={require("@/assets/images/glow-eclipse.png")}
       style={resultStyles.background}
     >
       {/* Ripple effect */}
@@ -242,10 +246,10 @@ const ResultsScreen = () => {
           <Text style={resultStyles.percentage}>{loadingProgress}%</Text>
           <Animated.Text
             style={[resultStyles.caption, { opacity: fadeAnim }]}
-            className='tracking-tight'
+            className="tracking-tight"
           >
             {loadingProgress >= 100
-              ? 'Get ready for some \nawesome things 💗'
+              ? "Get ready for some \nawesome things 💗"
               : message}
           </Animated.Text>
         </View>
@@ -297,50 +301,50 @@ const ResultsScreen = () => {
 const resultStyles = StyleSheet.create({
   background: {
     flex: 1,
-    resizeMode: 'cover',
-    justifyContent: 'center',
+    resizeMode: "cover",
+    justifyContent: "center",
   },
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
     // backgroundColor: '#FFFFFF',
     // backgroundColor: 'black',
   },
   contentContainer: {
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
     padding: 20,
   },
   percentage: {
     fontSize: 85,
-    fontWeight: 'bold',
-    color: 'white',
-    textAlign: 'center',
+    fontWeight: "bold",
+    color: "white",
+    textAlign: "center",
     marginBottom: 10,
   },
   caption: {
     fontSize: 16,
-    color: 'white',
-    textAlign: 'center',
+    color: "white",
+    textAlign: "center",
   },
   title: {
     fontSize: 30,
-    color: 'white',
-    fontWeight: 'bold',
+    color: "white",
+    fontWeight: "bold",
     marginBottom: 20,
   },
   subtitleCaption: {
     fontSize: 16,
-    color: 'white',
+    color: "white",
     marginTop: 10,
   },
   ripple: {
-    position: 'absolute',
+    position: "absolute",
     width: 100,
     height: 100,
     borderRadius: 50,
-    backgroundColor: 'rgba(255, 255, 255, 0.3)',
+    backgroundColor: "rgba(255, 255, 255, 0.3)",
     top: height / 2 - 50, // Center the ripple
     left: width / 2 - 50,
   },
