@@ -103,17 +103,16 @@ const OnboardingQuestions = () => {
     setShowQuestions(true);
   };
 
-  // if (showQuestions) {
   return (
     <ImageBackground
-      resizeMode="cover"
-      source={images.screenBg} // Background image with cover mode
-      style={styles.container} // Reusing container style
+      resizeMode='cover'
+      source={images.screenBg}
+      style={styles.container}
     >
-      <SafeAreaView className="flex h-full">
-        <StatusBar barStyle="dark-content" backgroundColor="#6a51ae" />
+      <SafeAreaView className='flex h-full'>
+        <StatusBar barStyle='dark-content' backgroundColor='#6a51ae' />
 
-        <View className="flex items-center mb-10">
+        <View className='flex items-center mb-10'>
           <Image source={glowTitle} style={styles.logo as ImageStyle} />
         </View>
 
@@ -134,24 +133,9 @@ const OnboardingQuestions = () => {
               />
             ))}
         </Swiper>
-
-        {/* <View className='justify-end px-5'>
-          <View className='w-full mb-5'>
-            {!isLastSlide ? (
-              <CustomButton
-                title='Next'
-                onPress={handleSwipeNext}
-                className='bg-[#8400FF]'
-              />
-            ) : (
-              <OAuth /> // Show OAuth (Google/Facebook sign-in) on the last screen
-            )}
-          </View>
-        </View> */}
       </SafeAreaView>
     </ImageBackground>
   );
-  // return null; // Or return a placeholder or loader while questions are hidden
 };
 
 const localStyles = StyleSheet.create({
