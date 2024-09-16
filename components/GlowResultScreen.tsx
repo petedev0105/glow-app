@@ -332,7 +332,7 @@ const GlowResultScreen = () => {
                     </Text>
                   </View>
                   <Text style={localStyles.recImportance}>
-                    <Text style={localStyles.boldText}>Imporance: </Text>
+                    <Text style={localStyles.boldText}>Importance: </Text>
                     {rec.importance}
                   </Text>
                   <Text style={localStyles.recTechnique}>
@@ -465,7 +465,6 @@ const GlowResultScreen = () => {
   return (
     <ImageBackground
       source={images.screenBgLarger}
-      // source={require('@/assets/images/screen-bg.png')}
       style={localStyles.background}
       resizeMode='cover'
     >
