@@ -1,3 +1,4 @@
+import { onboardingQuestionsList, styles } from '@/constants/onboarding';
 import { useImageStore } from '@/store/imageStore';
 import { useUser } from '@clerk/clerk-expo';
 import * as FileSystem from 'expo-file-system';
@@ -6,7 +7,6 @@ import * as ImagePicker from 'expo-image-picker';
 import { router } from 'expo-router';
 import React, { useState } from 'react';
 import { Alert, Image, Text, TouchableOpacity, View } from 'react-native';
-import { onboardingQuestionsList, styles } from '../../constants/onboarding';
 
 export const FacialAnalysisScreen = () => {
   const [image, setImage] = useState<string | null>(null);
