@@ -22,7 +22,10 @@ export const MakeUpPreferencesScreen = ({
         {onboardingQuestionsList[7].subtitle}
       </Text>
 
-      <ScrollView style={{ height: '48%', marginTop: 40 }}>
+      <ScrollView
+        style={{ height: '48%', marginTop: 40 }}
+        showsVerticalScrollIndicator={false}
+      >
         <View
           style={{
             ...styles.contentContainer,

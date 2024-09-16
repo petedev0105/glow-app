@@ -1,4 +1,4 @@
-import { images } from '@/constants'; // Assuming this is the same images object you provided
+import { images } from '@/constants';
 import React from 'react';
 import {
   Image,
@@ -12,13 +12,13 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import { styles } from '../../constants/onboarding'; // Assuming this is the same shared styles object
+import { styles } from '../../constants/onboarding';
 
 const ProfileScreen = () => {
   return (
     <ImageBackground
       resizeMode='cover'
-      source={images.homeBgLarger} // Background image
+      source={images.homeBgLarger}
       style={styles.container}
     >
       <SafeAreaView style={localStyles.safeArea}>
@@ -30,83 +30,94 @@ const ProfileScreen = () => {
         </View>
 
         {/* Title */}
-        <View style={styles.headerContainer}>
+        <View style={{ ...styles.headerContainer, flex: 0.2 }}>
           <Text
             style={{
               ...styles.title,
               fontSize: 30,
               fontWeight: '600',
               letterSpacing: -0.8,
-              marginTop: 10, // Reduce top margin
             }}
           >
-            Profile
+            My Profile
           </Text>
         </View>
 
         {/* Main Content */}
-        <View style={{ ...styles.contentContainer, marginTop: 20, flex: 4.5 }}>
+        <View style={{ ...localStyles.contentContainer, flex: 3 }}>
           <ScrollView
             style={localStyles.scrollView}
             contentContainerStyle={{
-              paddingHorizontal: 20,
               paddingBottom: 30,
-              width: '100%',
               marginBottom: 10,
             }}
+            showsVerticalScrollIndicator={false}
           >
-            {/* Face Scans Section */}
-            <TouchableOpacity style={localStyles.section}>
-              <Text style={localStyles.sectionText}>
-                Face Scans - September
-              </Text>
-            </TouchableOpacity>
+            {/* <TouchableOpacity
+              style={{
+                ...localStyles.sectionTop,
+                borderBottomWidth: 1,
+                borderRadius: 12,
+              }}
+            >
+              <Text style={localStyles.sectionText}>Face Scans</Text>
+            </TouchableOpacity> */}
 
             {/* Personal Section */}
             <Text style={localStyles.sectionHeader}>PERSONAL</Text>
-            <TouchableOpacity style={localStyles.section}>
-              <Text style={localStyles.sectionText}>My SkinID</Text>
+            <TouchableOpacity
+              style={{ ...localStyles.sectionTop, borderBottomWidth: 0 }}
+            >
+              <Text style={localStyles.sectionText}>My Glow Profile</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={localStyles.section}>
+            <TouchableOpacity style={localStyles.sectionBottom}>
               <Text style={localStyles.sectionText}>Scan your face</Text>
             </TouchableOpacity>
 
             {/* Help & Support Section */}
             <Text style={localStyles.sectionHeader}>HELP & SUPPORT</Text>
-            <TouchableOpacity style={localStyles.section}>
+            <TouchableOpacity style={localStyles.sectionTop}>
               <Text style={localStyles.sectionText}>
                 Frequently Asked Questions
               </Text>
             </TouchableOpacity>
-            <TouchableOpacity style={localStyles.section}>
+            <TouchableOpacity style={localStyles.sectionMiddle}>
               <Text style={localStyles.sectionText}>Suggest a Feature</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={localStyles.section}>
+            <TouchableOpacity style={localStyles.sectionBottom}>
               <Text style={localStyles.sectionText}>Contact us</Text>
             </TouchableOpacity>
 
             {/* Legal Section */}
             <Text style={localStyles.sectionHeader}>LEGAL</Text>
-            <TouchableOpacity style={localStyles.section}>
+            <TouchableOpacity
+              style={{ ...localStyles.sectionTop, borderBottomWidth: 0 }}
+            >
               <Text style={localStyles.sectionText}>Privacy policy</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={localStyles.section}>
+            {/* <TouchableOpacity style={localStyles.sectionMiddle}>
               <Text style={localStyles.sectionText}>Money-back Policy</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={localStyles.section}>
+            </TouchableOpacity> */}
+            <TouchableOpacity style={localStyles.sectionBottom}>
               <Text style={localStyles.sectionText}>Terms of Use</Text>
             </TouchableOpacity>
 
             {/* Log Out & Delete Account Section */}
-            <TouchableOpacity style={localStyles.logoutButton}>
-              <Text style={localStyles.logoutText}>Log Out</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={localStyles.deleteAccountButton}>
-              <Text style={localStyles.deleteAccountText}>Delete Account</Text>
-            </TouchableOpacity>
+            <View style={localStyles.buttonContainer}>
+              <TouchableOpacity style={localStyles.logoutButton}>
+                <Text style={localStyles.logoutText}>Log Out</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={{ ...localStyles.logoutButton, backgroundColor: 'red' }}
+              >
+                <Text style={localStyles.deleteAccountText}>
+                  Delete Account
+                </Text>
+              </TouchableOpacity>
+            </View>
           </ScrollView>
         </View>
-        <View style={{ ...styles.footerContainer, flex: 0.7 }}></View>
+        <View style={{ ...styles.footerContainer, flex: 0.3 }}></View>
       </SafeAreaView>
     </ImageBackground>
   );
@@ -115,6 +126,7 @@ const ProfileScreen = () => {
 const localStyles = StyleSheet.create({
   safeArea: {
     flex: 1,
+    width: '100%',
   },
   logoContainer: {
     flexDirection: 'row',
@@ -122,12 +134,40 @@ const localStyles = StyleSheet.create({
     marginBottom: 10,
     marginVertical: 20,
   },
-  section: {
-    backgroundColor: '#fff',
-    paddingVertical: 15,
+  contentContainer: {
+    width: '100%',
     paddingHorizontal: 20,
-    borderRadius: 8,
-    marginBottom: 10,
+  },
+  sectionTop: {
+    backgroundColor: '#fff',
+    paddingVertical: 14,
+    paddingHorizontal: 20,
+    borderRadius: 0,
+    borderTopLeftRadius: 12,
+    borderTopRightRadius: 12,
+    marginBottom: 0,
+    justifyContent: 'center',
+    borderColor: '#ddd',
+    borderWidth: 1,
+    borderBottomWidth: 1,
+  },
+  sectionMiddle: {
+    backgroundColor: '#fff',
+    paddingVertical: 14,
+    paddingHorizontal: 20,
+    borderRadius: 0,
+    justifyContent: 'center',
+    borderColor: '#ddd',
+    borderWidth: 1,
+    borderBottomWidth: 0,
+    borderTopWidth: 0,
+  },
+  sectionBottom: {
+    backgroundColor: '#fff',
+    paddingVertical: 14,
+    paddingHorizontal: 20,
+    borderBottomLeftRadius: 12,
+    borderBottomRightRadius: 12,
     justifyContent: 'center',
     borderColor: '#ddd',
     borderWidth: 1,
@@ -145,34 +185,31 @@ const localStyles = StyleSheet.create({
     backgroundColor: '#fff',
     paddingVertical: 15,
     paddingHorizontal: 20,
-    borderRadius: 8,
-    marginTop: 20,
-    alignItems: 'center',
-    borderColor: '#ddd',
-    borderWidth: 1,
-  },
-  logoutText: {
-    fontSize: 16,
-    color: '#000',
-    fontWeight: '600',
-  },
-  deleteAccountButton: {
-    backgroundColor: '#fff',
-    paddingVertical: 15,
-    paddingHorizontal: 20,
-    borderRadius: 8,
+    borderRadius: 12,
     marginTop: 10,
     alignItems: 'center',
     borderColor: '#ddd',
     borderWidth: 1,
   },
+  logoutText: {
+    fontSize: 14,
+    color: '#000',
+    fontWeight: '600',
+  },
   deleteAccountText: {
-    fontSize: 16,
-    color: 'red',
+    fontSize: 14,
+    color: 'white',
     fontWeight: '600',
   },
   scrollView: {
     flex: 1,
+    width: '100%',
+  },
+  buttonContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    gap: 10,
+    marginTop: 20,
   },
 });
 
