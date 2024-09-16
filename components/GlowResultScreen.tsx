@@ -32,6 +32,7 @@ const GlowResultScreen = () => {
   const insets = useSafeAreaInsets();
   const storeImages = useImageStore((state) => state.images);
   const [unlockBtnAnimatedValue] = useState(new Animated.Value(0));
+  const [openAccordion, setOpenAccordion] = useState<number | null>(null);
 
   const { recommendations } = useRecommendationsStore();
 
@@ -137,6 +138,45 @@ const GlowResultScreen = () => {
     </View>
   );
 
+  const AccordionItem = ({
+    title,
+    children,
+    index,
+    isOpen,
+    onToggle,
+  }: {
+    title: string;
+    children: any;
+    index: number;
+    isOpen: boolean;
+    onToggle: () => void;
+  }) => {
+    return (
+      <View style={localStyles.accordionItem}>
+        <TouchableOpacity
+          style={localStyles.accordionHeader}
+          onPress={onToggle}
+        >
+          <View>
+            <Text style={localStyles.accordionStepTitle}>Step {index + 1}</Text>
+            <View style={localStyles.accordionDivider} />
+            <Text style={localStyles.accordionTitle}>{title}</Text>
+          </View>
+          <Ionicons
+            name={isOpen ? 'chevron-up' : 'chevron-down'}
+            size={24}
+            color='#000'
+          />
+        </TouchableOpacity>
+        {isOpen && <View style={localStyles.accordionContent}>{children}</View>}
+      </View>
+    );
+  };
+
+  const toggleAccordion = (index: number) => {
+    setOpenAccordion(openAccordion === index ? null : index);
+  };
+
   const renderTabContent = () => {
     switch (activeTab) {
       case 'Ratings':
@@ -216,127 +256,178 @@ const GlowResultScreen = () => {
           </View>
         );
       case 'Glow-Up Tips':
-        // Implement Product Recommendations when available
         return (
           <ScrollView style={localStyles.scoresContainer}>
-            <Text style={localStyles.summarySectionTitle}>
-              {recommendations?.result[0]?.userFeaturesSummary}
-            </Text>
-            {recommendations?.result[0]?.steps.map((tip: any) => (
-              <View key={tip.id} style={localStyles.tipCard}>
-                <Text style={localStyles.tipTitle}>{tip.name}</Text>
-                <Text style={localStyles.tipDetails}>{tip.details}</Text>
-                <Text style={localStyles.tipImportance}>
-                  Importance: {tip.importance}
-                </Text>
-                <Text style={localStyles.tipRelatedFeature}>
-                  Related Feature: {tip.relatedFeature}
-                </Text>
-                <Text style={localStyles.tipExplanation}>
-                  {tip.explanation}
-                </Text>
-              </View>
-            ))}
+            <View style={localStyles.summarySectionCard}>
+              <Image
+                source={images.summaryImg}
+                style={localStyles.summaryImage}
+              />
+              <Text style={localStyles.summaryTitle}>Summary</Text>
+              <Text>{recommendations?.result[0]?.userFeaturesSummary}</Text>
+            </View>
+            {recommendations?.result[0]?.steps.map(
+              (tip: any, index: number) => (
+                <AccordionItem
+                  key={tip.id}
+                  title={tip.name}
+                  index={index}
+                  isOpen={openAccordion === index}
+                  onToggle={() => toggleAccordion(index)}
+                >
+                  <Text style={localStyles.boldText}>Explanation</Text>
+                  <Text style={localStyles.tipDetails}>{tip.details}</Text>
+                  <Text style={localStyles.tipImportance}>
+                    <Text style={localStyles.boldText}>Importance: </Text>
+                    {tip.importance}
+                  </Text>
+                  <Text style={localStyles.tipRelatedFeature}>
+                    <Text style={localStyles.boldText}>Related Feature: </Text>
+                    {tip.relatedFeature}
+                  </Text>
+                  <Text style={localStyles.tipExplanation}>
+                    {tip.explanation}
+                  </Text>
+                </AccordionItem>
+              )
+            )}
           </ScrollView>
         );
       case 'Skincare Recommendations':
         return (
           <ScrollView style={localStyles.scoresContainer}>
-            <Text style={localStyles.summarySectionTitle}>
-              {recommendations?.result[1]?.userSkinSummary}
-            </Text>
-            {recommendations?.result[1]?.steps.map((rec: any) => (
-              <View key={rec.id} style={localStyles.recCard}>
-                <Text style={localStyles.recTitle}>{rec.name}</Text>
-                <View style={localStyles.productSection}>
-                  <Text style={localStyles.productTitle}>High-End:</Text>
-                  <Text>
-                    {rec.highEnd.product} - {rec.highEnd.price}
+            <View style={localStyles.summarySectionCard}>
+              <Image
+                source={images.summaryImg}
+                style={localStyles.summaryImage}
+              />
+              <Text style={localStyles.summaryTitle}>Summary</Text>
+              <Text>{recommendations?.result[1]?.userSkinSummary}</Text>
+            </View>
+            {recommendations?.result[1]?.steps.map(
+              (rec: any, index: number) => (
+                <AccordionItem
+                  key={rec.id}
+                  title={rec.name}
+                  index={index}
+                  isOpen={openAccordion === index}
+                  onToggle={() => toggleAccordion(index)}
+                >
+                  <View style={localStyles.productSection}>
+                    <Text style={localStyles.productTitle}>High-End:</Text>
+                    <Text>
+                      {rec.highEnd.product} - {rec.highEnd.price}
+                    </Text>
+                    <Text style={localStyles.howToUse}>
+                      How to use: {rec.highEnd.howToUse}
+                    </Text>
+                  </View>
+                  <View style={localStyles.productSection}>
+                    <Text style={localStyles.productTitle}>Affordable:</Text>
+                    <Text>
+                      {rec.affordable.product} - {rec.affordable.price}
+                    </Text>
+                    <Text style={localStyles.howToUse}>
+                      How to use: {rec.affordable.howToUse}
+                    </Text>
+                  </View>
+                  <Text style={localStyles.recImportance}>
+                    <Text style={localStyles.boldText}>Importance: </Text>
+                    {rec.importance}
                   </Text>
-                  <Text>How to use: {rec.highEnd.howToUse}</Text>
-                </View>
-                <View style={localStyles.productSection}>
-                  <Text style={localStyles.productTitle}>Affordable:</Text>
-                  <Text>
-                    {rec.affordable.product} - {rec.affordable.price}
+                  <Text style={localStyles.recTechnique}>
+                    <Text style={localStyles.boldText}>Technique: </Text>
+                    {rec.technique}
                   </Text>
-                  <Text>How to use: {rec.affordable.howToUse}</Text>
-                </View>
-                <Text style={localStyles.recImportance}>
-                  Importance: {rec.importance}
-                </Text>
-                <Text style={localStyles.recTechnique}>
-                  Technique: {rec.technique}
-                </Text>
-                <Text style={localStyles.recTargetedConcern}>
-                  Targeted Concern: {rec.targetedConcern}
-                </Text>
-                <Text style={localStyles.recExplanation}>
-                  {rec.explanation}
-                </Text>
-              </View>
-            ))}
+                  <Text style={localStyles.recTargetedConcern}>
+                    Targeted Concern: {rec.targetedConcern}
+                  </Text>
+                  <Text style={localStyles.recExplanation}>
+                    {rec.explanation}
+                  </Text>
+                </AccordionItem>
+              )
+            )}
           </ScrollView>
         );
       case 'Makeup Tips':
         return (
           <ScrollView style={localStyles.scoresContainer}>
-            <Text style={localStyles.summarySectionTitle}>
-              {recommendations?.result[2]?.userMakeupSummary}
-            </Text>
-            {recommendations?.result[2]?.steps.map((tip: any) => (
-              <View key={tip.id} style={localStyles.makeupTipCard}>
-                <Text style={localStyles.makeupTipTitle}>{tip.name}</Text>
-                <Text style={localStyles.makeupTipTechnique}>
-                  Technique: {tip.technique}
-                </Text>
-                <Text style={localStyles.makeupTipImportance}>
-                  Importance: {tip.importance}
-                </Text>
-                <Text style={localStyles.makeupTipSuitableFor}>
-                  Suitable For: {tip.suitableFor}
-                </Text>
-                <Text style={localStyles.makeupTipExplanation}>
-                  {tip.explanation}
-                </Text>
-                {tip &&
-                  tip.products &&
-                  tip.products.map((product: any, index: number) => (
-                    <View key={index} style={localStyles.makeupProductSection}>
-                      <Text style={localStyles.makeupProductCategory}>
-                        {product.category}
-                      </Text>
-                      <View style={localStyles.makeupProductDetails}>
-                        <Text style={localStyles.makeupProductTitle}>
-                          High-End:
-                        </Text>
-                        <Text>
-                          {product.highEnd.name} - {product.highEnd.price}
-                        </Text>
-                        <Text>
-                          Application Tip: {product.highEnd.applicationTip}
-                        </Text>
-                      </View>
-                      <View style={localStyles.makeupProductDetails}>
-                        <Text style={localStyles.makeupProductTitle}>
-                          Affordable:
-                        </Text>
-                        <Text>
-                          {product.affordable.name} - {product.affordable.price}
-                        </Text>
-                        <Text>
-                          Application Tip: {product.affordable.applicationTip}
-                        </Text>
-                      </View>
-                    </View>
-                  ))}
-                {(!tip || !tip.products) && (
-                  <Text className='text-[#666]'>
-                    Could not load any tips. Please try again later
+            <View style={localStyles.summarySectionCard}>
+              <Image
+                source={images.summaryImg}
+                style={localStyles.summaryImage}
+              />
+              <Text style={localStyles.summaryTitle}>Summary</Text>
+              <Text>{recommendations?.result[2]?.userMakeupSummary}</Text>
+            </View>
+            {recommendations?.result[2]?.steps.map(
+              (tip: any, index: number) => (
+                <AccordionItem
+                  key={tip.id}
+                  title={tip.name}
+                  index={index}
+                  isOpen={openAccordion === index}
+                  onToggle={() => toggleAccordion(index)}
+                >
+                  <Text style={localStyles.makeupTipTechnique}>
+                    <Text style={localStyles.boldText}>Technique: </Text>
+                    {tip.technique}
                   </Text>
-                )}
-              </View>
-            ))}
+                  <Text style={localStyles.makeupTipImportance}>
+                    <Text style={localStyles.boldText}>Importance: </Text>
+                    {tip.importance}
+                  </Text>
+                  <Text style={localStyles.makeupTipSuitableFor}>
+                    <Text style={localStyles.boldText}>Suitable For: </Text>
+                    {tip.suitableFor}
+                  </Text>
+                  <Text style={localStyles.makeupTipExplanation}>
+                    {tip.explanation}
+                  </Text>
+                  {tip &&
+                    tip.products &&
+                    tip.products.map((product: any, index: number) => (
+                      <View
+                        key={index}
+                        style={localStyles.makeupProductSection}
+                      >
+                        <Text style={localStyles.makeupProductCategory}>
+                          {product.category}
+                        </Text>
+                        <View style={localStyles.makeupProductDetails}>
+                          <Text style={localStyles.makeupProductTitle}>
+                            High-End:
+                          </Text>
+                          <Text>
+                            {product.highEnd.name} - {product.highEnd.price}
+                          </Text>
+                          <Text style={localStyles.applicationTip}>
+                            Application Tip: {product.highEnd.applicationTip}
+                          </Text>
+                        </View>
+                        <View style={localStyles.makeupProductDetails}>
+                          <Text style={localStyles.makeupProductTitle}>
+                            Affordable:
+                          </Text>
+                          <Text>
+                            {product.affordable.name} -{' '}
+                            {product.affordable.price}
+                          </Text>
+                          <Text style={localStyles.applicationTip}>
+                            Application Tip: {product.affordable.applicationTip}
+                          </Text>
+                        </View>
+                      </View>
+                    ))}
+                  {(!tip || !tip.products) && (
+                    <Text style={localStyles.errorText}>
+                      Could not load any tips. Please try again later
+                    </Text>
+                  )}
+                </AccordionItem>
+              )
+            )}
           </ScrollView>
         );
       default:
@@ -373,8 +464,7 @@ const GlowResultScreen = () => {
 
   return (
     <ImageBackground
-      source={images.screenBg}
-      // source={require('@/assets/images/screen-bg.png')}
+      source={images.screenBgLarger}
       style={localStyles.background}
       resizeMode='cover'
     >
@@ -443,26 +533,30 @@ const GlowResultScreen = () => {
             </View>
           </RNScrollView>
 
-          <View style={localStyles.profileContainer}>
-            <Image
-              source={{
-                uri:
-                  storeImages[0] ||
-                  'https://example.com/default-profile-image.jpg',
-              }}
-              style={localStyles.profileImage}
-            />
-            <Text
-              style={localStyles.percentileText}
-              className='text-center shadow-lg'
-            >
-              You are in the{' '}
-              <Text style={localStyles.percentileHighlight}>
-                {`${percentile}th percentile`}
-              </Text>{' '}
-              of all users.
-            </Text>
-          </View>
+          {!activeTab.includes('Glow-Up Tips') &&
+            !activeTab.includes('Skincare Recommendations') &&
+            !activeTab.includes('Makeup Tips') && (
+              <View style={localStyles.profileContainer}>
+                <Image
+                  source={{
+                    uri:
+                      storeImages[0] ||
+                      'https://example.com/default-profile-image.jpg',
+                  }}
+                  style={localStyles.profileImage}
+                />
+                <Text
+                  style={localStyles.percentileText}
+                  className='text-center shadow-lg'
+                >
+                  You are in the{' '}
+                  <Text style={localStyles.percentileHighlight}>
+                    {`${percentile}th percentile`}
+                  </Text>{' '}
+                  of all users.
+                </Text>
+              </View>
+            )}
 
           {renderTabContent()}
           <View style={localStyles.buttonSpacer} />
@@ -590,13 +684,13 @@ const localStyles = StyleSheet.create({
     padding: 0,
   },
   innerCard: {
-    backgroundColor: '#F5F5F5',
+    backgroundColor: 'rgba(255,255,255, 1)',
     borderRadius: 10,
     padding: 15,
     borderWidth: 0,
   },
   scoreCard: {
-    backgroundColor: '#F5F5F5',
+    backgroundColor: 'rgba(255,255,255, 1)',
     borderRadius: 10,
     padding: 15,
     width: '48%',
@@ -695,7 +789,7 @@ const localStyles = StyleSheet.create({
     marginBottom: 10,
   },
   characteristicCard: {
-    backgroundColor: '#F5F5F5',
+    backgroundColor: 'rgba(255,255,255, 1)',
     borderRadius: 10,
     padding: 15,
     width: '48%',
@@ -813,10 +907,30 @@ const localStyles = StyleSheet.create({
     fontSize: 14,
     fontWeight: 'bold',
   },
-  summarySectionTitle: {
-    fontSize: 16,
+  summarySectionCard: {
+    backgroundColor: 'rgba(255,255,255, 1)',
+    borderRadius: 10,
+    paddingVertical: 25,
+    paddingHorizontal: 30,
+    marginBottom: 20,
+    borderWidth: 1,
+    borderColor: '#dbdbdb',
+    position: 'relative',
+    marginTop: 15,
+  },
+  summaryTitle: {
+    fontSize: 18,
     fontWeight: 'bold',
-    marginBottom: 10,
+    textAlign: 'center',
+    marginBottom: 20,
+  },
+  summaryImage: {
+    width: 40,
+    height: 40,
+    borderRadius: 15,
+    position: 'absolute',
+    top: 18,
+    left: 25,
   },
   tipRelatedFeature: {
     fontSize: 14,
@@ -844,6 +958,79 @@ const localStyles = StyleSheet.create({
     fontSize: 14,
     marginBottom: 10,
     fontStyle: 'italic',
+  },
+  accordionItem: {
+    backgroundColor: 'transparent',
+    borderRadius: 8,
+    marginBottom: 10,
+    overflow: 'hidden',
+    elevation: 2,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 2,
+    alignItems: 'center',
+  },
+  accordionHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'flex-start',
+    padding: 15,
+    // backgroundColor: '#fff',
+    borderColor: '#dbdbdb',
+    borderWidth: 1,
+    backgroundColor: 'rgba(255,255,255, 0.9)',
+    width: '100%',
+  },
+  accordionStepTitle: {
+    fontSize: 13,
+    fontWeight: 'bold',
+    color: '#000',
+    marginBottom: 4,
+    paddingLeft: 2,
+  },
+  accordionDivider: {
+    height: 1,
+    backgroundColor: '#dbdbdb',
+    marginTop: 2,
+    marginBottom: 12,
+    width: 60,
+    paddingLeft: 2,
+  },
+  accordionTitle: {
+    fontSize: 16,
+    // fontWeight: 'bold',
+    letterSpacing: -0.4,
+    marginBottom: 4,
+    paddingRight: 20,
+    paddingLeft: 2,
+  },
+  accordionContent: {
+    padding: 15,
+    borderColor: '#dbdbdb',
+    borderWidth: 1,
+    borderTopWidth: 0,
+    width: '96%',
+    borderBottomLeftRadius: 10,
+    borderBottomRightRadius: 10,
+    backgroundColor: 'rgba(255,255,255, 0.9)',
+  },
+  howToUse: {
+    fontSize: 14,
+    fontStyle: 'italic',
+    marginTop: 5,
+  },
+  applicationTip: {
+    fontSize: 14,
+    fontStyle: 'italic',
+    marginTop: 3,
+  },
+  errorText: {
+    color: '#666',
+    fontStyle: 'italic',
+  },
+  boldText: {
+    fontWeight: 'bold',
   },
 });
 

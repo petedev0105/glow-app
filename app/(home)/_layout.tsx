@@ -35,7 +35,7 @@ const Layout = () => {
           if (route.name === 'Home') {
             iconName = 'home';
             iconSize = 25; // Custom size for Home tab
-          } else if (route.name === 'scan-circle-outline') {
+          } else if (route.name === 'Scan') {
             iconName = 'scan-circle-outline';
             iconSize = 50; // Custom size for Scan tab
           } else if (route.name === 'Profile') {
@@ -75,7 +75,7 @@ const Layout = () => {
         }}
       />
       <Tab.Screen
-        name='scan-circle-outline'
+        name='Scan'
         component={ScansScreen}
         options={{
           headerShown: false,

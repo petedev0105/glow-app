@@ -1,6 +1,6 @@
 import { images } from '@/constants';
 import { LinearGradient } from 'expo-linear-gradient';
-import React from 'react';
+import React, { useState } from 'react';
 import {
   Image,
   ImageBackground,
@@ -13,8 +13,11 @@ import {
   View,
 } from 'react-native';
 import { styles } from '../../constants/onboarding';
+import LoadingSpinner from '../LoadingSpinner';
 
 const ScansScreen = () => {
+  const [isLoading, setIsLoading] = useState(true);
+
   // TODO call API to get all scans and display here
   const scans = [
     {
@@ -48,6 +51,10 @@ const ScansScreen = () => {
       image: images.dashboardGirl,
     },
   ];
+
+  if (isLoading) {
+    return <LoadingSpinner bgImg={images.homeBgLarger}></LoadingSpinner>;
+  }
 
   return (
     <ImageBackground
@@ -103,7 +110,11 @@ const ScansScreen = () => {
             showsVerticalScrollIndicator={false}
           >
             {scans.map((scan) => (
-              <View key={scan.id} style={localStyles.scanCard}>
+              <View
+                key={scan.id}
+                style={localStyles.scanCard}
+                className='shadow-sm'
+              >
                 <Image source={scan.image} style={localStyles.scanImage} />
 
                 <View style={localStyles.scanDetails}>

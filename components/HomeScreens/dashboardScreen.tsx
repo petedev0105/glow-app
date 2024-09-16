@@ -1,5 +1,6 @@
 import { images } from '@/constants';
 import { Ionicons } from '@expo/vector-icons';
+import { router } from 'expo-router';
 import React from 'react';
 import {
   Image,
@@ -73,7 +74,12 @@ const DashboardScreen = () => {
             </Text>
 
             {/* Start Facial Analysis Button */}
-            <TouchableOpacity style={localStyles.startButton}>
+            <TouchableOpacity
+              style={localStyles.startButton}
+              onPress={() => {
+                router.push('/(auth)/facial-analysis-screen');
+              }}
+            >
               <Ionicons name='scan' size={20} />
               <Text style={homeStyles.buttonText}>Start Facial Analysis</Text>
             </TouchableOpacity>
