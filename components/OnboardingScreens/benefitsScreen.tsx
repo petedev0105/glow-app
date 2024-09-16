@@ -38,7 +38,7 @@ export const BenefitsScreen = ({
         <TouchableOpacity
           style={styles.button}
           onPress={() => {
-            router.replace('/(auth)/facial-analysis-screen');
+            router.push('/(auth)/facial-analysis-screen');
           }}
         >
           <Text style={styles.buttonText}>
