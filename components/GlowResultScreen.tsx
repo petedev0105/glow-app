@@ -189,27 +189,27 @@ const GlowResultScreen = () => {
           <View style={localStyles.scoresContainer}>
             <View style={localStyles.scoreRow}>
               <CharacteristicCard
-                title='Skin Type'
+                title='Skin Type 👩'
                 value={skinAnalysis.skinType}
               />
               <CharacteristicCard
-                title='Hydration Level'
+                title='Hydration Level 💧'
                 value={skinAnalysis.hydrationLevel}
               />
             </View>
             <View style={localStyles.scoreRow}>
               <CharacteristicCard
-                title='Skin Texture'
+                title={`Skin\nTexture 🧴`}
                 value={skinAnalysis.skinTexture}
               />
               <CharacteristicCard
-                title='Skin Tone'
+                title='Skin Tone 🌼'
                 value={skinAnalysis.skinToneAndColor.join(', ')}
               />
             </View>
             <View style={localStyles.scoreRow}>
               <CharacteristicCard
-                title='Skin Vitality'
+                title={`Skin\nVitality ☀️`}
                 value={skinAnalysis.skinVitalityIndicators.join(', ')}
               />
             </View>
