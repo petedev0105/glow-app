@@ -509,26 +509,30 @@ const GlowResultScreen = () => {
             </View>
           </RNScrollView>
 
-          <View style={localStyles.profileContainer}>
-            <Image
-              source={{
-                uri:
-                  storeImages[0] ||
-                  'https://example.com/default-profile-image.jpg',
-              }}
-              style={localStyles.profileImage}
-            />
-            <Text
-              style={localStyles.percentileText}
-              className='text-center shadow-lg'
-            >
-              You are in the{' '}
-              <Text style={localStyles.percentileHighlight}>
-                {`${percentile}th percentile`}
-              </Text>{' '}
-              of all users.
-            </Text>
-          </View>
+          {!activeTab.includes('Glow-Up Tips') &&
+            !activeTab.includes('Skincare Recommendations') &&
+            !activeTab.includes('Makeup Tips') && (
+              <View style={localStyles.profileContainer}>
+                <Image
+                  source={{
+                    uri:
+                      storeImages[0] ||
+                      'https://example.com/default-profile-image.jpg',
+                  }}
+                  style={localStyles.profileImage}
+                />
+                <Text
+                  style={localStyles.percentileText}
+                  className='text-center shadow-lg'
+                >
+                  You are in the{' '}
+                  <Text style={localStyles.percentileHighlight}>
+                    {`${percentile}th percentile`}
+                  </Text>{' '}
+                  of all users.
+                </Text>
+              </View>
+            )}
 
           {renderTabContent()}
           <View style={localStyles.buttonSpacer} />
@@ -656,13 +660,13 @@ const localStyles = StyleSheet.create({
     padding: 0,
   },
   innerCard: {
-    backgroundColor: '#F5F5F5',
+    backgroundColor: 'rgba(255,255,255, 1)',
     borderRadius: 10,
     padding: 15,
     borderWidth: 0,
   },
   scoreCard: {
-    backgroundColor: '#F5F5F5',
+    backgroundColor: 'rgba(255,255,255, 1)',
     borderRadius: 10,
     padding: 15,
     width: '48%',
@@ -761,7 +765,7 @@ const localStyles = StyleSheet.create({
     marginBottom: 10,
   },
   characteristicCard: {
-    backgroundColor: '#fff',
+    backgroundColor: 'rgba(255,255,255, 1)',
     borderRadius: 10,
     padding: 15,
     width: '48%',
@@ -880,7 +884,7 @@ const localStyles = StyleSheet.create({
     fontWeight: 'bold',
   },
   summarySectionCard: {
-    backgroundColor: 'rgba(255,255,255, 0.9)',
+    backgroundColor: 'rgba(255,255,255, 1)',
     borderRadius: 10,
     paddingVertical: 25,
     paddingHorizontal: 30,
@@ -888,6 +892,7 @@ const localStyles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#dbdbdb',
     position: 'relative',
+    marginTop: 15,
   },
   summaryTitle: {
     fontSize: 18,
