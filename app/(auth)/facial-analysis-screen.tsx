@@ -52,7 +52,7 @@ const FacialAnalysisScreen = () => {
     if (image) {
       console.log(image);
       await handleImageUpload(image);
-      router.push('/(auth)/results-screen');
+      router.replace('/(auth)/results-screen');
 
       // try {
       //   console.log("calling image analysis api");
