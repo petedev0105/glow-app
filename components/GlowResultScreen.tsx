@@ -156,12 +156,13 @@ const GlowResultScreen = () => {
         >
           <View>
             <Text style={localStyles.accordionStepTitle}>Step {index + 1}</Text>
+            <View style={localStyles.accordionDivider} />
             <Text style={localStyles.accordionTitle}>{title}</Text>
           </View>
           <Ionicons
             name={isOpen ? 'chevron-up' : 'chevron-down'}
             size={24}
-            color='#666'
+            color='#000'
           />
         </TouchableOpacity>
         {isOpen && <View style={localStyles.accordionContent}>{children}</View>}
@@ -261,12 +262,15 @@ const GlowResultScreen = () => {
             {recommendations?.result[0]?.steps.map(
               (tip: any, index: number) => (
                 <AccordionItem key={tip.id} title={tip.name} index={index}>
+                  <Text style={localStyles.boldText}>Explanation</Text>
                   <Text style={localStyles.tipDetails}>{tip.details}</Text>
                   <Text style={localStyles.tipImportance}>
-                    Importance: {tip.importance}
+                    <Text style={localStyles.boldText}>Importance: </Text>
+                    {tip.importance}
                   </Text>
                   <Text style={localStyles.tipRelatedFeature}>
-                    Related Feature: {tip.relatedFeature}
+                    <Text style={localStyles.boldText}>Related Feature: </Text>
+                    {tip.relatedFeature}
                   </Text>
                   <Text style={localStyles.tipExplanation}>
                     {tip.explanation}
@@ -309,10 +313,12 @@ const GlowResultScreen = () => {
                     </Text>
                   </View>
                   <Text style={localStyles.recImportance}>
-                    Importance: {rec.importance}
+                    <Text style={localStyles.boldText}>Imporance: </Text>
+                    {rec.importance}
                   </Text>
                   <Text style={localStyles.recTechnique}>
-                    Technique: {rec.technique}
+                    <Text style={localStyles.boldText}>Technique: </Text>
+                    {rec.technique}
                   </Text>
                   <Text style={localStyles.recTargetedConcern}>
                     Targeted Concern: {rec.targetedConcern}
@@ -340,13 +346,16 @@ const GlowResultScreen = () => {
               (tip: any, index: number) => (
                 <AccordionItem key={tip.id} title={tip.name} index={index}>
                   <Text style={localStyles.makeupTipTechnique}>
-                    Technique: {tip.technique}
+                    <Text style={localStyles.boldText}>Technique: </Text>
+                    {tip.technique}
                   </Text>
                   <Text style={localStyles.makeupTipImportance}>
-                    Importance: {tip.importance}
+                    <Text style={localStyles.boldText}>Importance: </Text>
+                    {tip.importance}
                   </Text>
                   <Text style={localStyles.makeupTipSuitableFor}>
-                    Suitable For: {tip.suitableFor}
+                    <Text style={localStyles.boldText}>Suitable For: </Text>
+                    {tip.suitableFor}
                   </Text>
                   <Text style={localStyles.makeupTipExplanation}>
                     {tip.explanation}
@@ -752,7 +761,7 @@ const localStyles = StyleSheet.create({
     marginBottom: 10,
   },
   characteristicCard: {
-    backgroundColor: '#F5F5F5',
+    backgroundColor: '#fff',
     borderRadius: 10,
     padding: 15,
     width: '48%',
@@ -871,7 +880,7 @@ const localStyles = StyleSheet.create({
     fontWeight: 'bold',
   },
   summarySectionCard: {
-    backgroundColor: 'transparent',
+    backgroundColor: 'rgba(255,255,255, 0.9)',
     borderRadius: 10,
     paddingVertical: 25,
     paddingHorizontal: 30,
@@ -936,33 +945,46 @@ const localStyles = StyleSheet.create({
   accordionHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'center',
+    alignItems: 'flex-start',
     padding: 15,
     // backgroundColor: '#fff',
     borderColor: '#dbdbdb',
     borderWidth: 1,
-    backgroundColor: 'transparent',
+    backgroundColor: 'rgba(255,255,255, 0.9)',
     width: '100%',
   },
   accordionStepTitle: {
     fontSize: 13,
     fontWeight: 'bold',
-    color: '#666',
+    color: '#000',
     marginBottom: 4,
+    paddingLeft: 2,
+  },
+  accordionDivider: {
+    height: 1,
+    backgroundColor: '#dbdbdb',
+    marginTop: 2,
+    marginBottom: 12,
+    width: 60,
+    paddingLeft: 2,
   },
   accordionTitle: {
     fontSize: 16,
-    fontWeight: 'bold',
+    // fontWeight: 'bold',
+    letterSpacing: -0.4,
+    marginBottom: 4,
+    paddingRight: 20,
+    paddingLeft: 2,
   },
   accordionContent: {
     padding: 15,
     borderColor: '#dbdbdb',
     borderWidth: 1,
     borderTopWidth: 0,
-    width: '90%',
+    width: '96%',
     borderBottomLeftRadius: 10,
     borderBottomRightRadius: 10,
-    backgroundColor: 'transparent',
+    backgroundColor: 'rgba(255,255,255, 0.9)',
   },
   howToUse: {
     fontSize: 14,
@@ -977,6 +999,9 @@ const localStyles = StyleSheet.create({
   errorText: {
     color: '#666',
     fontStyle: 'italic',
+  },
+  boldText: {
+    fontWeight: 'bold',
   },
 });
 
