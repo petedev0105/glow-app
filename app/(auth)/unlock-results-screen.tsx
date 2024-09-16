@@ -558,22 +558,27 @@ const GlowResultScreen = () => {
           </RNScrollView>
 
           {/* Placeholder Profile Image */}
-          <View style={localStyles.profileContainer}>
-            <Image
-              source={storeImages[0] ? { uri: storeImages[0] } : images.model}
-              style={localStyles.profileImage}
-            />
-            {/* <Text style={localStyles.percentileText}>
+          {!activeTab.includes('Glow-Up Tips') &&
+            !activeTab.includes('Skincare Recommendations') &&
+            !activeTab.includes('Makeup Tips') && (
+              <View style={localStyles.profileContainer}>
+                <Image
+                  source={
+                    storeImages[0] ? { uri: storeImages[0] } : images.model
+                  }
+                  style={localStyles.profileImage}
+                />
+                {/* <Text style={localStyles.percentileText}>
               You are in the{' '}
               <Text style={localStyles.percentileHighlight}>
                 {`${percentile}th percentile`}
               </Text>{' '}
               of all users.
             </Text> */}
-            <Text style={localStyles.percentileText}>
-              You are in the{''}
-              {/* Replacing the percentile text with a gradient */}
-              {/* <LinearGradient
+                <Text style={localStyles.percentileText}>
+                  You are in the{''}
+                  {/* Replacing the percentile text with a gradient */}
+                  {/* <LinearGradient
                 colors={[
                   'rgba(150,150,150,0.4)', // Darker gray in the center for more depth
                   'rgba(150,150,150,0.2)', // Medium gray toward the outer area
@@ -586,10 +591,13 @@ const GlowResultScreen = () => {
               >
                 <View style={{ width: 30, height: 20 }} />
               </LinearGradient> */}
-              <Text className='font-bold mx-0 px-0'>{' 🔒th percentile '}</Text>
-              of all users.
-            </Text>
-          </View>
+                  <Text className='font-bold mx-0 px-0'>
+                    {' 🔒th percentile '}
+                  </Text>
+                  of all users.
+                </Text>
+              </View>
+            )}
 
           {/* Render content based on active tab */}
           {renderTabContent()}
