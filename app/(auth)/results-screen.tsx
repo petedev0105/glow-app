@@ -207,7 +207,7 @@ const ResultsScreen = () => {
   useEffect(() => {
     if (apiCallsComplete && loadingProgress >= 100) {
       console.log('Navigating to unlock-results-screen');
-      router.push('/unlock-results-screen');
+      router.replace('/unlock-results-screen');
     }
   }, [apiCallsComplete, loadingProgress]);
 
