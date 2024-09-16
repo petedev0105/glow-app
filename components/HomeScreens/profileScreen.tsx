@@ -1,5 +1,7 @@
 import { images } from '@/constants';
-import React from 'react';
+import { useAuth } from '@clerk/clerk-expo';
+import { router } from 'expo-router';
+import React, { useEffect } from 'react';
 import {
   Image,
   ImageBackground,
@@ -15,6 +17,14 @@ import {
 import { styles } from '../../constants/onboarding';
 
 const ProfileScreen = () => {
+  const { signOut, isSignedIn } = useAuth();
+
+  useEffect(() => {
+    if (!isSignedIn) {
+      router.replace('/(auth)/start');
+    }
+  }, [isSignedIn]);
+
   return (
     <ImageBackground
       resizeMode='cover'
@@ -104,11 +114,19 @@ const ProfileScreen = () => {
 
             {/* Log Out & Delete Account Section */}
             <View style={localStyles.buttonContainer}>
-              <TouchableOpacity style={localStyles.logoutButton}>
+              <TouchableOpacity
+                style={localStyles.logoutButton}
+                onPress={() => {
+                  signOut();
+                }}
+              >
                 <Text style={localStyles.logoutText}>Log Out</Text>
               </TouchableOpacity>
               <TouchableOpacity
                 style={{ ...localStyles.logoutButton, backgroundColor: 'red' }}
+                onPress={() => {
+                  signOut();
+                }}
               >
                 <Text style={localStyles.deleteAccountText}>
                   Delete Account
