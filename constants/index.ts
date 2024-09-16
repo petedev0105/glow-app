@@ -33,6 +33,7 @@ import modelDifferenceImg from '@/assets/images/model-difference.png';
 import modelFacialAnalysis from '@/assets/images/model-facial-analysis.png';
 import model from '@/assets/images/model.png';
 import onboardingScreenBg from '@/assets/images/onboarding-bg.png';
+import screenBgLarger from '@/assets/images/screen-bg-large.png';
 import screenBg from '@/assets/images/screen-bg.png';
 import signinBackground from '@/assets/images/signin-bg.png';
 import signinBackgroundSvg from '@/assets/images/signin-bg.svg';
@@ -61,6 +62,7 @@ export const images = {
   homeBg,
   dashboardGirl,
   summaryImg,
+  screenBgLarger,
 };
 
 export const icons = {
