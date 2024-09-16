@@ -3,7 +3,7 @@ import { styles } from '@/constants/onboarding';
 import { useImageStore } from '@/store/imageStore';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
-import { router, useNavigation } from 'expo-router';
+import { useNavigation } from 'expo-router';
 import React, { useEffect, useState } from 'react';
 import {
   Animated,
@@ -604,7 +604,6 @@ const GlowResultScreen = () => {
           ]}
           // TODO CHANGE ROUTE TO PAYWALL SCREEN INSTEAD AFTER THEY CLICK UNLOCK
           // onPress={() => router.replace('/(home)')}
-          onPress={() => router.replace('/glow-results-screen')}
         >
           <AnimatedLinearGradient
             colors={['#da70d6', '#7b68ee', '#87cefa']}
