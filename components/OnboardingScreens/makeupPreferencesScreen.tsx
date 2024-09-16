@@ -1,8 +1,8 @@
-import { Ionicons } from '@expo/vector-icons'; // Import Ionicons
-import * as Haptics from 'expo-haptics';
-import React, { useState } from 'react';
-import { ScrollView, Text, TouchableOpacity, View } from 'react-native';
-import { onboardingQuestionsList, styles } from '../../constants/onboarding';
+import { Ionicons } from "@expo/vector-icons"; // Import Ionicons
+import * as Haptics from "expo-haptics";
+import React, { useState } from "react";
+import { ScrollView, Text, TouchableOpacity, View } from "react-native";
+import { onboardingQuestionsList, styles } from "../../constants/onboarding";
 
 export const MakeUpPreferencesScreen = ({
   navigation,
@@ -13,7 +13,16 @@ export const MakeUpPreferencesScreen = ({
   onNext: () => void;
   onAuthComplete: any;
 }) => {
-  const [selectedGoal, setSelectedGoal] = useState('');
+  const [selectedGoals, setSelectedGoals] = useState<string[]>([]);
+
+  const toggleGoal = (goal: string) => {
+    setSelectedGoals((prevGoals) =>
+      prevGoals.includes(goal)
+        ? prevGoals.filter((g) => g !== goal)
+        : [...prevGoals, goal]
+    );
+    Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+  };
 
   return (
     <View style={styles.container}>
@@ -22,47 +31,56 @@ export const MakeUpPreferencesScreen = ({
         {onboardingQuestionsList[7].subtitle}
       </Text>
 
-      <ScrollView style={{ height: '48%', marginTop: 40 }}>
+      <ScrollView style={{ height: "48%", marginTop: 40 }}>
         <View
           style={{
             ...styles.contentContainer,
-            justifyContent: 'flex-start',
+            justifyContent: "flex-start",
           }}
         >
           {onboardingQuestionsList[7].options?.map((goal, index) => (
             <TouchableOpacity
               key={index}
-              onPress={() => {
-                Haptics.notificationAsync(
-                  Haptics.NotificationFeedbackType.Success
-                );
-                setSelectedGoal(goal);
-              }}
+              onPress={() => toggleGoal(goal)}
               style={[
                 styles.optionCard,
-                selectedGoal === goal ? styles.optionCardSelected : {},
+                selectedGoals.includes(goal) ? styles.optionCardSelected : {},
               ]}
             >
-              <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+              <View style={{ flexDirection: "row", alignItems: "center" }}>
                 {/* Use different icons based on the goal */}
-                {goal === 'Natural' ? (
+                {goal === "Vegan" ? (
                   <Ionicons
-                    name='flower-outline'
+                    name="leaf-outline"
                     size={24}
-                    color={selectedGoal === goal ? '#8A2BE2' : 'black'}
+                    color={selectedGoals.includes(goal) ? "#8A2BE2" : "black"}
+                  />
+                ) : goal === "Organic" ? (
+                  <Ionicons
+                    name="flower-outline"
+                    size={24}
+                    color={selectedGoals.includes(goal) ? "#8A2BE2" : "black"}
+                  />
+                ) : goal === "Fragrance-free" ? (
+                  <Ionicons
+                    name="water-outline"
+                    size={24}
+                    color={selectedGoals.includes(goal) ? "#8A2BE2" : "black"}
                   />
                 ) : (
                   <Ionicons
-                    name='eye-outline'
+                    name="paw-outline"
                     size={24}
-                    color={selectedGoal === goal ? '#8A2BE2' : 'black'}
+                    color={selectedGoals.includes(goal) ? "#8A2BE2" : "black"}
                   />
                 )}
                 <View style={{ marginLeft: 12 }}>
                   <Text
                     style={[
                       styles.optionTitle,
-                      selectedGoal === goal ? styles.optionTitleSelected : {},
+                      selectedGoals.includes(goal)
+                        ? styles.optionTitleSelected
+                        : {},
                     ]}
                   >
                     {goal}
@@ -70,12 +88,18 @@ export const MakeUpPreferencesScreen = ({
                   <Text
                     style={[
                       styles.optionDescription,
-                      selectedGoal === goal ? styles.optionTitleSelected : {},
+                      selectedGoals.includes(goal)
+                        ? styles.optionTitleSelected
+                        : {},
                     ]}
                   >
-                    {goal === 'Natural'
-                      ? 'I prefer a light and minimal makeup look.'
-                      : 'I like to use bold and expressive makeup.'}
+                    {goal === "Vegan"
+                      ? "I prefer makeup products without animal-derived ingredients."
+                      : goal === "Organic"
+                        ? "I prefer makeup products made with organic ingredients."
+                        : goal === "Fragrance-free"
+                          ? "I prefer makeup products without added fragrances."
+                          : "I prefer makeup products not tested on animals."}
                   </Text>
                 </View>
               </View>
@@ -88,10 +112,10 @@ export const MakeUpPreferencesScreen = ({
         <TouchableOpacity
           style={[
             styles.button,
-            selectedGoal === '' && localStyles.buttonDisabled,
+            selectedGoals.length === 0 && localStyles.buttonDisabled,
           ]}
           onPress={onNext}
-          disabled={selectedGoal === ''}
+          disabled={selectedGoals.length === 0}
         >
           <Text style={styles.buttonText}>Continue</Text>
         </TouchableOpacity>
@@ -102,6 +126,6 @@ export const MakeUpPreferencesScreen = ({
 
 const localStyles = {
   buttonDisabled: {
-    backgroundColor: '#CCC',
+    backgroundColor: "#CCC",
   },
 };

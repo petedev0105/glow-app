@@ -1,8 +1,8 @@
-import { Ionicons } from '@expo/vector-icons'; // For adding icons if needed
-import * as Haptics from 'expo-haptics';
-import React, { useState } from 'react';
-import { Text, TouchableOpacity, View } from 'react-native';
-import { onboardingQuestionsList, styles } from '../../constants/onboarding';
+import { Ionicons } from "@expo/vector-icons"; // For adding icons if needed
+import * as Haptics from "expo-haptics";
+import React, { useState } from "react";
+import { Text, TouchableOpacity, View } from "react-native";
+import { onboardingQuestionsList, styles } from "../../constants/onboarding";
 
 export const SkinConcernsScreen = ({
   navigation,
@@ -13,7 +13,14 @@ export const SkinConcernsScreen = ({
   onNext: () => void;
   onAuthComplete: any;
 }) => {
-  const [selectedGoal, setSelectedGoal] = useState('');
+  const [selectedGoals, setSelectedGoals] = useState<string[]>([]);
+
+  const toggleGoal = (goal: string) => {
+    Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+    setSelectedGoals((prev) =>
+      prev.includes(goal) ? prev.filter((g) => g !== goal) : [...prev, goal]
+    );
+  };
 
   return (
     <View style={styles.container}>
@@ -26,49 +33,63 @@ export const SkinConcernsScreen = ({
         style={{
           ...styles.contentContainer,
           marginTop: 40,
-          justifyContent: 'flex-start',
+          justifyContent: "flex-start",
         }}
       >
         {onboardingQuestionsList[5].options?.map((goal, index) => (
           <TouchableOpacity
             key={index}
-            onPress={() => {
-              Haptics.notificationAsync(
-                Haptics.NotificationFeedbackType.Success
-              );
-              setSelectedGoal(goal);
-            }}
+            onPress={() => toggleGoal(goal)}
             style={[
-              styles.optionCard, // Apply the default card style
-              selectedGoal === goal && styles.optionCardSelected, // Apply the selected style when active
+              styles.optionCard,
+              selectedGoals.includes(goal) && styles.optionCardSelected,
             ]}
           >
-            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-              {/* Optionally add icons based on the goal */}
+            <View
+              style={{
+                flexDirection: "row",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
               <Ionicons
-                name={goal === 'Sensitive' ? 'leaf-outline' : 'shield-outline'}
+                name={
+                  goal === "Acne"
+                    ? "medical-outline"
+                    : goal === "Wrinkles"
+                      ? "water-outline"
+                      : goal === "Dark Spots"
+                        ? "contrast-outline"
+                        : goal === "Oiliness"
+                          ? "water-outline"
+                          : "help-circle-outline"
+                }
                 size={24}
-                color={selectedGoal === goal ? '#8A2BE2' : 'black'}
+                color={selectedGoals.includes(goal) ? "#8A2BE2" : "black"}
               />
-              <View style={{ marginLeft: 12 }}>
+              <View
+                style={{
+                  marginLeft: 12,
+                  alignItems: "center",
+                  flexDirection: "column",
+                }}
+              >
                 <Text
                   style={[
-                    styles.optionTitle, // Default title style
-                    selectedGoal === goal && styles.optionTitleSelected, // Apply selected title style
+                    styles.optionTitle,
+                    selectedGoals.includes(goal) && styles.optionTitleSelected,
                   ]}
                 >
                   {goal}
                 </Text>
-                <Text
+                {/* <Text
                   style={[
                     styles.optionDescription,
                     selectedGoal === goal ? styles.optionTitleSelected : {},
                   ]}
-                >
-                  {goal === 'Sensitive'
-                    ? 'My skin has reacted negatively to some skincare in the past.'
-                    : 'My skin shows no reaction to certain ingredients.'}
-                </Text>
+                > */}
+                {/* Add appropriate descriptions for each skin concern */}
+                {/* </Text> */}
               </View>
             </View>
           </TouchableOpacity>
@@ -77,9 +98,12 @@ export const SkinConcernsScreen = ({
 
       <View style={styles.footerContainer}>
         <TouchableOpacity
-          style={[styles.button, selectedGoal === '' && styles.buttonDisabled]}
+          style={[
+            styles.button,
+            selectedGoals.length === 0 && styles.buttonDisabled,
+          ]}
           onPress={onNext}
-          disabled={selectedGoal === ''}
+          disabled={selectedGoals.length === 0}
         >
           <Text style={styles.buttonText}>Continue</Text>
         </TouchableOpacity>
