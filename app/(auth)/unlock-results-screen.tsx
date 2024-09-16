@@ -460,8 +460,8 @@ const GlowResultScreen = () => {
             { paddingBottom: insets.bottom },
           ]}
           // TODO CHANGE ROUTE TO PAYWALL SCREEN INSTEAD AFTER THEY CLICK UNLOCK
-          onPress={() => router.replace('/(home)')}
-          // onPress={() => router.replace('/glow-results-screen')}
+          // onPress={() => router.replace('/(home)')}
+          onPress={() => router.replace('/glow-results-screen')}
         >
           <AnimatedLinearGradient
             colors={['#da70d6', '#7b68ee', '#87cefa']}
