@@ -103,7 +103,11 @@ const ScansScreen = () => {
             showsVerticalScrollIndicator={false}
           >
             {scans.map((scan) => (
-              <View key={scan.id} style={localStyles.scanCard}>
+              <View
+                key={scan.id}
+                style={localStyles.scanCard}
+                className='shadow-sm'
+              >
                 <Image source={scan.image} style={localStyles.scanImage} />
 
                 <View style={localStyles.scanDetails}>

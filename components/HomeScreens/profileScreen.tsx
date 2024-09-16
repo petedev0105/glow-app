@@ -1,5 +1,7 @@
 import { images } from '@/constants';
+import { ProfileScreenNavigationProp } from '@/constants/home/types';
 import { useAuth } from '@clerk/clerk-expo';
+import { useNavigation } from '@react-navigation/native';
 import { router } from 'expo-router';
 import React, { useEffect } from 'react';
 import {
@@ -18,6 +20,7 @@ import { styles } from '../../constants/onboarding';
 
 const ProfileScreen = () => {
   const { signOut, isSignedIn } = useAuth();
+  const navigation = useNavigation<ProfileScreenNavigationProp>();
 
   useEffect(() => {
     if (!isSignedIn) {
@@ -77,21 +80,29 @@ const ProfileScreen = () => {
             <Text style={localStyles.sectionHeader}>PERSONAL</Text>
             <TouchableOpacity
               style={{ ...localStyles.sectionTop, borderBottomWidth: 0 }}
+              onPress={() => navigation.navigate('Scan')}
             >
               <Text style={localStyles.sectionText}>My Glow Profile</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={localStyles.sectionBottom}>
-              <Text style={localStyles.sectionText}>Scan your face</Text>
+            <TouchableOpacity
+              style={localStyles.sectionBottom}
+              onPress={() => {
+                router.push('/(auth)/facial-analysis-screen');
+              }}
+            >
+              <Text style={localStyles.sectionText}>Start a new scan</Text>
             </TouchableOpacity>
 
             {/* Help & Support Section */}
             <Text style={localStyles.sectionHeader}>HELP & SUPPORT</Text>
-            <TouchableOpacity style={localStyles.sectionTop}>
+            {/* <TouchableOpacity style={localStyles.sectionTop}>
               <Text style={localStyles.sectionText}>
                 Frequently Asked Questions
               </Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={localStyles.sectionMiddle}>
+            </TouchableOpacity> */}
+            <TouchableOpacity
+              style={{ ...localStyles.sectionTop, borderBottomWidth: 0 }}
+            >
               <Text style={localStyles.sectionText}>Suggest a Feature</Text>
             </TouchableOpacity>
             <TouchableOpacity style={localStyles.sectionBottom}>
