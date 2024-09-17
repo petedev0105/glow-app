@@ -7,7 +7,7 @@ const PushResultsScreen = () => {
   // PUSH SCANS TO DB AND WHEN DONE THEN SET NO NEED TO SET LOADING TO FALES, JUST REROUTE
   useEffect(() => {
     const pushScansToDB = () => {
-      const timer = setTimeout(() => {}, 5000);
+      // Call db here
       router.replace('/(home)');
     };
 
