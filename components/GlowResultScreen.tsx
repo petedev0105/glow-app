@@ -8,6 +8,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { router } from 'expo-router';
 import React, { useEffect, useState } from 'react';
 import {
+  Alert,
   Animated,
   Easing,
   Image,
@@ -16,6 +17,7 @@ import {
   ScrollView as RNScrollView,
   SafeAreaView,
   ScrollView,
+  Share,
   StatusBar,
   StyleSheet,
   Text,
@@ -49,6 +51,48 @@ const GlowResultScreen = () => {
       </View>
     );
   }
+
+  const onShare = async () => {
+    if (!glowResult) {
+      Alert.alert('No data available to share');
+      return;
+    }
+
+    const { scores } = glowResult as any;
+
+    const message = `
+✨ Check out my personalized Glow Profile! ✨
+
+🌟 *Ratings* 🌟
+-------------------------
+☀️ *Potential*: ${scores.potential.toFixed(1)}
+✨ *Overall*: ${scores.overall.toFixed(1)}
+💧 *Skin Health*: ${scores.skinHealth.toFixed(1)}
+⭐️ *Glow Factor*: ${scores.glowFactor.toFixed(1)}
+🎨 *Feature Harmony*: ${scores.featureHarmony.toFixed(1)}
+💋 *Authenticity*: ${scores.authenticity.toFixed(1)}
+-------------------------
+
+I’m glowing! 🌟 #GlowProfile
+`;
+
+    try {
+      const result = await Share.share({
+        message,
+      });
+      if (result.action === Share.sharedAction) {
+        if (result.activityType) {
+          // shared with activity type of result.activityType
+        } else {
+          // shared successfully
+        }
+      } else if (result.action === Share.dismissedAction) {
+        // dismissed
+      }
+    } catch (error: any) {
+      Alert.alert(error.message);
+    }
+  };
 
   const { scores, percentile, facialCharacteristics, skinAnalysis } =
     glowResult as any;
@@ -475,16 +519,31 @@ const GlowResultScreen = () => {
 
         <ScrollView
           style={localStyles.container}
-          contentContainerStyle={localStyles.contentContainer}
+          contentContainerStyle={{
+            ...localStyles.contentContainer,
+            paddingHorizontal: 10,
+          }}
         >
           <View style={localStyles.header}>
             <TouchableOpacity
-              style={localStyles.backButton}
+              style={[
+                localStyles.backButton,
+                localStyles.tabBase,
+                localStyles.activeTab,
+                {
+                  backgroundColor: '#F4EFFF',
+                  borderWidth: 2,
+                  borderColor: '#7c4cff',
+                },
+              ]}
               onPress={() => router.replace('/(auth)/push-results-screen')}
             >
-              <Ionicons name='arrow-back' size={24} color='black' />
+              <Text className='text-[#7c4cff] font-bold'>Save</Text>
             </TouchableOpacity>
             <Text style={localStyles.centeredTitle}>Glow Profile</Text>
+            <TouchableOpacity style={localStyles.shareButton} onPress={onShare}>
+              <Ionicons name='share-social-outline' size={24} color='#7c4cff' />
+            </TouchableOpacity>
           </View>
           <Text style={styles.subtitle}>
             Here's your personalized glow profile based on your facial analysis.
@@ -604,6 +663,11 @@ const localStyles = StyleSheet.create({
   centeredTitle: {
     fontSize: 24,
     fontWeight: 'bold',
+  },
+  shareButton: {
+    position: 'absolute',
+    right: 0,
+    padding: 10,
   },
   headerTitle: {
     fontSize: 20,
