@@ -480,8 +480,7 @@ const GlowResultScreen = () => {
           <View style={localStyles.header}>
             <TouchableOpacity
               style={localStyles.backButton}
-              // TODO NAVIGATE TO DASHBOARD HOME SCREEN
-              onPress={() => router.replace('/(home)')}
+              onPress={() => router.replace('/(auth)/push-results-screen')}
             >
               <Ionicons name='arrow-back' size={24} color='black' />
             </TouchableOpacity>

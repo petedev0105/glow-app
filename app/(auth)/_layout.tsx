@@ -22,22 +22,26 @@ const Layout = () => {
       }}
       initialRouteName={initialRouteName}
     >
-      <Stack.Screen name="start" options={{ headerShown: false }} />
-      <Stack.Screen name="next-screen" options={{ headerShown: false }} />
-      <Stack.Screen name="results-screen" options={{ headerShown: false }} />
+      <Stack.Screen name='start' options={{ headerShown: false }} />
+      <Stack.Screen name='next-screen' options={{ headerShown: false }} />
+      <Stack.Screen name='results-screen' options={{ headerShown: false }} />
       <Stack.Screen
-        name="unlock-results-screen"
+        name='unlock-results-screen'
         options={{ headerShown: false }}
       />
       <Stack.Screen
-        name="glow-results-screen"
+        name='glow-results-screen'
         options={{ headerShown: false }}
       />
-      <Stack.Screen name="welcome" options={{ headerShown: false }} />
-      <Stack.Screen name="sign-up" options={{ headerShown: false }} />
-      <Stack.Screen name="sign-in" options={{ headerShown: false }} />
       <Stack.Screen
-        name="facial-analysis-screen"
+        name='push-results-screen'
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen name='welcome' options={{ headerShown: false }} />
+      <Stack.Screen name='sign-up' options={{ headerShown: false }} />
+      <Stack.Screen name='sign-in' options={{ headerShown: false }} />
+      <Stack.Screen
+        name='facial-analysis-screen'
         options={{ headerShown: false }}
       />
     </Stack>
