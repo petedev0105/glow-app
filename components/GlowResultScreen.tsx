@@ -73,7 +73,7 @@ const GlowResultScreen = () => {
 💋 *Authenticity*: ${scores.authenticity.toFixed(1)}
 -------------------------
 
-I’m glowing! 🌟 #GlowProfile
+I’m glowing! 🌟 #GlowProfile 💗
 `;
 
     try {
