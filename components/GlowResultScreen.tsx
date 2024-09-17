@@ -65,9 +65,9 @@ const GlowResultScreen = () => {
 
 🌟 *Ratings* 🌟
 -------------------------
-☀️ *Potential*: ${scores.potential.toFixed(1)}
+💖 *Potential*: ${scores.potential.toFixed(1)}
 ✨ *Overall*: ${scores.overall.toFixed(1)}
-💧 *Skin Health*: ${scores.skinHealth.toFixed(1)}
+🧴 *Skin Health*: ${scores.skinHealth.toFixed(1)}
 ⭐️ *Glow Factor*: ${scores.glowFactor.toFixed(1)}
 🎨 *Feature Harmony*: ${scores.featureHarmony.toFixed(1)}
 💋 *Authenticity*: ${scores.authenticity.toFixed(1)}
