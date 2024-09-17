@@ -90,6 +90,10 @@ const OnboardingQuestions = () => {
     }
   };
 
+  const handleOnIndexChanged = (index: number) => {
+    setActiveIndex(index);
+  };
+
   const handleAuthComplete = () => {
     setShowQuestions(true);
   };
@@ -112,17 +116,16 @@ const OnboardingQuestions = () => {
           showsPagination={false}
           loop={false}
           // onIndexChanged={(index) => handleOnIndexChanged(index)}
+          scrollEnabled={false}
         >
-          {onboardingQuestionsScreens
-            // .slice(showQuestions ? 3 : 0, showQuestions ? undefined : 3)
-            .map((ScreenComponent, index) => (
-              <ScreenComponent
-                key={index}
-                navigation={navigation}
-                onNext={goToNextSlide}
-                onAuthComplete={handleAuthComplete}
-              />
-            ))}
+          {onboardingQuestionsScreens.map((ScreenComponent, index) => (
+            <ScreenComponent
+              key={index}
+              navigation={navigation}
+              onNext={goToNextSlide}
+              onAuthComplete={handleAuthComplete}
+            />
+          ))}
         </Swiper>
       </SafeAreaView>
     </ImageBackground>

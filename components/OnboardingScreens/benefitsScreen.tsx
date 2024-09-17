@@ -1,6 +1,6 @@
 import { router } from 'expo-router';
 import React from 'react';
-import { Text, TouchableOpacity, View } from 'react-native';
+import { StatusBar, Text, TouchableOpacity, View } from 'react-native';
 import { onboardingQuestionsList, styles } from '../../constants/onboarding';
 
 export const BenefitsScreen = ({
@@ -14,6 +14,8 @@ export const BenefitsScreen = ({
 }) => {
   return (
     <View style={styles.container}>
+      <StatusBar barStyle='light-content' />
+
       <Text style={styles.title}>{onboardingQuestionsList[9].title}</Text>
 
       <View

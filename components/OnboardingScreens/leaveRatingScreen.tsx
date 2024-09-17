@@ -1,8 +1,8 @@
-import { useAuth } from "@clerk/clerk-expo";
-import { router } from "expo-router";
-import React, { useEffect } from "react";
-import { Text, TouchableOpacity, View } from "react-native";
-import { onboardingQuestionsList, styles } from "../../constants/onboarding";
+import { images } from '@/constants';
+import { useAuth } from '@clerk/clerk-expo';
+import React from 'react';
+import { Image, StatusBar, Text, TouchableOpacity, View } from 'react-native';
+import { onboardingQuestionsList, styles } from '../../constants/onboarding';
 
 export const LeaveRatingScreen = ({
   navigation,
@@ -23,13 +23,32 @@ export const LeaveRatingScreen = ({
 
   return (
     <View style={styles.container}>
+      <StatusBar barStyle='light-content' />
+
       <Text style={styles.title}>{onboardingQuestionsList[8].title}</Text>
       <Text style={styles.subtitleCaption}>
         {onboardingQuestionsList[8].subtitle}
       </Text>
 
-      <View style={styles.contentContainer}>
-        <View style={{ ...styles.imagePlaceholder, marginVertical: 40 }} />
+      <View
+        style={{
+          ...styles.contentContainer,
+          justifyContent: 'flex-start',
+          marginTop: 32,
+        }}
+      >
+        {/* <View style={{ ...styles.imagePlaceholder, marginVertical: 40 }} /> */}
+        <View
+          className='flex flex-col w-full flex-start items-start justify-start'
+          style={{ paddingHorizontal: 10 }}
+        >
+          <Image
+            source={images.ratingStars}
+            resizeMode='contain'
+            className='w-full border-gray-200 h-20 rounded-lg'
+            style={{ borderWidth: 1 }}
+          />
+        </View>
       </View>
 
       <View style={styles.footerContainer}>

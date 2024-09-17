@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, TouchableOpacity, View } from 'react-native';
+import { StatusBar, Text, TouchableOpacity, View } from 'react-native';
 import { onboardingQuestionsList, styles } from '../../constants/onboarding';
 import OAuth from '../OAuth';
 
@@ -14,6 +14,8 @@ export const AuthScreen = ({
 }) => {
   return (
     <View style={styles.container}>
+      <StatusBar barStyle='light-content' />
+
       <View style={styles.contentContainer}>
         {/* Placeholder for an image */}
         <View style={styles.imagePlaceholder} />

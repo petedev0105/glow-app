@@ -1,6 +1,6 @@
 import { Picker } from '@react-native-picker/picker';
 import React, { useState } from 'react';
-import { Text, TouchableOpacity, View } from 'react-native';
+import { StatusBar, Text, TouchableOpacity, View } from 'react-native';
 import { onboardingQuestionsList, styles } from '../../constants/onboarding';
 
 export const AgeScreen = ({
@@ -20,6 +20,8 @@ export const AgeScreen = ({
 
   return (
     <View style={styles.container}>
+      <StatusBar barStyle='light-content' />
+
       <Text style={styles.title}>{onboardingQuestionsList[3].title}</Text>
       <Text style={styles.subtitleCaption}>
         {onboardingQuestionsList[3].subtitle}

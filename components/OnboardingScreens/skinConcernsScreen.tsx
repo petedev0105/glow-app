@@ -1,7 +1,7 @@
 import { Ionicons } from "@expo/vector-icons"; // For adding icons if needed
 import * as Haptics from "expo-haptics";
 import React, { useState } from "react";
-import { Text, TouchableOpacity, View } from "react-native";
+import { StatusBar, Text, TouchableOpacity, View } from 'react-native';
 import { onboardingQuestionsList, styles } from "../../constants/onboarding";
 
 export const SkinConcernsScreen = ({
@@ -24,6 +24,8 @@ export const SkinConcernsScreen = ({
 
   return (
     <View style={styles.container}>
+      <StatusBar barStyle='light-content' />
+
       <Text style={styles.title}>{onboardingQuestionsList[5].title}</Text>
       <Text style={styles.subtitleCaption}>
         {onboardingQuestionsList[5].subtitle}
@@ -33,7 +35,7 @@ export const SkinConcernsScreen = ({
         style={{
           ...styles.contentContainer,
           marginTop: 40,
-          justifyContent: "flex-start",
+          justifyContent: 'flex-start',
         }}
       >
         {onboardingQuestionsList[5].options?.map((goal, index) => (
@@ -47,31 +49,31 @@ export const SkinConcernsScreen = ({
           >
             <View
               style={{
-                flexDirection: "row",
-                alignItems: "center",
-                justifyContent: "center",
+                flexDirection: 'row',
+                alignItems: 'center',
+                justifyContent: 'center',
               }}
             >
               <Ionicons
                 name={
-                  goal === "Acne"
-                    ? "medical-outline"
-                    : goal === "Wrinkles"
-                      ? "water-outline"
-                      : goal === "Dark Spots"
-                        ? "contrast-outline"
-                        : goal === "Oiliness"
-                          ? "water-outline"
-                          : "help-circle-outline"
+                  goal === 'Acne'
+                    ? 'medical-outline'
+                    : goal === 'Wrinkles'
+                      ? 'water-outline'
+                      : goal === 'Dark Spots'
+                        ? 'contrast-outline'
+                        : goal === 'Oiliness'
+                          ? 'water-outline'
+                          : 'help-circle-outline'
                 }
                 size={24}
-                color={selectedGoals.includes(goal) ? "#8A2BE2" : "black"}
+                color={selectedGoals.includes(goal) ? '#8A2BE2' : 'black'}
               />
               <View
                 style={{
                   marginLeft: 12,
-                  alignItems: "center",
-                  flexDirection: "column",
+                  alignItems: 'center',
+                  flexDirection: 'column',
                 }}
               >
                 <Text

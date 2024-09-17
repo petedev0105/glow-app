@@ -1,9 +1,9 @@
 import * as Haptics from 'expo-haptics';
-import { router } from 'expo-router';
 import React, { useState } from 'react';
 import {
   KeyboardAvoidingView,
   Platform,
+  StatusBar,
   Text,
   TextInput,
   TouchableOpacity,
@@ -24,6 +24,8 @@ export const ReferralScreen = ({
 
   return (
     <View style={styles.container}>
+      <StatusBar barStyle='light-content' />
+
       <Text style={styles.title}>{onboardingQuestionsList[1].title}</Text>
 
       <KeyboardAvoidingView
@@ -58,12 +60,7 @@ export const ReferralScreen = ({
       </KeyboardAvoidingView>
 
       <View style={styles.footerContainer}>
-        <TouchableOpacity
-          style={styles.button}
-          onPress={() => {
-            router.push('/(home)');
-          }}
-        >
+        <TouchableOpacity style={styles.button} onPress={onNext}>
           <Text style={styles.buttonText}>Continue</Text>
         </TouchableOpacity>
       </View>

@@ -1,6 +1,6 @@
 import * as Haptics from "expo-haptics";
 import React, { useState } from "react";
-import { Text, TouchableOpacity, View } from "react-native";
+import { StatusBar, Text, TouchableOpacity, View } from 'react-native';
 import { onboardingQuestionsList, styles } from "../../constants/onboarding";
 
 export const ProductPreferencesScreen = ({
@@ -25,6 +25,8 @@ export const ProductPreferencesScreen = ({
 
   return (
     <View style={styles.container}>
+      <StatusBar barStyle='light-content' />
+
       <Text style={styles.title}>{onboardingQuestionsList[6].title}</Text>
       <Text style={styles.subtitleCaption}>
         {onboardingQuestionsList[6].subtitle}
@@ -34,7 +36,7 @@ export const ProductPreferencesScreen = ({
         style={{
           ...styles.contentContainer,
           marginTop: 40,
-          justifyContent: "flex-start",
+          justifyContent: 'flex-start',
         }}
       >
         {/* Map through options in pairs */}
@@ -44,8 +46,8 @@ export const ProductPreferencesScreen = ({
               <View
                 key={index}
                 style={{
-                  flexDirection: "row",
-                  justifyContent: "space-between",
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
                   gap: 20,
                   marginBottom: 15,
                 }}
@@ -54,17 +56,17 @@ export const ProductPreferencesScreen = ({
                 <TouchableOpacity
                   onPress={() =>
                     toggleGoal(
-                      onboardingQuestionsList[6].options?.[index] || ""
+                      onboardingQuestionsList[6].options?.[index] || ''
                     )
                   }
                   style={[
                     styles.optionCard,
                     selectedGoals.includes(
-                      onboardingQuestionsList[6].options?.[index] || ""
+                      onboardingQuestionsList[6].options?.[index] || ''
                     ) && styles.optionCardSelected,
-                    { width: "48%" },
-                    { alignItems: "center" },
-                    { justifyContent: "center" },
+                    { width: '48%' },
+                    { alignItems: 'center' },
+                    { justifyContent: 'center' },
                     { paddingVertical: 20 },
                     { paddingRight: 20 },
                   ]}
@@ -72,27 +74,27 @@ export const ProductPreferencesScreen = ({
                   {/* Column layout for emoji and text */}
                   <View
                     style={{
-                      flexDirection: "column",
-                      alignItems: "center",
-                      justifyContent: "center",
+                      flexDirection: 'column',
+                      alignItems: 'center',
+                      justifyContent: 'center',
                     }}
                   >
                     <Text style={{ fontSize: 40 }}>
                       {index === 0
-                        ? "🌿"
+                        ? '🌿'
                         : index === 2
-                          ? "🚫"
+                          ? '🚫'
                           : index === 4
-                            ? "♻️"
-                            : "💧"}
+                            ? '♻️'
+                            : '💧'}
                     </Text>
                     <Text
                       style={[
                         styles.optionTitle,
                         selectedGoals.includes(
-                          onboardingQuestionsList[6].options?.[index] || ""
+                          onboardingQuestionsList[6].options?.[index] || ''
                         ) && styles.optionTitleSelected,
-                        { textAlign: "center", marginTop: 10 },
+                        { textAlign: 'center', marginTop: 10 },
                       ]}
                     >
                       {onboardingQuestionsList[6].options?.[index]}
@@ -105,39 +107,39 @@ export const ProductPreferencesScreen = ({
                   <TouchableOpacity
                     onPress={() =>
                       toggleGoal(
-                        onboardingQuestionsList[6].options?.[index + 1] || ""
+                        onboardingQuestionsList[6].options?.[index + 1] || ''
                       )
                     }
                     style={[
                       styles.optionCard,
                       selectedGoals.includes(
-                        onboardingQuestionsList[6].options?.[index + 1] || ""
+                        onboardingQuestionsList[6].options?.[index + 1] || ''
                       ) && styles.optionCardSelected,
-                      { width: "48%" },
-                      { alignItems: "center" },
-                      { justifyContent: "center" },
+                      { width: '48%' },
+                      { alignItems: 'center' },
+                      { justifyContent: 'center' },
                       { paddingVertical: 20 },
                       { paddingRight: 20 },
                     ]}
                   >
                     <View
                       style={{
-                        flexDirection: "column",
-                        alignItems: "center",
-                        justifyContent: "center",
+                        flexDirection: 'column',
+                        alignItems: 'center',
+                        justifyContent: 'center',
                       }}
                     >
                       <Text style={{ fontSize: 40 }}>
-                        {index + 1 === 1 ? "🧼" : index + 1 === 3 ? "🧴" : "💧"}
+                        {index + 1 === 1 ? '🧼' : index + 1 === 3 ? '🧴' : '💧'}
                       </Text>
                       <Text
                         style={[
                           styles.optionTitle,
                           selectedGoals.includes(
                             onboardingQuestionsList[6].options?.[index + 1] ||
-                              ""
+                              ''
                           ) && styles.optionTitleSelected,
-                          { textAlign: "center", marginTop: 10 },
+                          { textAlign: 'center', marginTop: 10 },
                         ]}
                       >
                         {onboardingQuestionsList[6].options?.[index + 1]}
