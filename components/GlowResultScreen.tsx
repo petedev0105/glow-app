@@ -3,6 +3,7 @@ import { styles } from '@/constants/onboarding';
 import { useRecommendationsStore } from '@/store/glowRecommendationsStore';
 import { useGlowResultStore } from '@/store/glowResultStore';
 import { useImageStore } from '@/store/imageStore';
+import { useUser } from '@clerk/clerk-expo';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { router } from 'expo-router';
@@ -35,6 +36,7 @@ const GlowResultScreen = () => {
   const storeImages = useImageStore((state) => state.images);
   const [unlockBtnAnimatedValue] = useState(new Animated.Value(0));
   const [openAccordion, setOpenAccordion] = useState<number | null>(null);
+  const { user } = useUser();
 
   const { recommendations } = useRecommendationsStore();
 
@@ -63,7 +65,7 @@ const GlowResultScreen = () => {
     const message = `
 ✨ Check out my personalized Glow Profile! ✨
 
-🌟 *Ratings* 🌟
+🌟 *${user && `${user.firstName}'s `}Ratings* 🌟
 -------------------------
 💖 *Potential*: ${scores.potential.toFixed(1)}
 ✨ *Overall*: ${scores.overall.toFixed(1)}
