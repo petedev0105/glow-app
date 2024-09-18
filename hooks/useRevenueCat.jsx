@@ -12,6 +12,7 @@ export function useRevenueCat() {
   const [priceString, setPriceString] = useState("");
   const [revenueCatOfferings, setRevenueCatOfferings] = useState(null);
   const [error, setError] = useState(null);
+  const [customerInfo, setCustomerInfo] = useState(null);
   const router = useRouter();
 
   useEffect(() => {
@@ -21,9 +22,13 @@ export function useRevenueCat() {
         await Purchases.configure({ apiKey: API_KEYS[Platform.OS] });
         console.log("RevenueCat configured successfully");
 
-        // Check if user is already subscribed
-        const customerInfo = await Purchases.getCustomerInfo();
-        if (customerInfo.entitlements.active["glowProWeekly"]) {
+        // Fetch and set customer info
+        const info = await Purchases.getCustomerInfo();
+        setCustomerInfo(info);
+        console.log("Customer info:", JSON.stringify(info, null, 2));
+
+        const isSubscribed = info.entitlements.active["glowProWeekly"];
+        if (isSubscribed) {
           console.log("User is already subscribed. Navigating to home.");
           router.push("/home");
           return;
@@ -74,13 +79,14 @@ export function useRevenueCat() {
       );
       console.log("Purchase result:", JSON.stringify(purchaseResult, null, 2));
 
-      const customerInfo = await Purchases.getCustomerInfo();
+      const updatedCustomerInfo = await Purchases.getCustomerInfo();
+      setCustomerInfo(updatedCustomerInfo);
       console.log(
         "Updated customer info:",
-        JSON.stringify(customerInfo, null, 2)
+        JSON.stringify(updatedCustomerInfo, null, 2)
       );
 
-      if (customerInfo.entitlements.active["glowProWeekly"]) {
+      if (updatedCustomerInfo.entitlements.active["glowProWeekly"]) {
         console.log("Weekly entitlement is now active");
         router.push("/home");
       } else {
@@ -107,5 +113,6 @@ export function useRevenueCat() {
     revenueCatOfferings,
     error,
     handleWeeklyPurchase,
+    customerInfo,
   };
 }

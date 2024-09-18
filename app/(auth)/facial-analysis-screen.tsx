@@ -19,6 +19,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+import { LinearGradient } from "expo-linear-gradient";
 
 const FacialAnalysisScreen = () => {
   const [image, setImage] = useState<string | null>(null);
@@ -203,16 +204,12 @@ const FacialAnalysisScreen = () => {
             )}
             {image ? (
               <TouchableOpacity
-                style={styles.button}
-                // onPress={() => {
-                //   /* Add navigation logic here */
-                //   // console.log("continue button pressed");
-                //   // router.push("/(auth)/results-screen");
-
-                // }}
+                style={[styles.button, { marginBottom: 10 }]}
                 onPress={handleGetScore}
               >
-                <Text style={styles.buttonText}>Continue</Text>
+                <Text style={[styles.buttonText, { color: "#333" }]}>
+                  Start Facial Analysis 🧐
+                </Text>
               </TouchableOpacity>
             ) : (
               <TouchableOpacity

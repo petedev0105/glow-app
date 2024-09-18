@@ -1,7 +1,8 @@
 import { useAuth, useUser } from "@clerk/clerk-expo";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { useEffect, useLayoutEffect, useState } from "react";
-import { Image, View } from "react-native"; // {{ edit_1 }}
+import { Image, View, ActivityIndicator } from "react-native"; // {{ edit_1 }}
+import { useRevenueCat } from "@/hooks/useRevenueCat";
 
 const Page = () => {
   const { isSignedIn } = useAuth();
@@ -13,74 +14,83 @@ const Page = () => {
   const [mounted, setMounted] = useState(false); // {{ edit_1 }}
   const router = useRouter();
 
+  const {
+    priceString,
+    revenueCatOfferings,
+    error,
+    handleWeeklyPurchase,
+    customerInfo,
+  } = useRevenueCat();
+
   useLayoutEffect(() => {
     setMounted(true);
   }, []);
 
   useEffect(() => {
     if (mounted) {
-      // if (!userId) {
-      //   // router.replace("/(auth)/welcome");
-      //   console.log("app/index: User ID not found!");
-      //   router.replace("/(auth)/start");
-      // } else {
-      //   console.log(user.id);
-      //   // fetchPaidStatus(userId);
-      // }
+      if (isSignedIn) {
+        if (customerInfo) {
+          console.log(
+            "purchases from index: ",
+            JSON.stringify(customerInfo, null, 2)
+          );
 
-      if (!userId) {
-        router.replace("/(auth)/start");
+          if (customerInfo.activeSubscriptions.length > 0) {
+            router.replace("/(root)/(tabs)/home");
+          } else {
+            router.replace("/(auth)/welcome");
+          }
+        }
+        if (error) {
+          console.error("RevenueCat Error:", error);
+          router.replace("/(auth)/welcome");
+        }
       } else {
-        router.replace("/(auth)/welcome");
+        router.replace("/(auth)/sign-in");
       }
     }
-    // router.replace("/(auth)/welcome");
-  }, [userId, mounted]); // Ensure it runs when userId or mounted changes
+  }, [customerInfo, error, isSignedIn]);
 
-  async function fetchPaidStatus(userId) {
-    setLoading(true); // {{ edit_2 }}
-    console.log("currently in index file...");
+  // useEffect(() => {
+  //   if (mounted) {
+  //     // if (!userId) {
+  //     //   // router.replace("/(auth)/welcome");
+  //     //   console.log("app/index: User ID not found!");
+  //     //   router.replace("/(auth)/start");
+  //     // } else {
+  //     //   console.log(user.id);
+  //     //   // fetchPaidStatus(userId);
+  //     // }
 
-    // router.replace("/(auth)/welcome");
+  //     // if (revenueCatOfferings) {
+  //     //   console.log("revenuecat log from index file: ", revenueCatOfferings);
+  //     // }
 
-    // setLoading(false);
-    try {
-      // const response = await fetch(`/(api)/get-user-package/${userId}`, {
-      //   method: "GET",
-      //   headers: {
-      //     "Content-Type": "application/json",
-      //   },
-      // });
-      // if (!response.ok) {
-      //   throw new Error(`Error: ${response.statusText}`);
-      // }
-      // const data = await response.json();
-      // console.log("Paid Status:", data.paidStatus);
-      // const paidStatus = data.paidStatus;
-      // if (paidStatus && !showOnboarding) {
-      //   router.replace("/(root)/(tabs)/home");
-      // } else if (!showOnboarding) {
-      //   router.replace("/(auth)/welcome");
-      // } else {
-      // }
-      // if (!showOnboarding) {
-      //   router.replace("/(root)/(tabs)/home");
-      // } else if (!showOnboarding) {
-      //   router.replace("/(auth)/welcome");
-      // } else {
-      // }
-    } catch (error) {
-      setLoading(false);
-      // console.error("Failed to fetch paid status:", error);
-      router.replace("/(auth)/welcome");
-    } finally {
-      setLoading(false); // {{ edit_3 }}
-      router.replace("/(auth)/welcome");
-    }
-  } // Ensure userId is defined
+  //     if (!userId) {
+  //       router.replace("/(auth)/sign-in");
+  //     } else {
+  //       router.replace("/(auth)/welcome");
+  //     }
+  //   }
+  //   // router.replace("/(auth)/welcome");
+  // }, [userId, mounted]); // Ensure it runs when userId or mounted changes
 
   if (loading) {
     return (
+      // <View
+      //   style={{
+      //     flex: 1,
+      //     backgroundColor: "white",
+      //     justifyContent: "center",
+      //     alignItems: "center",
+      //   }}
+      // >
+      //   <Image
+      //     source={require("../assets/images/splash.png")}
+      //     style={{ width: "100%", height: "100%", resizeMode: "cover" }}
+      //   />
+      // </View>
+
       <View
         style={{
           flex: 1,
@@ -89,31 +99,10 @@ const Page = () => {
           alignItems: "center",
         }}
       >
-        <Image
-          source={require("../assets/images/splash.png")}
-          style={{ width: 100, height: 100 }}
-        ></Image>
+        <ActivityIndicator size="large" color="purple" />
       </View>
     );
   }
-
-  // return (
-  //   <View
-  //     style={{
-  //       flex: 1,
-  //       backgroundColor: "black",
-  //       justifyContent: "center",
-  //       alignItems: "center",
-  //     }}
-  //   >
-  //     <TouchableOpacity
-  //       className="w-full p-5 border pt-12 rounded-full"
-  //       onPress={() => router.replace("/(auth)/welcome")}
-  //     >
-  //       <Text className="text-white">Welcome</Text>
-  //     </TouchableOpacity>
-  //   </View>
-  // );
 };
 
 export default Page;
