@@ -1,6 +1,5 @@
 import { fetchAPI } from "@/lib/fetch";
-import { useRecommendationsStore } from "@/store/glowRecommendationsStore";
-import { useGlowResultStore } from "@/store/glowResultStore";
+import { useScanResultsStore } from "@/store/scanResultsStore";
 import { useImageStore } from "@/store/imageStore";
 import { useUser } from "@clerk/clerk-expo";
 import { useRouter } from "expo-router";
@@ -19,19 +18,17 @@ import {
 const { width, height } = Dimensions.get("window");
 
 const ResultsScreen = () => {
-  const { user } = useUser(); // Get the user outside the async function
-  const images = useImageStore((state) => state.images); // Get the images outside the async function
-  const imageUri = images[0]; // Assuming the first image is what you want to send
+  const { user } = useUser();
+  const images = useImageStore((state) => state.images);
+  const imageUri = images[0];
 
-  // TODO ACTUALLY CHECK IF THE USER HAS PAYED AND REROUTES TO RESULTS AUTOMATICALLY
   const payedUser = true;
 
   const [loadingProgress, setLoadingProgress] = useState(0);
   const [loading, setLoading] = useState(true);
-  const { glowResult, setGlowResult } = useGlowResultStore();
+  const { scanResults, setScanResults } = useScanResultsStore();
   const [message, setMessage] = useState("Analyzing your features...");
   const [intervalDuration, setIntervalDuration] = useState(80);
-  const { setRecommendations } = useRecommendationsStore();
 
   const [apiCallsStarted, setApiCallsStarted] = useState<boolean>(false);
   const [apiCallsComplete, setApiCallsComplete] = useState<boolean>(false);
@@ -110,18 +107,6 @@ const ResultsScreen = () => {
         setLoadingProgress((prev) => {
           const newProgress = prev + 1;
 
-          // Adjust interval duration based on progress
-          // if (newProgress === 10) {
-          //   clearInterval(progressInterval);
-          //   setIntervalDuration(100);
-          // } else if (newProgress === 20) {
-          //   clearInterval(progressInterval);
-          //   setIntervalDuration(75);
-          // } else if (newProgress === 30) {
-          //   clearInterval(progressInterval);
-          //   setIntervalDuration(50);
-          // }
-
           if (newProgress % 25 === 0) {
             const messageIndex = Math.floor(newProgress / 25);
             fadeOut(() => {
@@ -154,12 +139,10 @@ const ResultsScreen = () => {
         return;
       }
 
-      setLoading(true); // Start loading state
+      setLoading(true);
       setApiCallsStarted(true);
 
       try {
-        // Fetch glow score first
-        // const glowScoreResponse = await fetchAPI('/(api)/(openai)/glowscore', {
         const glowScoreResponse = await fetchAPI(
           "https://wandering-sun-9736.kiettran255.workers.dev/api/glow-score",
           {
@@ -169,15 +152,13 @@ const ResultsScreen = () => {
         );
 
         console.log("Glow Score Response:", glowScoreResponse);
-        setGlowResult(glowScoreResponse); // Set glow result
 
         const stringResponse = JSON.stringify(glowScoreResponse);
 
-        // Fetch recommendations based on the glow score
         try {
           console.log("running recommendations API...");
           const recommendationsResponse = await fetchAPI(
-            "/(api)/(openai)/glowrecommendations",
+            "https://wandering-sun-9736.kiettran255.workers.dev/api/glow-recommendations",
             {
               method: "POST",
               body: JSON.stringify({ stringResponse }),
@@ -185,19 +166,27 @@ const ResultsScreen = () => {
           );
 
           console.log("Recommendations Response:", recommendationsResponse);
-          setRecommendations(recommendationsResponse); // Set recommendations
+
+          const scanResults = {
+            glowScore: glowScoreResponse,
+            recommendations: recommendationsResponse,
+          };
+
+          console.log("Combined Scan Results:", scanResults);
+          setScanResults(scanResults);
+
           setApiCallsComplete(true);
+
+          // router.replace("/glow-results-screen");
+          // router.replace("/unlock-results-screen");
         } catch (recommendationError) {
           console.error("Error fetching recommendations:", recommendationError);
         }
-
-        // API Calls are complete, just take us to the next screen
-        // setApiCallsDone(true);
       } catch (error) {
         console.error("Error fetching glow results:", error);
         Alert.alert("Error", "Could not fetch glow results.");
       } finally {
-        setLoading(false); // Stop loading state
+        setLoading(false);
       }
     };
 
@@ -205,21 +194,27 @@ const ResultsScreen = () => {
       console.log("Effect triggered:", { loadingProgress });
     }
 
-    // If loading progress is
     if (loadingProgress >= 1 && imageUri && !apiCallsStarted) {
       fetchGlowResults({ prompt: "", imageUri });
     }
-  }, [loadingProgress, imageUri, setRecommendations]);
+  }, [loadingProgress, imageUri, setScanResults]);
 
+  // useEffect(() => {
+  //   if (apiCallsComplete && loadingProgress >= 100) {
+  //     console.log("Navigating to unlock-results-screen");
+  //     console.log("User has Payed.");
+  //     if (!payedUser) {
+  //       router.replace("/unlock-results-screen");
+  //     } else {
+  //       router.replace("/glow-results-screen");
+  //     }
+  //   }
+  // }, [apiCallsComplete, loadingProgress]);
+
+  // test unlock results screen
   useEffect(() => {
     if (apiCallsComplete && loadingProgress >= 100) {
-      console.log("Navigating to unlock-results-screen");
-      console.log("User has Payed.");
-      if (!payedUser) {
-        router.replace("/unlock-results-screen");
-      } else {
-        router.replace("/glow-results-screen");
-      }
+      router.replace("/unlock-results-screen");
     }
   }, [apiCallsComplete, loadingProgress]);
 
@@ -228,7 +223,6 @@ const ResultsScreen = () => {
       source={require("@/assets/images/glow-eclipse.png")}
       style={resultStyles.background}
     >
-      {/* Ripple effect */}
       <Animated.View
         style={[
           resultStyles.ripple,
@@ -240,9 +234,6 @@ const ResultsScreen = () => {
       />
       <View style={resultStyles.container}>
         <View style={resultStyles.contentContainer}>
-          {/* <Animated.Text style={[resultStyles.percentage, { opacity: fadeAnim }]}>
-          {loadingProgress}%
-        </Animated.Text> */}
           <Text style={resultStyles.percentage}>{loadingProgress}%</Text>
           <Animated.Text
             style={[resultStyles.caption, { opacity: fadeAnim }]}
@@ -253,46 +244,6 @@ const ResultsScreen = () => {
               : message}
           </Animated.Text>
         </View>
-        {/* {!loading ? (
-        <View style={resultStyles.contentContainer}>
-          <Text style={resultStyles.percentage}>{loadingProgress}%</Text>
-          <Text style={resultStyles.caption} className='tracking-tight'>
-            Analyzing your features...
-          </Text>
-        </View>
-      ) : (
-        <View style={resultStyles.contentContainer}>
-          <Text style={resultStyles.title}>Glow Analysis Results</Text>
-          {glowResult ? (
-            <View>
-              <Text style={resultStyles.subtitleCaption}>Glow Score:</Text>
-              <Text style={resultStyles.subtitleCaption}>Insights:</Text>
-            </View>
-          ) : (
-            <View>
-              <Text style={resultStyles.subtitleCaption}>
-                Could not retrieve glow results. Please try again.
-              </Text>
-            </View>
-          )}
-        </View>
-      )} */}
-        {/* {glowResult ? (
-          <View>
-            <Text style={resultStyles.subtitleCaption}>
-              {JSON.stringify(glowResult)}
-            </Text>
-            <Text style={resultStyles.subtitleCaption}>Glow Score:</Text>
-            <Text style={resultStyles.subtitleCaption}>Insights:</Text>
-          </View>
-        ) : // (
-        //   <View>
-        //     <Text style={resultStyles.subtitleCaption}>
-        //       Could not retrieve glow results. Please try again.
-        //     </Text>
-        //   </View>
-        // )}
-        null} */}
       </View>
     </ImageBackground>
   );
@@ -308,8 +259,6 @@ const resultStyles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    // backgroundColor: '#FFFFFF',
-    // backgroundColor: 'black',
   },
   contentContainer: {
     alignItems: "center",
@@ -328,24 +277,13 @@ const resultStyles = StyleSheet.create({
     color: "white",
     textAlign: "center",
   },
-  title: {
-    fontSize: 30,
-    color: "white",
-    fontWeight: "bold",
-    marginBottom: 20,
-  },
-  subtitleCaption: {
-    fontSize: 16,
-    color: "white",
-    marginTop: 10,
-  },
   ripple: {
     position: "absolute",
     width: 100,
     height: 100,
     borderRadius: 50,
     backgroundColor: "rgba(255, 255, 255, 0.3)",
-    top: height / 2 - 50, // Center the ripple
+    top: height / 2 - 50,
     left: width / 2 - 50,
   },
 });

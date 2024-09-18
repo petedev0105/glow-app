@@ -49,12 +49,15 @@
     "extra": {
       "router": {
         "origin": "https://glowapp.com/"
+      },
+      "eas": {
+        "projectId": "025adeb7-3799-4a9e-bb20-1cd6c7963da0"
       }
     },
     "owner": "supitspete",
     "runtimeVersion": "1.0.5",
     "updates": {
-      "url": "https://u.expo.dev/08ef2857-8897-4721-a044-c53d2a95ddf5"
+      "url": "https://u.expo.dev/025adeb7-3799-4a9e-bb20-1cd6c7963da0"
     }
   }
 }

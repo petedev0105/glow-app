@@ -19,13 +19,19 @@ const Page = () => {
 
   useEffect(() => {
     if (mounted) {
+      // if (!userId) {
+      //   // router.replace("/(auth)/welcome");
+      //   console.log("app/index: User ID not found!");
+      //   router.replace("/(auth)/start");
+      // } else {
+      //   console.log(user.id);
+      //   // fetchPaidStatus(userId);
+      // }
+
       if (!userId) {
-        // router.replace("/(auth)/welcome");
-        console.log('app/index: User ID not found!')
         router.replace("/(auth)/start");
       } else {
-        console.log(user.id);
-        fetchPaidStatus(userId);
+        router.replace("/(auth)/welcome");
       }
     }
     // router.replace("/(auth)/welcome");
@@ -39,26 +45,30 @@ const Page = () => {
 
     // setLoading(false);
     try {
-      const response = await fetch(`/(api)/get-user-package/${userId}`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-
-      if (!response.ok) {
-        throw new Error(`Error: ${response.statusText}`);
-      }
-
-      const data = await response.json();
-      console.log("Paid Status:", data.paidStatus);
-      const paidStatus = data.paidStatus;
-      if (paidStatus && !showOnboarding) {
-        router.replace("/(root)/(tabs)/home");
-      } else if (!showOnboarding) {
-        router.replace("/(auth)/welcome");
-      } else {
-      }
+      // const response = await fetch(`/(api)/get-user-package/${userId}`, {
+      //   method: "GET",
+      //   headers: {
+      //     "Content-Type": "application/json",
+      //   },
+      // });
+      // if (!response.ok) {
+      //   throw new Error(`Error: ${response.statusText}`);
+      // }
+      // const data = await response.json();
+      // console.log("Paid Status:", data.paidStatus);
+      // const paidStatus = data.paidStatus;
+      // if (paidStatus && !showOnboarding) {
+      //   router.replace("/(root)/(tabs)/home");
+      // } else if (!showOnboarding) {
+      //   router.replace("/(auth)/welcome");
+      // } else {
+      // }
+      // if (!showOnboarding) {
+      //   router.replace("/(root)/(tabs)/home");
+      // } else if (!showOnboarding) {
+      //   router.replace("/(auth)/welcome");
+      // } else {
+      // }
     } catch (error) {
       setLoading(false);
       // console.error("Failed to fetch paid status:", error);

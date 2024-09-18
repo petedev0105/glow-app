@@ -1,13 +1,13 @@
-import { images } from '@/constants';
-import { styles } from '@/constants/onboarding';
-import { useRecommendationsStore } from '@/store/glowRecommendationsStore';
-import { useGlowResultStore } from '@/store/glowResultStore';
-import { useImageStore } from '@/store/imageStore';
-import { useUser } from '@clerk/clerk-expo';
-import { Ionicons } from '@expo/vector-icons';
-import { LinearGradient } from 'expo-linear-gradient';
-import { router } from 'expo-router';
-import React, { useEffect, useState } from 'react';
+import { images } from "@/constants";
+import { styles } from "@/constants/onboarding";
+import { useRecommendationsStore } from "@/store/glowRecommendationsStore";
+import { useGlowResultStore } from "@/store/glowResultStore";
+import { useImageStore } from "@/store/imageStore";
+import { useUser } from "@clerk/clerk-expo";
+import { Ionicons } from "@expo/vector-icons";
+import { LinearGradient } from "expo-linear-gradient";
+import { router } from "expo-router";
+import React, { useEffect, useState } from "react";
 import {
   Alert,
   Animated,
@@ -24,29 +24,26 @@ import {
   Text,
   TouchableOpacity,
   View,
-} from 'react-native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
+} from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { useScanResultsStore } from "@/store/scanResultsStore";
 
 const AnimatedLinearGradient = Animated.createAnimatedComponent(LinearGradient);
 
 const GlowResultScreen = () => {
-  const { glowResult } = useGlowResultStore();
-  const [activeTab, setActiveTab] = useState('Ratings');
+  const [activeTab, setActiveTab] = useState("Ratings");
   const insets = useSafeAreaInsets();
   const storeImages = useImageStore((state) => state.images);
   const [unlockBtnAnimatedValue] = useState(new Animated.Value(0));
   const [openAccordion, setOpenAccordion] = useState<number | null>(null);
   const { user } = useUser();
 
-  const { recommendations } = useRecommendationsStore();
+  const { glowScore, recommendations } =
+    useScanResultsStore((state) => state.scanResults) || {};
+  const { scores, percentile, facialCharacteristics, skinAnalysis } =
+    glowScore || {};
 
-  useEffect(() => {
-    if (recommendations) {
-      console.log('recommendations from results screen: ', recommendations);
-    }
-  }, []);
-
-  if (!glowResult) {
+  if (!glowScore && !recommendations) {
     return (
       <View style={localStyles.container}>
         <Text>No glow result available</Text>
@@ -55,27 +52,25 @@ const GlowResultScreen = () => {
   }
 
   const onShare = async () => {
-    if (!glowResult) {
-      Alert.alert('No data available to share');
+    if (!glowScore) {
+      Alert.alert("No data available to share");
       return;
     }
-
-    const { scores } = glowResult as any;
 
     const message = `
 ✨ Check out my personalized Glow Profile! ✨
 
-🌟 *${user && `${user.firstName}'s `}Ratings* 🌟
+🌟 *${user?.firstName ? `${user.firstName}'s ` : ""}Ratings* 🌟
 -------------------------
-💖 *Potential*: ${scores.potential.toFixed(1)}
-✨ *Overall*: ${scores.overall.toFixed(1)}
-🧴 *Skin Health*: ${scores.skinHealth.toFixed(1)}
-⭐️ *Glow Factor*: ${scores.glowFactor.toFixed(1)}
-🎨 *Feature Harmony*: ${scores.featureHarmony.toFixed(1)}
-💋 *Authenticity*: ${scores.authenticity.toFixed(1)}
+💖 *Potential*: ${scores?.potential?.toFixed(1) ?? "N/A"}
+✨ *Overall*: ${scores?.overall?.toFixed(1) ?? "N/A"}
+🧴 *Skin Health*: ${scores?.skinHealth?.toFixed(1) ?? "N/A"}
+⭐️ *Glow Factor*: ${scores?.glowFactor?.toFixed(1) ?? "N/A"}
+🎨 *Feature Harmony*: ${scores?.featureHarmony?.toFixed(1) ?? "N/A"}
+💋 *Authenticity*: ${scores?.authenticity?.toFixed(1) ?? "N/A"}
 -------------------------
 
-I’m glowing! 🌟 #GlowProfile 💗
+I'm glowing! 🌟 #GlowProfile 💗
 `;
 
     try {
@@ -96,9 +91,6 @@ I’m glowing! 🌟 #GlowProfile 💗
     }
   };
 
-  const { scores, percentile, facialCharacteristics, skinAnalysis } =
-    glowResult as any;
-
   const ScoreCard = ({
     title,
     score,
@@ -111,7 +103,7 @@ I’m glowing! 🌟 #GlowProfile 💗
     potential ? (
       // apply golden gradient as a border, keep card size the same
       <LinearGradient
-        colors={['#d0980c', '#fde14a', '#f8efa3', '#fde14a', '#d0980c']}
+        colors={["#d0980c", "#fde14a", "#f8efa3", "#fde14a", "#d0980c"]}
         locations={[0, 0.25, 0.5, 0.75, 1]}
         start={{ x: 0, y: 1 }}
         end={{ x: 1, y: 1 }}
@@ -125,7 +117,7 @@ I’m glowing! 🌟 #GlowProfile 💗
           </View>
           <View style={localStyles.progressBar}>
             <LinearGradient
-              colors={['#d0980c', '#eace39', '#f0d91d', '#eace39', '#d0980c']}
+              colors={["#d0980c", "#eace39", "#f0d91d", "#eace39", "#d0980c"]}
               locations={[0, 0.25, 0.5, 0.75, 1]}
               start={{ x: 0, y: 0 }}
               end={{ x: 1, y: 0 }}
@@ -146,7 +138,7 @@ I’m glowing! 🌟 #GlowProfile 💗
         </View>
         <View style={localStyles.progressBar}>
           <LinearGradient
-            colors={['#da70d6', '#7b68ee', '#87cefa']} // Original gradient for progress fill
+            colors={["#da70d6", "#7b68ee", "#87cefa"]} // Original gradient for progress fill
             start={{ x: 0, y: 0 }}
             end={{ x: 1, y: 0 }}
             style={[
@@ -165,7 +157,7 @@ I’m glowing! 🌟 #GlowProfile 💗
     title: string;
     value: string;
   }) => (
-    <View style={localStyles.characteristicItem} className='shadow-md'>
+    <View style={localStyles.characteristicItem} className="shadow-md">
       <Text style={localStyles.characteristicTitle}>{title}:</Text>
       <Text style={localStyles.characteristicValue}>{value}</Text>
     </View>
@@ -203,15 +195,21 @@ I’m glowing! 🌟 #GlowProfile 💗
           style={localStyles.accordionHeader}
           onPress={onToggle}
         >
-          <View>
-            <Text style={localStyles.accordionStepTitle}>Step {index + 1}</Text>
-            <View style={localStyles.accordionDivider} />
+          <View style={{ flex: 1, flexDirection: "row", alignItems: "center" }}>
+            <Text
+              style={[
+                localStyles.accordionStepTitle,
+                { color: "black", textAlign: "center", marginRight: 10 },
+              ]}
+            >
+              {index + 1}
+            </Text>
             <Text style={localStyles.accordionTitle}>{title}</Text>
           </View>
           <Ionicons
-            name={isOpen ? 'chevron-up' : 'chevron-down'}
+            name={isOpen ? "chevron-up" : "chevron-down"}
             size={24}
-            color='#000'
+            color="#000"
           />
         </TouchableOpacity>
         {isOpen && <View style={localStyles.accordionContent}>{children}</View>}
@@ -225,83 +223,98 @@ I’m glowing! 🌟 #GlowProfile 💗
 
   const renderTabContent = () => {
     switch (activeTab) {
-      case 'Ratings':
+      case "Ratings":
         return (
           <View style={localStyles.scoresContainer}>
             <View style={localStyles.scoreRow}>
-              <ScoreCard title='Potential' score={scores.potential} potential />
-              <ScoreCard title='Overall' score={scores.overall} />
+              <ScoreCard
+                title="Potential"
+                score={scores?.potential ?? 0}
+                potential
+              />
+              <ScoreCard title="Overall" score={scores?.overall ?? 0} />
             </View>
             <View style={localStyles.scoreRow}>
-              <ScoreCard title='Skin Health' score={scores.skinHealth} />
-              <ScoreCard title='Glow Factor' score={scores.glowFactor} />
+              <ScoreCard title="Skin Health" score={scores?.skinHealth ?? 0} />
+              <ScoreCard title="Glow Factor" score={scores?.glowFactor ?? 0} />
             </View>
             <View style={localStyles.scoreRow}>
               <ScoreCard
-                title={`Feature${'\n'}Harmony`}
-                score={scores.featureHarmony}
+                title={`Feature${"\n"}Harmony`}
+                score={scores?.featureHarmony ?? 0}
               />
-              <ScoreCard title='Authenticity' score={scores.authenticity} />
-            </View>
-          </View>
-        );
-      case 'Facial Analysis':
-        return (
-          <View style={localStyles.scoresContainer}>
-            <View style={localStyles.scoreRow}>
-              <CharacteristicCard
-                title='Eye Shape 👁️'
-                value={facialCharacteristics.eyeShape}
-              />
-              <CharacteristicCard
-                title='Face Shape 👩'
-                value={facialCharacteristics.faceShape}
-              />
-            </View>
-            <View style={localStyles.scoreRow}>
-              <CharacteristicCard
-                title='Jawline 🧏‍♀️'
-                value={facialCharacteristics.jawline}
-              />
-              <CharacteristicCard
-                title='Lip Shape 💋'
-                value={facialCharacteristics.lipShape}
+              <ScoreCard
+                title="Authenticity"
+                score={scores?.authenticity ?? 0}
               />
             </View>
           </View>
         );
-      case 'Skin Analysis':
+      case "Facial Analysis":
         return (
           <View style={localStyles.scoresContainer}>
             <View style={localStyles.scoreRow}>
               <CharacteristicCard
-                title='Skin Type 👩'
-                value={skinAnalysis.skinType}
+                title="Eye Shape 👁️"
+                value={facialCharacteristics?.eyeShape ?? "N/A"}
               />
               <CharacteristicCard
-                title='Hydration Level 💧'
-                value={skinAnalysis.hydrationLevel}
+                title="Face Shape 👩"
+                value={facialCharacteristics?.faceShape ?? "N/A"}
+              />
+            </View>
+            <View style={localStyles.scoreRow}>
+              <CharacteristicCard
+                title="Jawline 🧏‍♀️"
+                value={facialCharacteristics?.jawline ?? "N/A"}
+              />
+              <CharacteristicCard
+                title="Lip Shape 💋"
+                value={facialCharacteristics?.lipShape ?? "N/A"}
+              />
+            </View>
+          </View>
+        );
+      case "Skin Analysis":
+        return (
+          <View style={localStyles.scoresContainer}>
+            <View style={localStyles.scoreRow}>
+              <CharacteristicCard
+                title="Skin Type 👩"
+                value={skinAnalysis?.skinType ?? "N/A"}
+              />
+              <CharacteristicCard
+                title="Hydration Level 💧"
+                value={skinAnalysis?.hydrationLevel ?? "N/A"}
               />
             </View>
             <View style={localStyles.scoreRow}>
               <CharacteristicCard
                 title={`Skin\nTexture 🧴`}
-                value={skinAnalysis.skinTexture}
+                value={skinAnalysis?.skinTexture ?? "N/A"}
               />
               <CharacteristicCard
-                title='Skin Tone 🌼'
-                value={skinAnalysis.skinToneAndColor.join(', ')}
+                title="Skin Tone 🌼"
+                value={
+                  Array.isArray(skinAnalysis?.skinToneAndColor)
+                    ? skinAnalysis.skinToneAndColor.join(", ")
+                    : (skinAnalysis?.skinToneAndColor ?? "N/A")
+                }
               />
             </View>
             <View style={localStyles.scoreRow}>
               <CharacteristicCard
                 title={`Skin\nVitality ☀️`}
-                value={skinAnalysis.skinVitalityIndicators.join(', ')}
+                value={
+                  Array.isArray(skinAnalysis?.skinVitalityIndicators)
+                    ? skinAnalysis.skinVitalityIndicators.join(", ")
+                    : (skinAnalysis?.skinVitalityIndicators ?? "N/A")
+                }
               />
             </View>
           </View>
         );
-      case 'Glow-Up Tips':
+      case "Glow-Up Tips":
         return (
           <ScrollView style={localStyles.scoresContainer}>
             <View style={localStyles.summarySectionCard}>
@@ -339,7 +352,7 @@ I’m glowing! 🌟 #GlowProfile 💗
             )}
           </ScrollView>
         );
-      case 'Skincare Recommendations':
+      case "Product Recommendations":
         return (
           <ScrollView style={localStyles.scoresContainer}>
             <View style={localStyles.summarySectionCard}>
@@ -396,7 +409,7 @@ I’m glowing! 🌟 #GlowProfile 💗
             )}
           </ScrollView>
         );
-      case 'Makeup Tips':
+      case "Makeup Tips":
         return (
           <ScrollView style={localStyles.scoresContainer}>
             <View style={localStyles.summarySectionCard}>
@@ -457,7 +470,7 @@ I’m glowing! 🌟 #GlowProfile 💗
                             Affordable:
                           </Text>
                           <Text>
-                            {product.affordable.name} -{' '}
+                            {product.affordable.name} -{" "}
                             {product.affordable.price}
                           </Text>
                           <Text style={localStyles.applicationTip}>
@@ -512,12 +525,12 @@ I’m glowing! 🌟 #GlowProfile 💗
     <ImageBackground
       source={images.screenBgLarger}
       style={localStyles.background}
-      resizeMode='cover'
+      resizeMode="cover"
     >
       <View style={localStyles.overlay} />
 
       <SafeAreaView style={localStyles.safeArea}>
-        <StatusBar barStyle='dark-content' backgroundColor='#6a51ae' />
+        <StatusBar barStyle="dark-content" backgroundColor="#6a51ae" />
 
         <ScrollView
           style={localStyles.container}
@@ -533,18 +546,18 @@ I’m glowing! 🌟 #GlowProfile 💗
                 localStyles.tabBase,
                 localStyles.activeTab,
                 {
-                  backgroundColor: '#F4EFFF',
+                  backgroundColor: "#F4EFFF",
                   borderWidth: 2,
-                  borderColor: '#7c4cff',
+                  borderColor: "#7c4cff",
                 },
               ]}
-              onPress={() => router.replace('/(auth)/push-results-screen')}
+              onPress={() => router.replace("/(auth)/push-results-screen")}
             >
-              <Text className='text-[#7c4cff] font-bold'>Save</Text>
+              <Text className="text-[#7c4cff] font-bold">Save</Text>
             </TouchableOpacity>
             <Text style={localStyles.centeredTitle}>Glow Profile</Text>
             <TouchableOpacity style={localStyles.shareButton} onPress={onShare}>
-              <Ionicons name='share-social-outline' size={24} color='#7c4cff' />
+              <Ionicons name="share-social-outline" size={24} color="#7c4cff" />
             </TouchableOpacity>
           </View>
           <Text style={styles.subtitle}>
@@ -558,12 +571,12 @@ I’m glowing! 🌟 #GlowProfile 💗
           >
             <View style={localStyles.tabContainer}>
               {[
-                'Ratings',
-                'Facial Analysis',
-                'Skin Analysis',
-                'Glow-Up Tips',
-                'Skincare Recommendations',
-                'Makeup Tips',
+                "Ratings",
+                "Facial Analysis",
+                "Skin Analysis",
+                "Glow-Up Tips",
+                "Product Recommendations",
+                "Makeup Tips",
               ].map((tab) => {
                 const isActive = activeTab === tab;
                 return (
@@ -593,26 +606,26 @@ I’m glowing! 🌟 #GlowProfile 💗
             </View>
           </RNScrollView>
 
-          {!activeTab.includes('Glow-Up Tips') &&
-            !activeTab.includes('Skincare Recommendations') &&
-            !activeTab.includes('Makeup Tips') && (
+          {!activeTab.includes("Glow-Up Tips") &&
+            !activeTab.includes("Skincare Recommendations") &&
+            !activeTab.includes("Makeup Tips") && (
               <View style={localStyles.profileContainer}>
                 <Image
                   source={{
                     uri:
                       storeImages[0] ||
-                      'https://example.com/default-profile-image.jpg',
+                      "https://example.com/default-profile-image.jpg",
                   }}
                   style={localStyles.profileImage}
                 />
                 <Text
                   style={localStyles.percentileText}
-                  className='text-center shadow-lg'
+                  className="text-center shadow-lg"
                 >
-                  You are in the{' '}
+                  You are in the{" "}
                   <Text style={localStyles.percentileHighlight}>
                     {`${percentile}th percentile`}
-                  </Text>{' '}
+                  </Text>{" "}
                   of all users.
                 </Text>
               </View>
@@ -629,54 +642,54 @@ I’m glowing! 🌟 #GlowProfile 💗
 const localStyles = StyleSheet.create({
   overlay: {
     ...StyleSheet.absoluteFillObject, // Makes the overlay cover the entire background
-    backgroundColor: 'rgba(255, 255, 255, 0.6)', // Adjust opacity here (lighter background)
+    backgroundColor: "rgba(255, 255, 255, 0.6)", // Adjust opacity here (lighter background)
   },
   background: {
     flex: 1,
-    resizeMode: 'cover',
-    justifyContent: 'center',
-    width: '100%',
-    height: '100%',
+    resizeMode: "cover",
+    justifyContent: "center",
+    width: "100%",
+    height: "100%",
   },
   safeArea: {
     flex: 1,
-    backgroundColor: 'transparent',
+    backgroundColor: "transparent",
   },
   container: {
     flex: 1,
-    backgroundColor: 'transparent',
+    backgroundColor: "transparent",
     paddingHorizontal: 20,
   },
   contentContainer: {
     padding: 20,
   },
   header: {
-    position: 'relative',
-    justifyContent: 'center',
-    alignItems: 'center',
+    position: "relative",
+    justifyContent: "center",
+    alignItems: "center",
     height: 50,
     marginBottom: 0,
   },
   backButton: {
-    position: 'absolute',
+    position: "absolute",
     left: 0,
     padding: 10,
   },
   centeredTitle: {
     fontSize: 24,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
   shareButton: {
-    position: 'absolute',
+    position: "absolute",
     right: 0,
     padding: 10,
   },
   headerTitle: {
     fontSize: 20,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
   tabContainer: {
-    flexDirection: 'row',
+    flexDirection: "row",
     marginTop: 20,
     marginBottom: 0,
   },
@@ -693,25 +706,25 @@ const localStyles = StyleSheet.create({
     borderRadius: 20,
     paddingVertical: 10,
     paddingHorizontal: 15,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
   },
   activeTab: {
-    backgroundColor: 'black',
+    backgroundColor: "black",
   },
   inactiveTab: {
-    backgroundColor: 'transparent',
+    backgroundColor: "transparent",
   },
   inactiveTabText: {
-    color: 'black',
+    color: "black",
   },
   activeTabText: {
-    color: 'white',
-    fontWeight: 'bold',
+    color: "white",
+    fontWeight: "bold",
   },
 
   profileContainer: {
-    alignItems: 'center',
+    alignItems: "center",
     marginBottom: 20,
   },
   profileImage: {
@@ -721,18 +734,18 @@ const localStyles = StyleSheet.create({
     marginBottom: 10,
   },
   percentileText: {
-    width: '80%',
+    width: "80%",
     fontSize: 16,
-    color: '#000',
+    color: "#000",
     letterSpacing: -0.4,
-    textAlign: 'center',
+    textAlign: "center",
     marginVertical: 10,
     lineHeight: 26,
   },
   percentileHighlight: {
-    fontWeight: '600',
+    fontWeight: "600",
     // color: '#8835f4',
-    color: 'black',
+    color: "black",
     letterSpacing: -0.4,
   },
   scoresContainer: {
@@ -741,7 +754,7 @@ const localStyles = StyleSheet.create({
   gradientBorderWrapper: {
     borderRadius: 10,
     padding: 2,
-    width: '48%',
+    width: "48%",
     marginBottom: 10,
   },
   gradientBorder: {
@@ -749,138 +762,138 @@ const localStyles = StyleSheet.create({
     padding: 0,
   },
   innerCard: {
-    backgroundColor: 'rgba(255,255,255, 1)',
+    backgroundColor: "rgba(255,255,255, 1)",
     borderRadius: 10,
     padding: 15,
     borderWidth: 0,
   },
   scoreCard: {
-    backgroundColor: 'rgba(255,255,255, 1)',
+    backgroundColor: "rgba(255,255,255, 1)",
     borderRadius: 10,
     padding: 15,
-    width: '48%',
+    width: "48%",
     marginBottom: 10,
     borderWidth: 1,
     // borderColor: '#000',
-    borderColor: '#E7E7E7',
+    borderColor: "#E7E7E7",
   },
   row: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
     marginBottom: 5,
   },
   scoreTitle: {
     fontSize: 12,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
   scoreValue: {
     fontSize: 21,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
   progressBar: {
     height: 6,
-    backgroundColor: '#E0E0E0',
+    backgroundColor: "#E0E0E0",
     borderRadius: 5,
-    overflow: 'hidden',
+    overflow: "hidden",
     marginTop: 10,
   },
   progressFill: {
-    height: '100%',
+    height: "100%",
     borderRadius: 5,
   },
   unlockButton: {
-    backgroundColor: 'linear-gradient(to right, #da70d6, #7b68ee, #87cefa)',
+    backgroundColor: "linear-gradient(to right, #da70d6, #7b68ee, #87cefa)",
     borderRadius: 50,
     padding: 20,
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
     marginTop: 16,
   },
   gradientBackground: {
     borderRadius: 50,
     padding: 4,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
     marginTop: 16,
-    width: '90%',
+    width: "90%",
   },
   whiteButton: {
-    backgroundColor: 'black',
+    backgroundColor: "black",
     borderRadius: 50,
     paddingVertical: 14,
     paddingHorizontal: 32,
-    justifyContent: 'center',
-    alignItems: 'center',
-    width: '100%',
+    justifyContent: "center",
+    alignItems: "center",
+    width: "100%",
   },
   unlockButtonText: {
     // color: '#6200EE', // Keep the text in a bold color to stand out
-    color: 'white',
+    color: "white",
     fontSize: 18,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
   sectionContainer: {
     marginBottom: 20,
   },
   sectionTitle: {
     fontSize: 20,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     marginBottom: 10,
   },
   characteristicItem: {
-    flexDirection: 'row',
-    justifyContent: 'center',
+    flexDirection: "row",
+    justifyContent: "center",
     marginBottom: 5,
   },
   characteristicTitle: {
     fontSize: 14,
-    fontWeight: 'bold',
+    fontWeight: "semibold",
     marginBottom: 10,
   },
   characteristicValue: {
-    fontSize: 14,
-    fontWeight: 'semibold',
-    color: '#000',
+    fontSize: 18,
+    fontWeight: "bold",
+    color: "#000",
   },
   tabScrollView: {
     flexGrow: 0,
     marginBottom: 20,
   },
   scoreRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    justifyContent: "space-between",
     marginBottom: 10,
   },
   characteristicCard: {
-    backgroundColor: 'rgba(255,255,255, 1)',
+    backgroundColor: "rgba(255,255,255, 1)",
     borderRadius: 10,
     padding: 15,
-    width: '48%',
+    width: "48%",
     marginBottom: 10,
     minHeight: 100,
-    justifyContent: 'space-between',
+    justifyContent: "space-between",
     borderWidth: 1,
     // borderColor: '#000',
-    borderColor: '#E7E7E7',
+    borderColor: "#E7E7E7",
   },
   buttonSpacer: {
     height: 80,
   },
   buttonContainer: {
-    position: 'absolute',
-    width: '100%',
+    position: "absolute",
+    width: "100%",
     bottom: 0,
     left: 0,
     right: 0,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
     paddingHorizontal: 20,
     paddingTop: 10,
     ...Platform.select({
       ios: {
-        shadowColor: '#000',
+        shadowColor: "#000",
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.2,
         shadowRadius: 3,
@@ -891,14 +904,14 @@ const localStyles = StyleSheet.create({
     }),
   },
   tipCard: {
-    backgroundColor: '#F5F5F5',
+    backgroundColor: "#F5F5F5",
     borderRadius: 10,
     padding: 15,
     marginBottom: 10,
   },
   tipTitle: {
     fontSize: 18,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     marginBottom: 5,
   },
   tipDetails: {
@@ -907,17 +920,17 @@ const localStyles = StyleSheet.create({
   },
   tipImportance: {
     fontSize: 14,
-    fontStyle: 'italic',
+    fontStyle: "italic",
   },
   recCard: {
-    backgroundColor: '#F5F5F5',
+    backgroundColor: "#F5F5F5",
     borderRadius: 10,
     padding: 15,
     marginBottom: 10,
   },
   recTitle: {
     fontSize: 18,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     marginBottom: 10,
   },
   productSection: {
@@ -925,11 +938,11 @@ const localStyles = StyleSheet.create({
   },
   productTitle: {
     fontSize: 16,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
   recImportance: {
     fontSize: 14,
-    fontStyle: 'italic',
+    fontStyle: "italic",
     marginTop: 5,
   },
   recTechnique: {
@@ -937,14 +950,14 @@ const localStyles = StyleSheet.create({
     marginTop: 5,
   },
   makeupTipCard: {
-    backgroundColor: '#F5F5F5',
+    backgroundColor: "#F5F5F5",
     borderRadius: 10,
     padding: 15,
     marginBottom: 10,
   },
   makeupTipTitle: {
     fontSize: 18,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     marginBottom: 5,
   },
   makeupTipTechnique: {
@@ -953,7 +966,7 @@ const localStyles = StyleSheet.create({
   },
   makeupTipImportance: {
     fontSize: 14,
-    fontStyle: 'italic',
+    fontStyle: "italic",
     marginBottom: 10,
   },
   makeupProductSection: {
@@ -961,7 +974,7 @@ const localStyles = StyleSheet.create({
   },
   makeupProductCategory: {
     fontSize: 16,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     marginBottom: 5,
   },
   makeupProductDetails: {
@@ -970,30 +983,30 @@ const localStyles = StyleSheet.create({
   },
   makeupProductTitle: {
     fontSize: 14,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
   summarySectionCard: {
-    backgroundColor: 'rgba(255,255,255, 1)',
-    borderRadius: 10,
+    backgroundColor: "rgba(255,255,255, 1)",
+    borderRadius: 20,
     paddingVertical: 25,
     paddingHorizontal: 30,
     marginBottom: 20,
     borderWidth: 1,
-    borderColor: '#dbdbdb',
-    position: 'relative',
+    borderColor: "#dbdbdb",
+    position: "relative",
     marginTop: 15,
   },
   summaryTitle: {
     fontSize: 18,
-    fontWeight: 'bold',
-    textAlign: 'center',
+    fontWeight: "bold",
+    textAlign: "center",
     marginBottom: 20,
   },
   summaryImage: {
     width: 40,
     height: 40,
     borderRadius: 15,
-    position: 'absolute',
+    position: "absolute",
     top: 18,
     left: 25,
   },
@@ -1004,7 +1017,7 @@ const localStyles = StyleSheet.create({
   tipExplanation: {
     fontSize: 14,
     marginTop: 5,
-    fontStyle: 'italic',
+    fontStyle: "italic",
   },
   recTargetedConcern: {
     fontSize: 14,
@@ -1013,7 +1026,7 @@ const localStyles = StyleSheet.create({
   recExplanation: {
     fontSize: 14,
     marginTop: 5,
-    fontStyle: 'italic',
+    fontStyle: "italic",
   },
   makeupTipSuitableFor: {
     fontSize: 14,
@@ -1022,41 +1035,51 @@ const localStyles = StyleSheet.create({
   makeupTipExplanation: {
     fontSize: 14,
     marginBottom: 10,
-    fontStyle: 'italic',
+    fontStyle: "italic",
   },
   accordionItem: {
-    backgroundColor: 'transparent',
-    borderRadius: 8,
+    backgroundColor: "transparent",
+    borderRadius: 20,
     marginBottom: 10,
-    overflow: 'hidden',
-    elevation: 2,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 2,
-    alignItems: 'center',
+    overflow: "hidden",
+    padding: 10,
+    // elevation: 2,
+    // shadowColor: "#000",
+    // shadowOffset: { width: 0, height: 2 },
+    // shadowOpacity: 0.1,
+    // shadowRadius: 2,
+    alignItems: "center",
   },
   accordionHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'flex-start',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "flex-start",
     padding: 15,
-    // backgroundColor: '#fff',
-    borderColor: '#dbdbdb',
+    backgroundColor: "#fff",
+    borderColor: "#dbdbdb",
     borderWidth: 1,
-    backgroundColor: 'rgba(255,255,255, 0.9)',
-    width: '100%',
+    borderRadius: 20,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+
+    shadowRadius: 3.84,
+    elevation: 5,
+    // backgroundColor: "rgba(255,255,255, 0.9)",
+    width: "100%",
   },
   accordionStepTitle: {
     fontSize: 13,
-    fontWeight: 'bold',
-    color: '#000',
+    fontWeight: "bold",
+    color: "#000",
     marginBottom: 4,
     paddingLeft: 2,
   },
   accordionDivider: {
     height: 1,
-    backgroundColor: '#dbdbdb',
+    backgroundColor: "#dbdbdb",
     marginTop: 2,
     marginBottom: 12,
     width: 60,
@@ -1072,30 +1095,30 @@ const localStyles = StyleSheet.create({
   },
   accordionContent: {
     padding: 15,
-    borderColor: '#dbdbdb',
+    borderColor: "#dbdbdb",
     borderWidth: 1,
     borderTopWidth: 0,
-    width: '96%',
-    borderBottomLeftRadius: 10,
-    borderBottomRightRadius: 10,
-    backgroundColor: 'rgba(255,255,255, 0.9)',
+    width: "96%",
+    borderBottomLeftRadius: 20,
+    borderBottomRightRadius: 20,
+    backgroundColor: "rgba(255,255,255, 0.9)",
   },
   howToUse: {
     fontSize: 14,
-    fontStyle: 'italic',
+    fontStyle: "italic",
     marginTop: 5,
   },
   applicationTip: {
     fontSize: 14,
-    fontStyle: 'italic',
+    fontStyle: "italic",
     marginTop: 3,
   },
   errorText: {
-    color: '#666',
-    fontStyle: 'italic',
+    color: "#666",
+    fontStyle: "italic",
   },
   boldText: {
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
 });
 
