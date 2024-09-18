@@ -29,6 +29,7 @@ const Layout = () => {
         name='unlock-results-screen'
         options={{ headerShown: false }}
       />
+      <Stack.Screen name='paywall-screen' options={{ headerShown: false }} />
       <Stack.Screen
         name='glow-results-screen'
         options={{ headerShown: false }}

@@ -33,6 +33,8 @@ import modelDifferenceImg from '@/assets/images/model-difference.png';
 import modelFacialAnalysis from '@/assets/images/model-facial-analysis.png';
 import model from '@/assets/images/model.png';
 import onboardingScreenBg from '@/assets/images/onboarding-bg.png';
+import paywallReviewImg from '@/assets/images/paywall-review-img.png';
+import paywallBg from '@/assets/images/paywall-screen-bg.png';
 import ratingStars from '@/assets/images/rating-stars.png';
 import screenBgLarger from '@/assets/images/screen-bg-large.png';
 import screenBg from '@/assets/images/screen-bg.png';
@@ -65,6 +67,8 @@ export const images = {
   summaryImg,
   screenBgLarger,
   ratingStars,
+  paywallBg,
+  paywallReviewImg,
 };
 
 export const icons = {

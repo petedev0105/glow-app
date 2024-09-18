@@ -3,7 +3,7 @@ import { styles } from "@/constants/onboarding";
 import { useImageStore } from "@/store/imageStore";
 import { Ionicons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
-import { useNavigation } from "expo-router";
+import { router, useNavigation } from 'expo-router';
 import React, { useEffect, useState } from "react";
 import {
   Animated,
@@ -19,13 +19,11 @@ import {
   Text,
   TouchableOpacity,
   View,
-  Alert,
-} from "react-native";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
+} from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 // revenue cat hook
-import { useRevenueCat } from "@/hooks/useRevenueCat";
-import { PurchasesError } from "react-native-purchases";
+import { useRevenueCat } from '@/hooks/useRevenueCat';
 
 const AnimatedLinearGradient = Animated.createAnimatedComponent(LinearGradient);
 
@@ -509,12 +507,12 @@ const GlowResultScreen = () => {
     <ImageBackground
       source={images.screenBgLarger}
       style={localStyles.background}
-      resizeMode="cover"
+      resizeMode='cover'
     >
       <View style={localStyles.overlay} />
 
       <SafeAreaView style={localStyles.safeArea}>
-        <StatusBar barStyle="dark-content" backgroundColor="#6a51ae" />
+        <StatusBar barStyle='dark-content' backgroundColor='#6a51ae' />
 
         <ScrollView
           style={localStyles.container}
@@ -535,12 +533,12 @@ const GlowResultScreen = () => {
           >
             <View style={localStyles.tabContainer}>
               {[
-                "Ratings",
-                "Facial Analysis",
-                "Skin Analysis",
-                "Glow-Up Tips",
-                "Skincare Recommendations",
-                "Makeup Tips",
+                'Ratings',
+                'Facial Analysis',
+                'Skin Analysis',
+                'Glow-Up Tips',
+                'Skincare Recommendations',
+                'Makeup Tips',
               ].map((tab) => {
                 const isActive = activeTab === tab;
                 return (
@@ -571,9 +569,9 @@ const GlowResultScreen = () => {
           </RNScrollView>
 
           {/* Placeholder Profile Image */}
-          {!activeTab.includes("Glow-Up Tips") &&
-            !activeTab.includes("Skincare Recommendations") &&
-            !activeTab.includes("Makeup Tips") && (
+          {!activeTab.includes('Glow-Up Tips') &&
+            !activeTab.includes('Skincare Recommendations') &&
+            !activeTab.includes('Makeup Tips') && (
               <View style={localStyles.profileContainer}>
                 <Image
                   source={
@@ -589,7 +587,7 @@ const GlowResultScreen = () => {
               of all users.
             </Text> */}
                 <Text style={localStyles.percentileText}>
-                  You are in the{""}
+                  You are in the{''}
                   {/* Replacing the percentile text with a gradient */}
                   {/* <LinearGradient
                 colors={[
@@ -604,8 +602,8 @@ const GlowResultScreen = () => {
               >
                 <View style={{ width: 30, height: 20 }} />
               </LinearGradient> */}
-                  <Text className="font-bold mx-0 px-0">
-                    {" 🔒th percentile "}
+                  <Text className='font-bold mx-0 px-0'>
+                    {' 🔒th percentile '}
                   </Text>
                   of all users.
                 </Text>
@@ -624,10 +622,10 @@ const GlowResultScreen = () => {
             { paddingBottom: insets.bottom },
           ]}
           // TODO CHANGE ROUTE TO PAYWALL SCREEN INSTEAD AFTER THEY CLICK UNLOCK
-          onPress={handleWeeklyPurchase}
+          onPress={() => router.replace('/(auth)/paywall-screen')}
         >
           <AnimatedLinearGradient
-            colors={["#da70d6", "#7b68ee", "#87cefa"]}
+            colors={['#da70d6', '#7b68ee', '#87cefa']}
             start={{ x: animatedStartX, y: 0 }}
             end={{ x: animatedEndX, y: 0 }}
             style={localStyles.gradientBackground}
