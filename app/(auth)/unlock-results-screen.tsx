@@ -23,7 +23,6 @@ import {
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 // revenue cat hook
-import { useRevenueCat } from '@/hooks/useRevenueCat';
 
 const AnimatedLinearGradient = Animated.createAnimatedComponent(LinearGradient);
 
@@ -37,9 +36,6 @@ const GlowResultScreen = () => {
   const percentile = 70; // Dummy percentile value
 
   const navigation = useNavigation();
-
-  const { priceString, revenueCatOfferings, error, handleWeeklyPurchase } =
-    useRevenueCat();
 
   useEffect(() => {
     const animateGradient = () => {
@@ -55,12 +51,6 @@ const GlowResultScreen = () => {
 
     animateGradient();
   }, [unlockBtnAnimatedValue]);
-
-  useEffect(() => {
-    if (error) {
-      console.log(error);
-    }
-  }, [error]);
 
   const animatedStartX = unlockBtnAnimatedValue.interpolate({
     inputRange: [0, 1],
