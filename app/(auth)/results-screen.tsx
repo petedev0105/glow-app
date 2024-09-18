@@ -173,9 +173,10 @@ const ResultsScreen = () => {
           };
 
           console.log("Combined Scan Results:", scanResults);
+
           setScanResults(scanResults);
 
-          setApiCallsComplete(true);
+          // setApiCallsComplete(true);
 
           // router.replace("/glow-results-screen");
           // router.replace("/unlock-results-screen");
