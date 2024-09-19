@@ -18,6 +18,8 @@ if (!publishableKey) {
   );
 }
 
+console.log("publishable key is: ", publishableKey);
+
 export default function RootLayout() {
   const [fontsLoaded] = useFonts({
     "Jakarta-Bold": require("../assets/fonts/PlusJakartaSans-Bold.ttf"),

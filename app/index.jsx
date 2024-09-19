@@ -28,7 +28,8 @@ const Page = () => {
 
   useEffect(() => {
     if (mounted) {
-      if (isSignedIn) {
+      if (isSignedIn && userId) {
+        console.log(userId);
         if (customerInfo) {
           console.log(
             "purchases from index: ",
@@ -36,9 +37,10 @@ const Page = () => {
           );
 
           if (customerInfo.activeSubscriptions.length > 0) {
-            router.replace("/(root)/(tabs)/home");
+            router.replace("/(home)");
           } else {
             router.replace("/(auth)/welcome");
+            // router.replace("/(home)");
           }
         }
         if (error) {
@@ -50,31 +52,6 @@ const Page = () => {
       }
     }
   }, [customerInfo, error, isSignedIn]);
-
-  // useEffect(() => {
-  //   if (mounted) {
-  //     // if (!userId) {
-  //     //   // router.replace("/(auth)/welcome");
-  //     //   console.log("app/index: User ID not found!");
-  //     //   router.replace("/(auth)/start");
-  //     // } else {
-  //     //   console.log(user.id);
-  //     //   // fetchPaidStatus(userId);
-  //     // }
-
-  //     // if (revenueCatOfferings) {
-  //     //   console.log("revenuecat log from index file: ", revenueCatOfferings);
-  //     // }
-
-  //     if (!userId) {
-  //       router.replace("/(auth)/sign-in");
-  //     } else {
-  //       router.replace("/(auth)/welcome");
-  //     }
-  //   }
-  //   // router.replace("/(auth)/welcome");
-  // }, [userId, mounted]); // Ensure it runs when userId or mounted changes
-
   if (loading) {
     return (
       // <View
