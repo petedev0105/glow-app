@@ -22,6 +22,7 @@ import {
   Alert,
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { useRouter } from "expo-router";
 
 // revenue cat hook
 import { useRevenueCat } from "@/hooks/useRevenueCat";
@@ -36,12 +37,13 @@ const GlowResultScreen = () => {
   const storeImages = useImageStore((state) => state.images);
   const [openAccordion, setOpenAccordion] = useState<number | null>(null);
 
+  const { handleWeeklyPurchase } = useRevenueCat();
+
   const percentile = 70; // Dummy percentile value
 
   const navigation = useNavigation();
 
-  const { priceString, revenueCatOfferings, error, handleWeeklyPurchase } =
-    useRevenueCat();
+  const router = useRouter();
 
   useEffect(() => {
     const animateGradient = () => {
@@ -57,12 +59,6 @@ const GlowResultScreen = () => {
 
     animateGradient();
   }, [unlockBtnAnimatedValue]);
-
-  useEffect(() => {
-    if (error) {
-      console.log(error);
-    }
-  }, [error]);
 
   const animatedStartX = unlockBtnAnimatedValue.interpolate({
     inputRange: [0, 1],
@@ -625,6 +621,7 @@ const GlowResultScreen = () => {
           ]}
           // TODO CHANGE ROUTE TO PAYWALL SCREEN INSTEAD AFTER THEY CLICK UNLOCK
           onPress={handleWeeklyPurchase}
+          // onPress={() => router.replace("/home")}
         >
           <AnimatedLinearGradient
             colors={["#da70d6", "#7b68ee", "#87cefa"]}

@@ -47,14 +47,6 @@ export const googleOAuth = async (startOAuthFlow: any) => {
               clerkId: signUp.createdUserId,
             }),
           });
-
-          // Create initial tasks for the new user
-          await fetchAPI(
-            `/(api)/create-initial-tasks/${signUp.createdUserId}`,
-            {
-              method: "POST",
-            }
-          );
         }
 
         // setShowQuestions(true);
