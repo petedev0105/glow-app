@@ -621,6 +621,7 @@ const GlowResultScreen = () => {
             { paddingBottom: insets.bottom },
           ]}
           // TODO CHANGE ROUTE TO PAYWALL SCREEN INSTEAD AFTER THEY CLICK UNLOCK
+          // onPress={() => router.replace("/(auth)/paywall-screen")}
           onPress={handleWeeklyPurchase}
           // onPress={() => router.replace("/home")}
         >

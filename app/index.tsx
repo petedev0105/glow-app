@@ -2,7 +2,7 @@ import { useAuth, useUser } from "@clerk/clerk-expo";
 import { useRouter } from "expo-router";
 import { useEffect, useLayoutEffect, useState } from "react";
 import { Image, View, ActivityIndicator } from "react-native"; // {{ edit_1 }}
-import { useRevenueCat } from "@/hooks/useRevenueCat";
+import { useRevenueCat } from "../hooks/useRevenueCat";
 
 const Page = () => {
   const { isSignedIn } = useAuth();

@@ -10,6 +10,7 @@ const PushResultsScreen = () => {
 
   useEffect(() => {
     if (customerInfo) {
+      console.log(customerInfo);
       const isSubscribed =
         (customerInfo as CustomerInfo).activeSubscriptions?.length > 0;
       const nextScreen = isSubscribed

@@ -21,7 +21,7 @@ import ScanResultModal from "../ScanResultModal";
 import { format } from "date-fns"; // Add this import
 
 type Scan = {
-  id: number;
+  imageUrl: string;
   glowScore: {
     scores: {
       overall: number;
@@ -55,13 +55,41 @@ type Scan = {
       steps: Array<{
         id: number;
         name: string;
-        details: string;
+        details?: string;
+        highEnd?: {
+          name: string;
+          price: string;
+          howToUse: string;
+        };
+        affordable?: {
+          price: string;
+          product: string;
+          howToUse: string;
+        };
+        technique?: string;
         importance: string;
         explanation: string;
-        relatedFeature: string;
+        targetedConcern?: string;
+        relatedFeature?: string;
+        products?: Array<{
+          highEnd: {
+            name: string;
+            price: string;
+            applicationTip: string;
+          };
+          category: string;
+          affordable: {
+            name: string;
+            price: string;
+            applicationTip: string;
+          };
+        }>;
+        suitableFor?: string;
       }>;
       title: string;
-      userFeaturesSummary: string;
+      userFeaturesSummary?: string;
+      userSkinSummary?: string;
+      userMakeupSummary?: string;
     }>;
   };
   imageUrl: string; // Assuming the image is stored as a URL or path
@@ -98,6 +126,7 @@ const ScansScreen = () => {
         setScans(scanResults);
       } catch (error) {
         console.error("Error fetching user scans:", error);
+        setScans([]);
       } finally {
         setIsLoading(false);
       }
@@ -185,7 +214,7 @@ const ScansScreen = () => {
                   <View style={localStyles.scoreContainer}>
                     <Text style={localStyles.scoreText}>Overall</Text>
                     <Text style={localStyles.scoreValue}>
-                      {scan.glowScore?.scores?.overall}
+                      {scan.glowScore.scores.overall}
                     </Text>
                     <Text style={localStyles.scoreText}>Potential</Text>
                     <Text style={localStyles.scoreValue}>
@@ -215,7 +244,7 @@ const ScansScreen = () => {
                         },
                       ]}
                     />
-                  </View>
+                  </View> */}
                 </View>
               </TouchableOpacity>
             ))}
@@ -301,6 +330,266 @@ const localStyles = StyleSheet.create({
   },
   scrollView: {
     flex: 1,
+  },
+  modalContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
+  },
+  modalContent: {
+    backgroundColor: "white",
+    borderRadius: 20,
+    padding: 20,
+    width: "90%",
+    maxHeight: "80%",
+  },
+  modalHeader: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: 20,
+  },
+  modalTitle: {
+    fontSize: 24,
+    fontWeight: "bold",
+  },
+  closeButton: {
+    padding: 5,
+  },
+  shareButton: {
+    padding: 5,
+  },
+  tabScrollView: {
+    flexGrow: 0,
+    marginBottom: 20,
+  },
+  tabContainer: {
+    flexDirection: "row",
+    paddingHorizontal: 10, // Add horizontal padding
+  },
+  tabWrapper: {
+    marginRight: 10,
+    height: 50, // Set a fixed height for the tab wrapper
+  },
+  tabBase: {
+    borderRadius: 20,
+    paddingVertical: 10,
+    paddingHorizontal: 15,
+    minWidth: 100, // Set a minimum width for tabs
+  },
+  activeTab: {
+    backgroundColor: "black",
+  },
+  inactiveTab: {
+    backgroundColor: "transparent",
+  },
+  activeTabText: {
+    color: "white",
+    fontWeight: "bold",
+    textAlign: "center", // Center the text
+  },
+  inactiveTabText: {
+    color: "black",
+    textAlign: "center", // Center the text
+  },
+  profileContainer: {
+    alignItems: "center",
+    marginBottom: 20,
+  },
+  profileImage: {
+    width: 160,
+    height: 160,
+    borderRadius: 50,
+    marginBottom: 10,
+  },
+  percentileText: {
+    fontSize: 16,
+    textAlign: "center",
+  },
+  percentileHighlight: {
+    fontWeight: "bold",
+  },
+  scoresContainer: {
+    marginBottom: 20,
+  },
+  scoreRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginBottom: 10,
+  },
+  gradientBorderWrapper: {
+    borderRadius: 10,
+    padding: 2,
+    width: "48%",
+  },
+  innerCard: {
+    backgroundColor: "white",
+    borderRadius: 10,
+    padding: 15,
+  },
+  scoreCard: {
+    backgroundColor: "white",
+    borderRadius: 10,
+    padding: 15,
+    width: "48%",
+    borderWidth: 1,
+    borderColor: "#E7E7E7",
+  },
+  row: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: 5,
+  },
+  scoreTitle: {
+    fontSize: 12,
+    fontWeight: "bold",
+  },
+  // scoreValue: {
+  //   fontSize: 21,
+  //   fontWeight: "bold",
+  // },
+  // progressBar: {
+  //   height: 6,
+  //   backgroundColor: "#E0E0E0",
+  //   borderRadius: 5,
+  //   overflow: "hidden",
+  //   marginTop: 10,
+  // },
+  // progressFill: {
+  //   height: "100%",
+  //   borderRadius: 5,
+  // },
+  characteristicCard: {
+    backgroundColor: "white",
+    borderRadius: 10,
+    padding: 15,
+    width: "48%",
+    minHeight: 100,
+    justifyContent: "space-between",
+    borderWidth: 1,
+    borderColor: "#E7E7E7",
+  },
+  characteristicTitle: {
+    fontSize: 14,
+    fontWeight: "bold",
+    marginBottom: 10,
+  },
+  characteristicValue: {
+    fontSize: 18,
+    fontWeight: "bold",
+    color: "#000",
+  },
+  summarySectionCard: {
+    backgroundColor: "white",
+    borderRadius: 10,
+    padding: 15,
+    marginBottom: 20,
+    borderWidth: 1,
+    borderColor: "#E7E7E7",
+  },
+  summaryImage: {
+    width: 40,
+    height: 40,
+    marginBottom: 10,
+  },
+  summaryTitle: {
+    fontSize: 16,
+    fontWeight: "bold",
+    marginBottom: 10,
+  },
+  accordionItem: {
+    backgroundColor: "white",
+    borderRadius: 10,
+    marginBottom: 10,
+    borderWidth: 1,
+    borderColor: "#E7E7E7",
+  },
+  accordionHeader: {
+    flexDirection: "row",
+    alignItems: "center",
+    padding: 15,
+    borderBottomWidth: 1,
+    borderBottomColor: "#E7E7E7",
+  },
+  accordionStepTitle: {
+    fontSize: 18,
+    fontWeight: "bold",
+    marginRight: 10,
+  },
+  accordionTitle: {
+    fontSize: 16,
+    fontWeight: "bold",
+  },
+  accordionContent: {
+    padding: 15,
+  },
+  boldText: {
+    fontWeight: "bold",
+  },
+  tipDetails: {
+    marginBottom: 10,
+  },
+  tipImportance: {
+    marginBottom: 10,
+  },
+  tipRelatedFeature: {
+    marginBottom: 10,
+  },
+  tipExplanation: {
+    marginBottom: 10,
+  },
+  productSection: {
+    marginBottom: 10,
+  },
+  productTitle: {
+    fontWeight: "bold",
+    marginBottom: 5,
+  },
+  howToUse: {
+    marginBottom: 10,
+  },
+  recImportance: {
+    marginBottom: 10,
+  },
+  recTechnique: {
+    marginBottom: 10,
+  },
+  recTargetedConcern: {
+    marginBottom: 10,
+  },
+  recExplanation: {
+    marginBottom: 10,
+  },
+  makeupTipTechnique: {
+    marginBottom: 10,
+  },
+  makeupTipImportance: {
+    marginBottom: 10,
+  },
+  makeupTipSuitableFor: {
+    marginBottom: 10,
+  },
+  makeupTipExplanation: {
+    marginBottom: 10,
+  },
+  makeupProductSection: {
+    marginBottom: 10,
+  },
+  makeupProductCategory: {
+    fontWeight: "bold",
+    marginBottom: 5,
+  },
+  makeupProductDetails: {
+    marginBottom: 10,
+  },
+  makeupProductTitle: {
+    fontWeight: "bold",
+    marginBottom: 5,
+  },
+  applicationTip: {
+    marginBottom: 10,
   },
 });
 

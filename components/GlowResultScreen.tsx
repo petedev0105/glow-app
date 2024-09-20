@@ -610,7 +610,7 @@ I'm glowing! 🌟 #GlowProfile 💗
           </RNScrollView>
 
           {!activeTab.includes("Glow-Up Tips") &&
-            !activeTab.includes("Skincare Recommendations") &&
+            !activeTab.includes("Product Recommendations") &&
             !activeTab.includes("Makeup Tips") && (
               <View style={localStyles.profileContainer}>
                 <Image

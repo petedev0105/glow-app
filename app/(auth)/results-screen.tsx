@@ -3,7 +3,7 @@ import { useScanResultsStore } from "@/store/scanResultsStore";
 import { useImageStore } from "@/store/imageStore";
 import { useUser } from "@clerk/clerk-expo";
 import { useRouter } from "expo-router";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState, useCallback } from "react";
 import {
   Alert,
   Animated,
@@ -32,6 +32,7 @@ const ResultsScreen = () => {
 
   const [apiCallsStarted, setApiCallsStarted] = useState<boolean>(false);
   const [apiCallsComplete, setApiCallsComplete] = useState<boolean>(false);
+  const [shouldFetchResults, setShouldFetchResults] = useState(true);
 
   const fadeAnim = useRef(new Animated.Value(1)).current;
   const rippleAnim = useRef(new Animated.Value(0)).current;
@@ -43,6 +44,7 @@ const ResultsScreen = () => {
   });
 
   const router = useRouter();
+  const isFocused = useIsFocused();
 
   const messages = [
     "Analyzing your features ✨",
