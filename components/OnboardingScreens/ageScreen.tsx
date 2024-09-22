@@ -1,7 +1,12 @@
-import { Picker } from '@react-native-picker/picker';
-import React, { useState } from 'react';
-import { StatusBar, Text, TouchableOpacity, View } from 'react-native';
-import { onboardingQuestionsList, styles } from '../../constants/onboarding';
+import React, { useState } from "react";
+import {
+  StatusBar,
+  Text,
+  TouchableOpacity,
+  View,
+  TextInput,
+} from "react-native";
+import { onboardingQuestionsList, styles } from "../../constants/onboarding";
 
 export const AgeScreen = ({
   navigation,
@@ -12,15 +17,11 @@ export const AgeScreen = ({
   onNext: () => void;
   onAuthComplete: any;
 }) => {
-  const [selectedYear, setSelectedYear] = useState('2000');
-  const currentYear = new Date().getFullYear();
-  const years = Array.from(new Array(currentYear - 1970 + 1), (v, i) =>
-    (1970 + i).toString()
-  );
+  const [selectedYear, setSelectedYear] = useState("2000");
 
   return (
     <View style={styles.container}>
-      <StatusBar barStyle='light-content' />
+      <StatusBar barStyle="light-content" />
 
       <Text style={styles.title}>{onboardingQuestionsList[3].title}</Text>
       <Text style={styles.subtitleCaption}>
@@ -28,25 +29,30 @@ export const AgeScreen = ({
       </Text>
 
       <View style={styles.contentContainer}>
-        <Picker
-          selectedValue={selectedYear}
+        <TextInput
+          value={selectedYear}
+          onChangeText={setSelectedYear}
           style={{
             ...styles.input,
-            width: '60%',
-            height: 150,
-            borderColor: '#836E89',
-            // backgroundColor: '#F9F3F8',
-            backgroundColor: 'white',
-            borderWidth: 0,
+            width: "60%",
+            height: 50,
+            borderColor: "#836E89",
+            backgroundColor: "white",
+            borderWidth: 1,
             borderRadius: 20,
+            textAlign: "center",
+            fontSize: 18,
+            shadowColor: "#000",
+            shadowOffset: { width: 0, height: 2 },
+            shadowOpacity: 0.1,
+            shadowRadius: 4,
+            elevation: 3,
           }}
-          itemStyle={{ height: 120 }} // To show more visible options in the scroll
-          onValueChange={(itemValue) => setSelectedYear(itemValue)}
-        >
-          {years.map((year) => (
-            <Picker.Item key={year} label={year} value={year} />
-          ))}
-        </Picker>
+          keyboardType="numeric"
+          maxLength={4}
+          placeholder="Enter birth year"
+          placeholderTextColor="#999"
+        />
       </View>
 
       <View style={styles.footerContainer}>

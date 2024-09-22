@@ -32,7 +32,9 @@ const GlowResultScreen = () => {
   const [activeTab, setActiveTab] = useState("Ratings");
   const insets = useSafeAreaInsets();
   const [unlockBtnAnimatedValue] = useState(new Animated.Value(0));
-  const storeImages = useImageStore((state) => state.images);
+  const storeImages = useImageStore(
+    (state: { images: string[] }) => state.images
+  );
   const [openAccordion, setOpenAccordion] = useState<number | null>(null);
 
   const { handleWeeklyPurchase } = useRevenueCat();

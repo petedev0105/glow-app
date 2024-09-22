@@ -11,11 +11,14 @@ import {
   StyleSheet,
   Text,
   View,
+  TouchableOpacity,
 } from "react-native";
 import { styles } from "../../constants/onboarding";
 import LoadingSpinner from "../LoadingSpinner";
 import { useUser } from "@clerk/clerk-expo";
 import { fetchAPI } from "@/lib/fetch";
+import ScanResultModal from "../ScanResultModal";
+import { format } from "date-fns"; // Add this import
 
 type Scan = {
   id: number;
@@ -61,7 +64,8 @@ type Scan = {
       userFeaturesSummary: string;
     }>;
   };
-  image: string; // Assuming the image is stored as a URL or path
+  imageUrl: string; // Assuming the image is stored as a URL or path
+  createdAt: string;
 };
 
 const ScansScreen = () => {
@@ -69,6 +73,14 @@ const ScansScreen = () => {
   const [scans, setScans] = useState<Scan[]>([]);
   const { user } = useUser();
   const userId = user?.id;
+  const [modalVisible, setModalVisible] = useState(false);
+  const [selectedScan, setSelectedScan] = useState<Scan | null>(null);
+
+  const formatDate = (dateString: string) => {
+    if (!dateString) return "N/A";
+    const date = new Date(dateString);
+    return format(date, "dd MMM yyyy");
+  };
 
   useEffect(() => {
     const fetchUserScans = async () => {
@@ -89,40 +101,6 @@ const ScansScreen = () => {
 
     fetchUserScans();
   }, []);
-
-  // TODO call API to get all scans and display here
-  // const scans = [
-  //   {
-  //     id: 1,
-  //     score: 85,
-  //     potential: 90,
-  //     image: images.dashboardGirl,
-  //   },
-  //   {
-  //     id: 2,
-  //     score: 85,
-  //     potential: 90,
-  //     image: images.dashboardGirl,
-  //   },
-  //   {
-  //     id: 3,
-  //     score: 85,
-  //     potential: 90,
-  //     image: images.dashboardGirl,
-  //   },
-  //   {
-  //     id: 4,
-  //     score: 85,
-  //     potential: 90,
-  //     image: images.dashboardGirl,
-  //   },
-  //   {
-  //     id: 5,
-  //     score: 85,
-  //     potential: 90,
-  //     image: images.dashboardGirl,
-  //   },
-  // ];
 
   if (isLoading) {
     return <LoadingSpinner bgImg={images.homeBgLarger}></LoadingSpinner>;
@@ -168,12 +146,10 @@ const ScansScreen = () => {
         </View>
 
         {/* Main Content */}
-        {/* <View style={{ ...styles.contentContainer, paddingHorizontal: 20 }}> */}
         <View style={{ ...styles.contentContainer, marginTop: 20, flex: 4.5 }}>
           <ScrollView
             style={localStyles.scrollView}
             contentContainerStyle={{
-              // ...styles.contentContainer,
               paddingHorizontal: 20,
               paddingBottom: 30,
               width: "100%",
@@ -182,19 +158,25 @@ const ScansScreen = () => {
             showsVerticalScrollIndicator={false}
           >
             {scans.map((scan, index) => (
-              <View
+              <TouchableOpacity
                 key={index}
                 style={localStyles.scanCard}
                 className="shadow-sm"
+                onPress={() => {
+                  setSelectedScan(scan);
+                  setModalVisible(true);
+                }}
               >
                 <Image
-                  source={{ uri: scan.image }}
+                  source={{ uri: scan.imageUrl }}
                   style={localStyles.scanImage}
                 />
 
                 <View style={localStyles.scanDetails}>
                   <Text style={localStyles.scanTitle}>Glow Up Scan</Text>
-                  <Text style={localStyles.scanDate}>15 Sep 2024</Text>
+                  {/* <Text style={localStyles.scanDate}>
+                    {formatDate(scan.createdAt)}
+                  </Text> */}
 
                   <View style={localStyles.scoreContainer}>
                     <Text style={localStyles.scoreText}>Overall</Text>
@@ -210,36 +192,38 @@ const ScansScreen = () => {
 
                   <View style={localStyles.progressBar}>
                     <LinearGradient
-                      colors={["#9B84FF", "#9B84FF"]} // Match color for overall progress (purple)
+                      colors={["#9B84FF", "#9B84FF"]}
                       style={[
                         localStyles.progressFill,
                         {
-                          width: `${(scan.glowScore.scores.overall / 100) * 100}%`,
-                        }, // Width based on overall score
+                          width: `${scan.glowScore.scores.overall * 10}%`,
+                        },
                       ]}
                     />
                     <LinearGradient
-                      colors={["#C7E9FF", "#C7E9FF"]} // Match color for potential progress (light blue)
+                      colors={["#C7E9FF", "#C7E9FF"]}
                       style={[
                         localStyles.progressFill,
                         {
-                          width: `${(scan.glowScore.scores.potential / 100) * 100}%`, // Width based on potential score
-                          position: "absolute", // Position to overlay on the same bar
-                          left: `${(scan.glowScore.scores.overall / 100) * 100}%`, // Start where the overall score ends
+                          width: `${scan.glowScore.scores.potential * 10 - scan.glowScore.scores.overall * 10}%`,
+                          position: "absolute",
+                          left: `${scan.glowScore.scores.overall * 10}%`,
                         },
                       ]}
                     />
                   </View>
                 </View>
-              </View>
+              </TouchableOpacity>
             ))}
           </ScrollView>
-          {/* <View className='flex justify-center items-center bg-white rounded-full w-10 h-10'>
-            <Ionicons name='caret-down-outline' size={30}></Ionicons>
-          </View> */}
         </View>
         <View style={{ ...styles.footerContainer, flex: 0.7 }}></View>
       </SafeAreaView>
+      <ScanResultModal
+        isVisible={modalVisible}
+        onClose={() => setModalVisible(false)}
+        scanData={selectedScan}
+      />
     </ImageBackground>
   );
 };
@@ -278,7 +262,7 @@ const localStyles = StyleSheet.create({
   scanTitle: {
     fontSize: 16,
     fontWeight: "600",
-    marginBottom: 5,
+    marginBottom: 10,
   },
   scanDate: {
     fontSize: 12,

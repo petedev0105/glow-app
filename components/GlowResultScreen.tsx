@@ -33,13 +33,15 @@ const AnimatedLinearGradient = Animated.createAnimatedComponent(LinearGradient);
 const GlowResultScreen = () => {
   const [activeTab, setActiveTab] = useState("Ratings");
   const insets = useSafeAreaInsets();
-  const storeImages = useImageStore((state) => state.images);
+  const storeImages = useImageStore(
+    (state: { images: string[] }) => state.images
+  );
   const [unlockBtnAnimatedValue] = useState(new Animated.Value(0));
   const [openAccordion, setOpenAccordion] = useState<number | null>(null);
   const { user } = useUser();
 
-  const { glowScore, recommendations } =
-    useScanResultsStore((state) => state.scanResults) || {};
+  const { scanResults } = useScanResultsStore();
+  const { glowScore, recommendations } = scanResults || {};
   const { scores, percentile, facialCharacteristics, skinAnalysis } =
     glowScore || {};
 
@@ -551,9 +553,10 @@ I'm glowing! 🌟 #GlowProfile 💗
                   borderColor: "#7c4cff",
                 },
               ]}
-              onPress={() => router.replace("/(auth)/push-results-screen")}
+              // onPress={() => router.replace("/(auth)/push-results-screen")}
+              onPress={() => router.replace("/(home)")}
             >
-              <Text className="text-[#7c4cff] font-bold">Save</Text>
+              <Text className="text-[#7c4cff] font-bold">Home</Text>
             </TouchableOpacity>
             <Text style={localStyles.centeredTitle}>Glow Profile</Text>
             <TouchableOpacity style={localStyles.shareButton} onPress={onShare}>

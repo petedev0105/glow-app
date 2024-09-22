@@ -14,14 +14,14 @@ import {
   Text,
   View,
 } from "react-native";
-import { update } from "lodash";
+import AWS from "aws-sdk";
 
 const { width, height } = Dimensions.get("window");
 
 const ResultsScreen = () => {
   const { user } = useUser();
   const userId = user?.id;
-  const images = useImageStore((state) => state.images);
+  const images = useImageStore((state: { images: string[] }) => state.images);
   const imageUri = images[0];
 
   const [loadingProgress, setLoadingProgress] = useState(0);
@@ -50,6 +50,10 @@ const ResultsScreen = () => {
     "Just a moment, almost there... ⏳",
     "Finalizing results... 🌟",
   ];
+
+  // useEffect(() => {
+  //   console.log("image Uri is: ", imageUri);
+  // }, []);
 
   useEffect(() => {
     // Ripple animation
@@ -142,7 +146,10 @@ const ResultsScreen = () => {
       setLoading(true);
       setApiCallsStarted(true);
 
+      console.log("calling the fetchglowscore function...");
+
       try {
+        console.log("getting glow score...");
         const glowScoreResponse = await fetchAPI(
           "https://wandering-sun-9736.kiettran255.workers.dev/api/glow-score",
           {
@@ -167,34 +174,39 @@ const ResultsScreen = () => {
 
           console.log("Recommendations Response:", recommendationsResponse);
 
-          // Convert the local file to a buffer, or use the correct format for S3.
-          // const response = await fetch(imageUri);
-          // const blob = await response.blob();
+          // NOTE: REMOVED AWS SECRETS
 
-          // const params = {
-          //   Bucket: 'glow-snaps',
-          //   Key: `${userId}/${Date.now()}-image.jpg`,
-          //   Body: blob,
-          //   ContentType: 'image/jpeg', // Change based on your file type
-          //   ACL: 'public-read', // Ensure the image is publicly accessible
-          // };
+          const s3Bucket = new AWS.S3();
+
+          // Convert the local file to a buffer, or use the correct format for S3.
+          const response = await fetch(imageUri);
+          const blob = await response.blob();
+
+          const params = {
+            Bucket: "glow-snaps",
+            Key: `${userId}/${Date.now()}-image.jpg`,
+            Body: blob,
+            ContentType: "image/jpeg", // Change based on your file type
+            ACL: "public-read", // Ensure the image is publicly accessible
+          };
 
           // // Upload image to S3
-          // const uploadResult = await s3Bucket.upload(params).promise();
+          const uploadResult = await s3Bucket.upload(params).promise();
 
           // // Get the S3 URL of the uploaded image
-          // const imageUrl = uploadResult.Location;
+          const imageUrl = uploadResult.Location;
+          // console.log(imageUrl);
           // Alert.alert('FRRR', imageUrl);
 
           const scanResults = {
-            // imageUrl: imageUrl,
+            imageUrl: imageUrl,
             glowScore: glowScoreResponse,
             recommendations: recommendationsResponse,
           };
 
           try {
             const updateResponse = await fetchAPI(
-              `/(api)/update-user-scan/${userId}`,
+              `https://wandering-sun-9736.kiettran255.workers.dev/api/save-scan-results/${userId}`,
               {
                 method: "POST",
                 body: JSON.stringify({ scanResults }),
@@ -213,6 +225,8 @@ const ResultsScreen = () => {
 
           setScanResults(scanResults);
 
+          // setApiCallsComplete(true);
+
           router.replace("/push-results-screen");
         } catch (recommendationError) {
           console.error("Error fetching recommendations:", recommendationError);
@@ -225,12 +239,8 @@ const ResultsScreen = () => {
       }
     };
 
-    if (loadingProgress % 10 === 0) {
-      console.log("Effect triggered:", { loadingProgress });
-    }
-
     if (loadingProgress >= 1 && imageUri && !apiCallsStarted) {
-      fetchGlowResults({ prompt: "", imageUri });
+      fetchGlowResults({ prompt: "Here is an image of a face.", imageUri });
     }
   }, [loadingProgress, imageUri, setScanResults]);
 
@@ -247,11 +257,11 @@ const ResultsScreen = () => {
   // }, [apiCallsComplete, loadingProgress]);
 
   // test unlock results screen
-  useEffect(() => {
-    if (apiCallsComplete && loadingProgress >= 100) {
-      router.replace("/unlock-results-screen");
-    }
-  }, [apiCallsComplete, loadingProgress]);
+  // useEffect(() => {
+  //   if (apiCallsComplete && loadingProgress >= 100) {
+  //     router.replace("/unlock-results-screen");
+  //   }
+  // }, [apiCallsComplete, loadingProgress]);
 
   return (
     <ImageBackground

@@ -51,7 +51,7 @@ const FacialAnalysisScreen = () => {
 
   async function handleGetScore() {
     if (image) {
-      console.log(image);
+      // console.log(image);
       await handleImageUpload(image);
       router.replace("/(auth)/results-screen");
 
@@ -131,6 +131,8 @@ const FacialAnalysisScreen = () => {
       // store image URL in Zustand store
       useImageStore.getState().clearImages();
       useImageStore.getState().addImage(imageUri);
+      // console.log(imageUri);
+
       console.log(imageUri);
 
       // router.replace("/(auth)/next-screen");

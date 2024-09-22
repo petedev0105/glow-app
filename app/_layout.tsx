@@ -5,7 +5,6 @@ import { useFonts } from "expo-font";
 import { Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import { useEffect, useState } from "react";
-import { useRevenueCat } from "@/hooks/useRevenueCat";
 
 // // Prevent the splash screen from auto-hiding before asset loading is complete.
 // SplashScreen.preventAutoHideAsync();
@@ -46,26 +45,24 @@ export default function RootLayout() {
   }
 
   return (
-    <AuthProvider>
-      <ClerkProvider
-        tokenCache={tokenCache}
-        publishableKey={publishableKey}
-        appearance={{
-          layout: {
-            unsafe_disableDevelopmentModeWarnings: true,
-          },
-        }}
-      >
-        <ClerkLoaded>
-          <Stack>
-            <Stack.Screen name="index" options={{ headerShown: false }} />
-            <Stack.Screen name="(auth)" options={{ headerShown: false }} />
-            <Stack.Screen name="(root)" options={{ headerShown: false }} />
-            <Stack.Screen name="(home)" options={{ headerShown: false }} />
-            <Stack.Screen name="+not-found" />
-          </Stack>
-        </ClerkLoaded>
-      </ClerkProvider>
-    </AuthProvider>
+    <ClerkProvider
+      tokenCache={tokenCache}
+      publishableKey={publishableKey}
+      appearance={{
+        layout: {
+          unsafe_disableDevelopmentModeWarnings: true,
+        },
+      }}
+    >
+      <ClerkLoaded>
+        <Stack>
+          <Stack.Screen name="index" options={{ headerShown: false }} />
+          <Stack.Screen name="(auth)" options={{ headerShown: false }} />
+          <Stack.Screen name="(root)" options={{ headerShown: false }} />
+          <Stack.Screen name="(home)" options={{ headerShown: false }} />
+          <Stack.Screen name="+not-found" />
+        </Stack>
+      </ClerkLoaded>
+    </ClerkProvider>
   );
 }

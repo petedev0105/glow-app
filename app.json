@@ -14,12 +14,7 @@
     },
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.supitspete.glow",
-      "infoPlist": {
-        "NSAppTransportSecurity": {
-          "NSAllowsArbitraryLoads": true
-        }
-      }
+      "bundleIdentifier": "com.supitspete.glow"
     },
     "android": {
       "adaptiveIcon": {
@@ -40,8 +35,7 @@
           "origin": "https://glowapp.com/"
         }
       ],
-      "expo-font",
-      "sentry-expo"
+      "expo-font"
     ],
     "experiments": {
       "typedRoutes": true
