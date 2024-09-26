@@ -3,7 +3,7 @@ import { styles } from "@/constants/onboarding";
 import { useImageStore } from "@/store/imageStore";
 import { Ionicons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
-import { router, useNavigation } from 'expo-router';
+import { useNavigation } from 'expo-router';
 import React, { useEffect, useState } from "react";
 import {
   Animated,
@@ -18,9 +18,9 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity,
-  View,
-} from 'react-native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
+  View
+} from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 // revenue cat hook
 
@@ -33,9 +33,14 @@ const GlowResultScreen = () => {
   const storeImages = useImageStore((state) => state.images);
   const [openAccordion, setOpenAccordion] = useState<number | null>(null);
 
+  const { handleWeeklyPurchase } = useRevenueCat();
+
   const percentile = 70; // Dummy percentile value
 
   const navigation = useNavigation();
+
+  const { priceString, revenueCatOfferings, error, handleWeeklyPurchase } =
+    useRevenueCat();
 
   useEffect(() => {
     const animateGradient = () => {
@@ -612,7 +617,7 @@ const GlowResultScreen = () => {
             { paddingBottom: insets.bottom },
           ]}
           // TODO CHANGE ROUTE TO PAYWALL SCREEN INSTEAD AFTER THEY CLICK UNLOCK
-          onPress={() => router.replace('/(auth)/paywall-screen')}
+          onPress={handleWeeklyPurchase}
         >
           <AnimatedLinearGradient
             colors={['#da70d6', '#7b68ee', '#87cefa']}

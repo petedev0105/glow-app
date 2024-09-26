@@ -1,6 +1,6 @@
-import { images } from '@/constants';
-import { LinearGradient } from 'expo-linear-gradient';
-import React, { useState } from 'react';
+import { images } from "@/constants";
+import { LinearGradient } from "expo-linear-gradient";
+import React, { useState, useEffect } from "react";
 import {
   Image,
   ImageBackground,
@@ -11,46 +11,118 @@ import {
   StyleSheet,
   Text,
   View,
-} from 'react-native';
-import { styles } from '../../constants/onboarding';
-import LoadingSpinner from '../LoadingSpinner';
+} from "react-native";
+import { styles } from "../../constants/onboarding";
+import LoadingSpinner from "../LoadingSpinner";
+import { useUser } from "@clerk/clerk-expo";
+import { fetchAPI } from "@/lib/fetch";
+
+type Scan = {
+  id: number;
+  glowScore: {
+    scores: {
+      overall: number;
+      potential: number;
+      glowFactor: number;
+      skinHealth: number;
+      authenticity: number;
+      featureHarmony: number;
+    };
+    percentile: number;
+    keyStrengths: string[];
+    skinAnalysis: {
+      skinType: string;
+      skinTexture: string;
+      skinConcerns: string[];
+      hydrationLevel: string;
+      skinToneAndColor: string[];
+      skinVitalityIndicators: string[];
+    };
+    facialCharacteristics: {
+      jawline: string;
+      eyeShape: string;
+      lipShape: string;
+      faceShape: string;
+    };
+    enhancementSuggestions: string[];
+  };
+  recommendations: {
+    result: Array<{
+      id: number;
+      steps: Array<{
+        id: number;
+        name: string;
+        details: string;
+        importance: string;
+        explanation: string;
+        relatedFeature: string;
+      }>;
+      title: string;
+      userFeaturesSummary: string;
+    }>;
+  };
+  image: string; // Assuming the image is stored as a URL or path
+};
 
 const ScansScreen = () => {
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
+  const [scans, setScans] = useState<Scan[]>([]);
+  const { user } = useUser();
+  const userId = user?.id;
+
+  useEffect(() => {
+    const fetchUserScans = async () => {
+      if (!userId) return;
+      setIsLoading(true);
+      try {
+        const response = await fetchAPI(`/(api)/fetch-user-scans/${userId}`);
+        const scanResults = response.data.map(
+          (item: { scan_results: Scan }) => item.scan_results
+        );
+        setScans(scanResults);
+      } catch (error) {
+        console.error("Error fetching user scans:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchUserScans();
+  }, []);
 
   // TODO call API to get all scans and display here
-  const scans = [
-    {
-      id: 1,
-      score: 85,
-      potential: 90,
-      image: images.dashboardGirl,
-    },
-    {
-      id: 2,
-      score: 85,
-      potential: 90,
-      image: images.dashboardGirl,
-    },
-    {
-      id: 3,
-      score: 85,
-      potential: 90,
-      image: images.dashboardGirl,
-    },
-    {
-      id: 4,
-      score: 85,
-      potential: 90,
-      image: images.dashboardGirl,
-    },
-    {
-      id: 5,
-      score: 85,
-      potential: 90,
-      image: images.dashboardGirl,
-    },
-  ];
+  // const scans = [
+  //   {
+  //     id: 1,
+  //     score: 85,
+  //     potential: 90,
+  //     image: images.dashboardGirl,
+  //   },
+  //   {
+  //     id: 2,
+  //     score: 85,
+  //     potential: 90,
+  //     image: images.dashboardGirl,
+  //   },
+  //   {
+  //     id: 3,
+  //     score: 85,
+  //     potential: 90,
+  //     image: images.dashboardGirl,
+  //   },
+  //   {
+  //     id: 4,
+  //     score: 85,
+  //     potential: 90,
+  //     image: images.dashboardGirl,
+  //   },
+  //   {
+  //     id: 5,
+  //     score: 85,
+  //     potential: 90,
+  //     image: images.dashboardGirl,
+  //   },
+  // ];
 
   if (isLoading) {
     return <LoadingSpinner bgImg={images.homeBgLarger}></LoadingSpinner>;
@@ -58,12 +130,12 @@ const ScansScreen = () => {
 
   return (
     <ImageBackground
-      resizeMode='cover'
+      resizeMode="cover"
       source={images.homeBgLarger}
       style={styles.container}
     >
       <SafeAreaView style={localStyles.safeArea}>
-        <StatusBar barStyle='dark-content' backgroundColor='#6a51ae' />
+        <StatusBar barStyle="dark-content" backgroundColor="#6a51ae" />
 
         <View style={localStyles.logoContainer}>
           <Image source={images.glowTitle} style={styles.logo as ImageStyle} />
@@ -75,7 +147,7 @@ const ScansScreen = () => {
             style={{
               ...styles.title,
               fontSize: 30,
-              fontWeight: '600',
+              fontWeight: "600",
               letterSpacing: -0.8,
               marginTop: 10, // Reduce top margin
             }}
@@ -86,7 +158,7 @@ const ScansScreen = () => {
             style={{
               ...styles.title,
               fontSize: 20,
-              fontWeight: '400',
+              fontWeight: "400",
               marginTop: 16,
               letterSpacing: -0.8,
             }}
@@ -104,18 +176,21 @@ const ScansScreen = () => {
               // ...styles.contentContainer,
               paddingHorizontal: 20,
               paddingBottom: 30,
-              width: '100%',
+              width: "100%",
               marginBottom: 10,
             }}
             showsVerticalScrollIndicator={false}
           >
-            {scans.map((scan) => (
+            {scans.map((scan, index) => (
               <View
-                key={scan.id}
+                key={index}
                 style={localStyles.scanCard}
-                className='shadow-sm'
+                className="shadow-sm"
               >
-                <Image source={scan.image} style={localStyles.scanImage} />
+                <Image
+                  source={{ uri: scan.image }}
+                  style={localStyles.scanImage}
+                />
 
                 <View style={localStyles.scanDetails}>
                   <Text style={localStyles.scanTitle}>Glow Up Scan</Text>
@@ -123,28 +198,34 @@ const ScansScreen = () => {
 
                   <View style={localStyles.scoreContainer}>
                     <Text style={localStyles.scoreText}>Overall</Text>
-                    <Text style={localStyles.scoreValue}>{scan.score}</Text>
+                    <Text style={localStyles.scoreValue}>
+                      {scan.glowScore?.scores?.overall}
+                    </Text>
                     <Text style={localStyles.scoreText}>Potential</Text>
-                    <Text style={localStyles.scoreValue}>{scan.potential}</Text>
+                    <Text style={localStyles.scoreValue}>
+                      {scan.glowScore.scores.potential}
+                    </Text>
                     <Text style={localStyles.scoreText}>+4</Text>
                   </View>
 
                   <View style={localStyles.progressBar}>
                     <LinearGradient
-                      colors={['#9B84FF', '#9B84FF']} // Match color for overall progress (purple)
-                      style={[
-                        localStyles.progressFill,
-                        { width: `${(scan.score / 100) * 100}%` }, // Width based on overall score
-                      ]}
-                    />
-                    <LinearGradient
-                      colors={['#C7E9FF', '#C7E9FF']} // Match color for potential progress (light blue)
+                      colors={["#9B84FF", "#9B84FF"]} // Match color for overall progress (purple)
                       style={[
                         localStyles.progressFill,
                         {
-                          width: `${(scan.potential / 100) * 100}%`, // Width based on potential score
-                          position: 'absolute', // Position to overlay on the same bar
-                          left: `${(scan.score / 100) * 100}%`, // Start where the overall score ends
+                          width: `${(scan.glowScore.scores.overall / 100) * 100}%`,
+                        }, // Width based on overall score
+                      ]}
+                    />
+                    <LinearGradient
+                      colors={["#C7E9FF", "#C7E9FF"]} // Match color for potential progress (light blue)
+                      style={[
+                        localStyles.progressFill,
+                        {
+                          width: `${(scan.glowScore.scores.potential / 100) * 100}%`, // Width based on potential score
+                          position: "absolute", // Position to overlay on the same bar
+                          left: `${(scan.glowScore.scores.overall / 100) * 100}%`, // Start where the overall score ends
                         },
                       ]}
                     />
@@ -168,27 +249,27 @@ const localStyles = StyleSheet.create({
     flex: 1,
   },
   logoContainer: {
-    flexDirection: 'row',
-    justifyContent: 'center',
+    flexDirection: "row",
+    justifyContent: "center",
     marginBottom: 10,
     marginVertical: 20,
   },
   scanCard: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: '#fff',
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "#fff",
     borderRadius: 12,
     padding: 12,
     marginVertical: 10,
-    borderColor: '#dbdbdb',
+    borderColor: "#dbdbdb",
     borderWidth: 1,
-    width: '100%',
+    width: "100%",
   },
   scanImage: {
     width: 60,
     height: 60,
     borderRadius: 8,
-    resizeMode: 'contain',
+    resizeMode: "contain",
   },
   scanDetails: {
     flex: 1,
@@ -196,38 +277,38 @@ const localStyles = StyleSheet.create({
   },
   scanTitle: {
     fontSize: 16,
-    fontWeight: '600',
+    fontWeight: "600",
     marginBottom: 5,
   },
   scanDate: {
     fontSize: 12,
-    color: '#6c757d',
+    color: "#6c757d",
     marginBottom: 10,
   },
   scoreContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
     marginBottom: 10,
   },
   scoreText: {
     fontSize: 12,
-    color: '#6c757d',
+    color: "#6c757d",
   },
   scoreValue: {
     fontSize: 16,
-    fontWeight: '600',
+    fontWeight: "600",
   },
   progressBar: {
     height: 6,
-    backgroundColor: '#E0E0E0',
+    backgroundColor: "#E0E0E0",
     borderRadius: 5,
-    overflow: 'hidden',
+    overflow: "hidden",
     marginTop: 5,
-    position: 'relative',
+    position: "relative",
   },
   progressFill: {
-    height: '100%',
+    height: "100%",
     borderRadius: 5,
   },
   scrollView: {

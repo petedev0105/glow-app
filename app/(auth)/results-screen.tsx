@@ -14,15 +14,15 @@ import {
   Text,
   View,
 } from "react-native";
+import { update } from "lodash";
 
 const { width, height } = Dimensions.get("window");
 
 const ResultsScreen = () => {
   const { user } = useUser();
+  const userId = user?.id;
   const images = useImageStore((state) => state.images);
   const imageUri = images[0];
-
-  const payedUser = true;
 
   const [loadingProgress, setLoadingProgress] = useState(0);
   const [loading, setLoading] = useState(true);
@@ -167,18 +167,53 @@ const ResultsScreen = () => {
 
           console.log("Recommendations Response:", recommendationsResponse);
 
+          // Convert the local file to a buffer, or use the correct format for S3.
+          // const response = await fetch(imageUri);
+          // const blob = await response.blob();
+
+          // const params = {
+          //   Bucket: 'glow-snaps',
+          //   Key: `${userId}/${Date.now()}-image.jpg`,
+          //   Body: blob,
+          //   ContentType: 'image/jpeg', // Change based on your file type
+          //   ACL: 'public-read', // Ensure the image is publicly accessible
+          // };
+
+          // // Upload image to S3
+          // const uploadResult = await s3Bucket.upload(params).promise();
+
+          // // Get the S3 URL of the uploaded image
+          // const imageUrl = uploadResult.Location;
+          // Alert.alert('FRRR', imageUrl);
+
           const scanResults = {
+            // imageUrl: imageUrl,
             glowScore: glowScoreResponse,
             recommendations: recommendationsResponse,
           };
 
+          try {
+            const updateResponse = await fetchAPI(
+              `/(api)/update-user-scan/${userId}`,
+              {
+                method: "POST",
+                body: JSON.stringify({ scanResults }),
+              }
+            );
+
+            if (updateResponse) {
+              console.log("updated successfully");
+              console.log(updateResponse);
+            }
+          } catch (updateError) {
+            console.error("Error updating user scan results:", updateError);
+          }
+
           console.log("Combined Scan Results:", scanResults);
+
           setScanResults(scanResults);
 
-          setApiCallsComplete(true);
-
-          // router.replace("/glow-results-screen");
-          // router.replace("/unlock-results-screen");
+          router.replace("/push-results-screen");
         } catch (recommendationError) {
           console.error("Error fetching recommendations:", recommendationError);
         }

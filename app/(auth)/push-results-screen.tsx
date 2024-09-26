@@ -1,23 +1,27 @@
-import LoadingSpinner from "@/components/LoadingSpinner";
-import { images } from "@/constants";
 import { router } from "expo-router";
 import React, { useEffect } from "react";
+import { useRevenueCat } from "@/hooks/useRevenueCat";
+import LoadingSpinner from "@/components/LoadingSpinner";
+import { images } from "@/constants";
+import { CustomerInfo } from "@revenuecat/purchases-typescript-internal"; // Add this import
 
 const PushResultsScreen = () => {
-  // PUSH SCANS TO DB AND WHEN DONE THEN SET NO NEED TO SET LOADING TO FALES, JUST REROUTE
+  const { customerInfo } = useRevenueCat();
 
-  // coolio, this is smart
   useEffect(() => {
-    const pushScansToDB = () => {
-      console.log("pushing scans to db and rerouting...");
-      // Call db here
-      router.replace("/(home)");
-    };
+    if (customerInfo) {
+      const isSubscribed =
+        (customerInfo as CustomerInfo).activeSubscriptions?.length > 0;
+      const nextScreen = isSubscribed
+        ? "/glow-results-screen"
+        : "/unlock-results-screen";
+      router.replace(nextScreen);
 
-    pushScansToDB();
-  }, []);
+      // console.log(customerInfo);
+    }
+  }, [customerInfo]);
 
-  return <LoadingSpinner bgImg={images.homeBgLarger}></LoadingSpinner>;
+  return <LoadingSpinner bgImg={images.homeBgLarger} />;
 };
 
 export default PushResultsScreen;
