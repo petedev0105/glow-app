@@ -1,4 +1,3 @@
-import { AuthProvider } from "@/context/AuthContext";
 import { tokenCache } from "@/lib/auth";
 import { ClerkLoaded, ClerkProvider } from "@clerk/clerk-expo";
 import { useFonts } from "expo-font";
@@ -7,7 +6,7 @@ import * as SplashScreen from "expo-splash-screen";
 import { useEffect, useState } from "react";
 
 // // Prevent the splash screen from auto-hiding before asset loading is complete.
-// SplashScreen.preventAutoHideAsync();
+SplashScreen.preventAutoHideAsync();
 
 const publishableKey = process.env.EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY!;
 
@@ -17,7 +16,7 @@ if (!publishableKey) {
   );
 }
 
-console.log("publishable key is: ", publishableKey);
+// console.log("publishable key is: ", publishableKey);
 
 export default function RootLayout() {
   const [fontsLoaded] = useFonts({
@@ -29,8 +28,6 @@ export default function RootLayout() {
     Jakarta: require("../assets/fonts/PlusJakartaSans-Regular.ttf"),
     "Jakarta-SemiBold": require("../assets/fonts/PlusJakartaSans-SemiBold.ttf"),
   });
-
-  const [revenueCatLoaded, setRevenueCatLoaded] = useState(false);
 
   // const [appIsReady, setAppIsReady] = useState(false);
 

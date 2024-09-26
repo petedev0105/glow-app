@@ -32,8 +32,8 @@ const ScanResultModal = ({ isVisible, onClose, scanData }) => {
     glowScore || {};
 
   useEffect(() => {
-    setActiveTab("ratings");
-  }, []);
+    setActiveTab("Ratings");
+  }, [scanData]);
 
   useEffect(() => {
     const animateGradient = () => {

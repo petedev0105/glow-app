@@ -87,10 +87,14 @@ const ScansScreen = () => {
       if (!userId) return;
       setIsLoading(true);
       try {
-        const response = await fetchAPI(`/(api)/fetch-user-scans/${userId}`);
+        const response = await fetchAPI(
+          `https://wandering-sun-9736.kiettran255.workers.dev/api/get-scan-results/${userId}`
+        );
+        console.log(response.data);
         const scanResults = response.data.map(
           (item: { scan_results: Scan }) => item.scan_results
         );
+        console.log(scanResults);
         setScans(scanResults);
       } catch (error) {
         console.error("Error fetching user scans:", error);
@@ -185,7 +189,7 @@ const ScansScreen = () => {
                     </Text>
                     <Text style={localStyles.scoreText}>Potential</Text>
                     <Text style={localStyles.scoreValue}>
-                      {scan.glowScore.scores.potential}
+                      {scan.glowScore.scores?.potential}
                     </Text>
                     <Text style={localStyles.scoreText}>+4</Text>
                   </View>
@@ -196,7 +200,7 @@ const ScansScreen = () => {
                       style={[
                         localStyles.progressFill,
                         {
-                          width: `${scan.glowScore.scores.overall * 10}%`,
+                          width: `${scan.glowScore.scores?.overall * 10}%`,
                         },
                       ]}
                     />
@@ -205,9 +209,9 @@ const ScansScreen = () => {
                       style={[
                         localStyles.progressFill,
                         {
-                          width: `${scan.glowScore.scores.potential * 10 - scan.glowScore.scores.overall * 10}%`,
+                          width: `${scan.glowScore.scores?.potential * 10 - scan.glowScore.scores?.overall * 10}%`,
                           position: "absolute",
-                          left: `${scan.glowScore.scores.overall * 10}%`,
+                          left: `${scan.glowScore.scores?.overall * 10}%`,
                         },
                       ]}
                     />

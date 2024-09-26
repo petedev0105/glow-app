@@ -17,6 +17,7 @@ import {
   View,
 } from "react-native";
 import { styles } from "../../constants/onboarding";
+import * as Linking from "expo-linking";
 
 const ProfileScreen = () => {
   const { signOut, isSignedIn } = useAuth();
@@ -27,6 +28,26 @@ const ProfileScreen = () => {
       router.replace("/(auth)/sign-in");
     }
   }, [isSignedIn]);
+
+  const openPrivacyPolicy = () => {
+    Linking.openURL(
+      "https://getdoryai.notion.site/Privacy-Policy-104f1bbab427809dbef3dc9de97ee495?pvs=4"
+    );
+  };
+
+  const openTermsOfUse = () => {
+    Linking.openURL(
+      "https://getdoryai.notion.site/Terms-of-Use-b1810bbb67e547a39813b0e396446853?pvs=4"
+    );
+  };
+
+  const openContactUs = () => {
+    Linking.openURL("https://tally.so/r/w4vOYA");
+  };
+
+  const openSuggestFeature = () => {
+    Linking.openURL("https://tally.so/r/w4vOYA");
+  };
 
   return (
     <ImageBackground
@@ -102,10 +123,14 @@ const ProfileScreen = () => {
             </TouchableOpacity> */}
             <TouchableOpacity
               style={{ ...localStyles.sectionTop, borderBottomWidth: 0 }}
+              onPress={openSuggestFeature}
             >
               <Text style={localStyles.sectionText}>Suggest a Feature</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={localStyles.sectionBottom}>
+            <TouchableOpacity
+              style={localStyles.sectionBottom}
+              onPress={openContactUs}
+            >
               <Text style={localStyles.sectionText}>Contact us</Text>
             </TouchableOpacity>
 
@@ -113,13 +138,14 @@ const ProfileScreen = () => {
             <Text style={localStyles.sectionHeader}>LEGAL</Text>
             <TouchableOpacity
               style={{ ...localStyles.sectionTop, borderBottomWidth: 0 }}
+              onPress={openPrivacyPolicy}
             >
               <Text style={localStyles.sectionText}>Privacy policy</Text>
             </TouchableOpacity>
-            {/* <TouchableOpacity style={localStyles.sectionMiddle}>
-              <Text style={localStyles.sectionText}>Money-back Policy</Text>
-            </TouchableOpacity> */}
-            <TouchableOpacity style={localStyles.sectionBottom}>
+            <TouchableOpacity
+              style={localStyles.sectionBottom}
+              onPress={openTermsOfUse}
+            >
               <Text style={localStyles.sectionText}>Terms of Use</Text>
             </TouchableOpacity>
 
