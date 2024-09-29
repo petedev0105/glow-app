@@ -24,6 +24,12 @@ const Page = () => {
     setMounted(true);
   }, []);
 
+  // useEffect(() => {
+  //   if (mounted) {
+  //     router.replace("/(auth)/sign-in");
+  //   }
+  // }, [mounted]);
+
   useEffect(() => {
     if (mounted) {
       if (isSignedIn && userId) {
@@ -50,34 +56,6 @@ const Page = () => {
       }
     }
   }, [customerInfo, error, isSignedIn]);
-
-  // useEffect(() => {
-  //   if (mounted) {
-  //     if (isSignedIn && userId) {
-  //       console.log(userId);
-  //       if (customerInfo) {
-  //         console.log(
-  //           "purchases from index: ",
-  //           JSON.stringify(customerInfo, null, 2)
-  //         );
-  //         if (customerInfo.activeSubscriptions.length > 0) {
-  //           router.replace("/(home)");
-  //         } else {
-  //           router.replace("/(auth)/welcome");
-  //           // router.replace("/(home)");
-  //         }
-  //       }
-  //       if (error) {
-  //         console.error("RevenueCat Error:", error);
-  //         router.replace("/(auth)/welcome");
-  //       }
-  //     } else {
-  //       router.replace("/(auth)/sign-in");
-  //     }
-
-  //     router.replace("/(auth)/welcome");
-  //   }
-  // }, [mounted]);
 
   if (loading) {
     return (

@@ -6,9 +6,11 @@ import * as SplashScreen from "expo-splash-screen";
 import { useEffect, useState } from "react";
 
 // // Prevent the splash screen from auto-hiding before asset loading is complete.
-SplashScreen.preventAutoHideAsync();
+// SplashScreen.preventAutoHideAsync();
 
 const publishableKey = process.env.EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY!;
+
+console.log(publishableKey);
 
 if (!publishableKey) {
   throw new Error(
