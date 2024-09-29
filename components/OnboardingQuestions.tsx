@@ -22,7 +22,6 @@ import { AgeScreen } from "./OnboardingScreens/ageScreen";
 import { AuthScreen } from "./OnboardingScreens/authScreen";
 import { BeautyGoalsScreen } from "./OnboardingScreens/beautyGoalsScreen";
 import { BenefitsScreen } from './OnboardingScreens/benefitsScreen';
-import { LeaveRatingScreen } from './OnboardingScreens/leaveRatingScreen';
 import { MakeUpPreferencesScreen } from './OnboardingScreens/makeupPreferencesScreen';
 import { ProductPreferencesScreen } from './OnboardingScreens/productPreferencesScreen';
 import { ReferralScreen } from './OnboardingScreens/referralScreen';
@@ -39,7 +38,7 @@ export const onboardingQuestionsScreens = [
   SkinConcernsScreen,
   ProductPreferencesScreen,
   MakeUpPreferencesScreen,
-  LeaveRatingScreen,
+  // LeaveRatingScreen,
   BenefitsScreen,
 ];
 
