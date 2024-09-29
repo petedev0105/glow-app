@@ -32,7 +32,7 @@ export const initialiseScreens = [TrustedScreen, ReferralScreen, AuthScreen];
 
 export const onboardingQuestionsScreens = [
   TrustedScreen,
-  ReferralScreen,
+  // ReferralScreen,
   AgeScreen,
   BeautyGoalsScreen,
   SkinConcernsScreen,
