@@ -1,7 +1,11 @@
 import { useState, useEffect } from "react";
 import { Platform } from "react-native";
 import { useRouter } from "expo-router";
-import Purchases from "react-native-purchases";
+import Purchases, {
+  CustomerInfo,
+  PurchasesError,
+  PurchasesOfferings,
+} from "react-native-purchases";
 
 const API_KEYS = {
   ios: "appl_KwCRoyhPJbkTPAXYmbfPmFjtfJu",
@@ -9,21 +13,28 @@ const API_KEYS = {
 };
 
 export function useRevenueCat() {
-  const [priceString, setPriceString] = useState("");
-  const [revenueCatOfferings, setRevenueCatOfferings] = useState(null);
-  const [error, setError] = useState(null);
+  const [priceString, setPriceString] = useState<string>("");
+  const [revenueCatOfferings, setRevenueCatOfferings] =
+    useState<PurchasesOfferings | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  const [customerInfo, setCustomerInfo] = useState<CustomerInfo | null>(null);
   const router = useRouter();
 
   useEffect(() => {
     Purchases.setLogLevel(Purchases.LOG_LEVEL.VERBOSE);
     async function initializePurchases() {
       try {
-        await Purchases.configure({ apiKey: API_KEYS[Platform.OS] });
+        await Purchases.configure({
+          apiKey: API_KEYS[Platform.OS as keyof typeof API_KEYS],
+        });
         console.log("RevenueCat configured successfully");
 
-        // Check if user is already subscribed
-        const customerInfo = await Purchases.getCustomerInfo();
-        if (customerInfo.entitlements.active["glowProWeekly"]) {
+        const info = await Purchases.getCustomerInfo();
+        setCustomerInfo(info);
+        console.log("Customer info:", JSON.stringify(info, null, 2));
+
+        const isSubscribed = info.entitlements.active["glowProWeekly"];
+        if (isSubscribed) {
           console.log("User is already subscribed. Navigating to home.");
           router.push("/home");
           return;
@@ -35,8 +46,8 @@ export function useRevenueCat() {
           JSON.stringify(offerings, null, 2)
         );
 
-        if (offerings?.current?.availablePackages?.length > 0) {
-          const weeklyPackage = offerings.current.availablePackages.find(
+        if (offerings?.current?.availablePackages?.length ?? 0 > 0) {
+          const weeklyPackage = offerings.current?.availablePackages?.find(
             (pkg) => pkg.packageType === "WEEKLY"
           );
 
@@ -74,29 +85,27 @@ export function useRevenueCat() {
       );
       console.log("Purchase result:", JSON.stringify(purchaseResult, null, 2));
 
-      const customerInfo = await Purchases.getCustomerInfo();
+      const updatedCustomerInfo = await Purchases.getCustomerInfo();
+      setCustomerInfo(updatedCustomerInfo);
       console.log(
         "Updated customer info:",
-        JSON.stringify(customerInfo, null, 2)
+        JSON.stringify(updatedCustomerInfo, null, 2)
       );
 
-      if (customerInfo.entitlements.active["glowProWeekly"]) {
+      if (updatedCustomerInfo.entitlements.active["glowProWeekly"]) {
         console.log("Weekly entitlement is now active");
-        router.push("/home");
+        router.push("/glow-results-screen");
       } else {
         console.log("Weekly entitlement is not active after purchase");
         setError("Purchase was not successful. Please try again.");
       }
     } catch (error) {
-      // console.error("Error in handleWeeklyPurchase:", error);
-      if (error.userCancelled) {
+      if ((error as PurchasesError).userCancelled) {
         console.log("Purchase cancelled by user");
-      } else if (error.code === Purchases.PURCHASE_NOT_ALLOWED_ERROR) {
-        console.log("Purchase not allowed");
-        setError("Purchase not allowed. Please check your account settings.");
       } else {
-        // console.error("Unexpected error during purchase:", error);
-        setError(`An error occurred during purchase: ${error.message}`);
+        setError(
+          `An error occurred during purchase: ${(error as Error).message}`
+        );
       }
     }
     console.log("handleWeeklyPurchase completed");
@@ -107,5 +116,6 @@ export function useRevenueCat() {
     revenueCatOfferings,
     error,
     handleWeeklyPurchase,
+    customerInfo,
   };
 }

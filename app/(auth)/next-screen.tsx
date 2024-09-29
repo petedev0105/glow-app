@@ -1,12 +1,12 @@
-import glowTitle from '@/assets/images/glow-title.png';
-import { onboardingQuestionsList, styles } from '@/constants/onboarding';
-import { useImageStore } from '@/store/imageStore';
-import { useUser } from '@clerk/clerk-expo';
-import * as FileSystem from 'expo-file-system';
-import * as ImageManipulator from 'expo-image-manipulator';
-import * as ImagePicker from 'expo-image-picker';
-import { router } from 'expo-router';
-import React, { useEffect } from 'react';
+import glowTitle from "@/assets/images/glow-title.png";
+import { onboardingQuestionsList, styles } from "@/constants/onboarding";
+import { useImageStore } from "@/store/imageStore";
+import { useUser } from "@clerk/clerk-expo";
+import * as FileSystem from "expo-file-system";
+import * as ImageManipulator from "expo-image-manipulator";
+import * as ImagePicker from "expo-image-picker";
+import { router } from "expo-router";
+import React, { useEffect } from "react";
 import {
   Alert,
   Image,
@@ -16,14 +16,14 @@ import {
   Text,
   TouchableOpacity,
   View,
-} from 'react-native';
+} from "react-native";
 
 // Compress the image if needed
 const compressImage = async (uri: string) => {
   try {
     const fileInfo = await FileSystem.getInfoAsync(uri);
 
-    if ('size' in fileInfo && fileInfo.size > 1000000) {
+    if ("size" in fileInfo && fileInfo.size > 1000000) {
       const manipResult = await ImageManipulator.manipulateAsync(
         uri,
         [
@@ -38,7 +38,7 @@ const compressImage = async (uri: string) => {
       return uri;
     }
   } catch (error) {
-    console.error('Error compressing image:', error);
+    console.error("Error compressing image:", error);
     return uri;
   }
 };
@@ -47,7 +47,7 @@ const compressImage = async (uri: string) => {
 const handleCameraCapture = async () => {
   const permissionResult = await ImagePicker.requestCameraPermissionsAsync();
   if (!permissionResult.granted) {
-    Alert.alert('Permission to access camera is required!');
+    Alert.alert("Permission to access camera is required!");
     return;
   }
 
@@ -69,7 +69,7 @@ const handleGalleryUpload = async () => {
   const permissionResult =
     await ImagePicker.requestMediaLibraryPermissionsAsync();
   if (!permissionResult.granted) {
-    Alert.alert('Permission to access gallery is required!');
+    Alert.alert("Permission to access gallery is required!");
     return;
   }
 
@@ -93,19 +93,19 @@ const handleImageUpload = async (imageUri: string) => {
 
     // router.replace('/(auth)/next-screen');
   } catch (error) {
-    Alert.alert('Error uploading image');
+    Alert.alert("Error uploading image");
   }
 };
 
 // Show options to take a selfie or choose from the library
 const showImagePickerOptions = () => {
   Alert.alert(
-    'Upload Image',
-    'Choose an option',
+    "Upload Image",
+    "Choose an option",
     [
-      { text: 'Take a Selfie', onPress: handleCameraCapture },
-      { text: 'Choose Existing Image', onPress: handleGalleryUpload },
-      { text: 'Cancel', style: 'cancel' },
+      { text: "Take a Selfie", onPress: handleCameraCapture },
+      { text: "Choose Existing Image", onPress: handleGalleryUpload },
+      { text: "Cancel", style: "cancel" },
     ],
     { cancelable: true }
   );
@@ -143,26 +143,28 @@ const handleSubmitImage = async ({
     // const imageUrl = uploadResult.Location;
     // Alert.alert('FRRR', imageUrl);
 
-    router.replace('/(auth)/results-screen');
+    router.replace("/(auth)/results-screen");
   } catch (error) {
-    console.error('Error uploading image:', error);
-    Alert.alert('Error uploading image');
+    console.error("Error uploading image:", error);
+    Alert.alert("Error uploading image");
   }
 };
 
 const NextScreen = () => {
   // const { imageUri } = useLocalSearchParams();
   const { user } = useUser();
-  const images = useImageStore((state) => state.images);
-  const imageUri = images[0];
+  const images = useImageStore();
+  // const imageUri = storeImages[0];
+
+  const imageUri = "";
 
   useEffect(() => {}, [images]);
 
   return (
-    <SafeAreaView className='flex h-full bg-white'>
-      <StatusBar barStyle='dark-content' backgroundColor='#6a51ae' />
+    <SafeAreaView className="flex h-full bg-white">
+      <StatusBar barStyle="dark-content" backgroundColor="#6a51ae" />
 
-      <View className='flex items-center mb-10'>
+      <View className="flex items-center mb-10">
         <Image source={glowTitle} style={styles.logo as ImageStyle} />
       </View>
 
@@ -176,7 +178,7 @@ const NextScreen = () => {
           <View style={styles.snapPlaceholder}>
             <Image
               source={{ uri: imageUri as string }}
-              style={{ width: '100%', height: '100%', borderRadius: 10 }}
+              style={{ width: "100%", height: "100%", borderRadius: 10 }}
             />
           </View>
         </View>
@@ -202,5 +204,5 @@ const NextScreen = () => {
 
 export default NextScreen;
 function useUserStore() {
-  throw new Error('Function not implemented.');
+  throw new Error("Function not implemented.");
 }

@@ -38,24 +38,16 @@ export const googleOAuth = async (startOAuthFlow: any) => {
       if (setActive) {
         await setActive({ session: createdSessionId });
 
-        if (signUp.createdUserId) {
-          await fetchAPI("/(api)/user", {
-            method: "POST",
-            body: JSON.stringify({
-              name: `${signUp.firstName} ${signUp.lastName}`,
-              email: signUp.emailAddress,
-              clerkId: signUp.createdUserId,
-            }),
-          });
-
-          // Create initial tasks for the new user
-          await fetchAPI(
-            `/(api)/create-initial-tasks/${signUp.createdUserId}`,
-            {
-              method: "POST",
-            }
-          );
-        }
+        // if (signUp.createdUserId) {
+        //   await fetchAPI("/(api)/user", {
+        //     method: "POST",
+        //     body: JSON.stringify({
+        //       name: `${signUp.firstName} ${signUp.lastName}`,
+        //       email: signUp.emailAddress,
+        //       clerkId: signUp.createdUserId,
+        //     }),
+        //   });
+        // }
 
         // setShowQuestions(true);
 

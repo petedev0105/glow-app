@@ -1,8 +1,8 @@
 {
   "expo": {
-    "name": "Glow - Look your best",
+    "name": "Glow",
     "slug": "glow",
-    "version": "1.0.0",
+    "version": "1.1.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "scheme": "myapp",
@@ -14,12 +14,7 @@
     },
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.supitspete.glow",
-      "infoPlist": {
-        "NSAppTransportSecurity": {
-          "NSAllowsArbitraryLoads": true
-        }
-      }
+      "bundleIdentifier": "com.supitspete.glow"
     },
     "android": {
       "adaptiveIcon": {
@@ -37,18 +32,17 @@
       [
         "expo-router",
         {
-          "origin": "https://glowapp.com/"
+          "origin": "https://tryglowapp.com/"
         }
       ],
-      "expo-font",
-      "sentry-expo"
+      "expo-font"
     ],
     "experiments": {
       "typedRoutes": true
     },
     "extra": {
       "router": {
-        "origin": "https://glowapp.com/"
+        "origin": "https://tryglowapp.com/"
       },
       "eas": {
         "projectId": "025adeb7-3799-4a9e-bb20-1cd6c7963da0"

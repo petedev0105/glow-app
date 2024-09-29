@@ -3,7 +3,7 @@ import { useScanResultsStore } from "@/store/scanResultsStore";
 import { useImageStore } from "@/store/imageStore";
 import { useUser } from "@clerk/clerk-expo";
 import { useRouter } from "expo-router";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState, useCallback } from "react";
 import {
   Alert,
   Animated,
@@ -14,15 +14,15 @@ import {
   Text,
   View,
 } from "react-native";
+import AWS from "aws-sdk";
 
 const { width, height } = Dimensions.get("window");
 
 const ResultsScreen = () => {
   const { user } = useUser();
-  const images = useImageStore((state) => state.images);
+  const userId = user?.id;
+  const images = useImageStore((state: { images: string[] }) => state.images);
   const imageUri = images[0];
-
-  const payedUser = true;
 
   const [loadingProgress, setLoadingProgress] = useState(0);
   const [loading, setLoading] = useState(true);
@@ -32,6 +32,7 @@ const ResultsScreen = () => {
 
   const [apiCallsStarted, setApiCallsStarted] = useState<boolean>(false);
   const [apiCallsComplete, setApiCallsComplete] = useState<boolean>(false);
+  const [shouldFetchResults, setShouldFetchResults] = useState(true);
 
   const fadeAnim = useRef(new Animated.Value(1)).current;
   const rippleAnim = useRef(new Animated.Value(0)).current;
@@ -43,6 +44,7 @@ const ResultsScreen = () => {
   });
 
   const router = useRouter();
+  const isFocused = useIsFocused();
 
   const messages = [
     "Analyzing your features ✨",
@@ -50,6 +52,10 @@ const ResultsScreen = () => {
     "Just a moment, almost there... ⏳",
     "Finalizing results... 🌟",
   ];
+
+  // useEffect(() => {
+  //   console.log("image Uri is: ", imageUri);
+  // }, []);
 
   useEffect(() => {
     // Ripple animation
@@ -142,7 +148,10 @@ const ResultsScreen = () => {
       setLoading(true);
       setApiCallsStarted(true);
 
+      console.log("calling the fetchglowscore function...");
+
       try {
+        console.log("getting glow score...");
         const glowScoreResponse = await fetchAPI(
           "https://wandering-sun-9736.kiettran255.workers.dev/api/glow-score",
           {
@@ -167,18 +176,68 @@ const ResultsScreen = () => {
 
           console.log("Recommendations Response:", recommendationsResponse);
 
+          let s3ImageUrl = "";
+
+          try {
+            const response = await fetch(
+              "https://wandering-sun-9736.kiettran255.workers.dev/api/upload-image",
+              {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                  imageUri: imageUri,
+                  userId: userId,
+                }),
+              }
+            );
+
+            if (!response.ok) {
+              throw new Error(`HTTP error! status: ${response.status}`);
+            }
+
+            const result = await response.json();
+            console.log("Upload successful:", result.message);
+            console.log("Image URL:", result.location);
+
+            // return result.location; // Return the S3 URL of the uploaded image
+            s3ImageUrl = result.location;
+          } catch (error) {
+            console.error("Error uploading image:", error);
+            throw error;
+          }
+
           const scanResults = {
+            imageUrl: s3ImageUrl,
             glowScore: glowScoreResponse,
             recommendations: recommendationsResponse,
           };
 
+          try {
+            const updateResponse = await fetchAPI(
+              `https://wandering-sun-9736.kiettran255.workers.dev/api/save-scan-results/${userId}`,
+              {
+                method: "POST",
+                body: JSON.stringify({ scanResults }),
+              }
+            );
+
+            if (updateResponse) {
+              console.log("updated successfully");
+              console.log(updateResponse);
+            }
+          } catch (updateError) {
+            console.error("Error updating user scan results:", updateError);
+          }
+
           console.log("Combined Scan Results:", scanResults);
+
           setScanResults(scanResults);
 
-          setApiCallsComplete(true);
+          // setApiCallsComplete(true);
 
-          // router.replace("/glow-results-screen");
-          // router.replace("/unlock-results-screen");
+          router.replace("/push-results-screen");
         } catch (recommendationError) {
           console.error("Error fetching recommendations:", recommendationError);
         }
@@ -190,12 +249,8 @@ const ResultsScreen = () => {
       }
     };
 
-    if (loadingProgress % 10 === 0) {
-      console.log("Effect triggered:", { loadingProgress });
-    }
-
     if (loadingProgress >= 1 && imageUri && !apiCallsStarted) {
-      fetchGlowResults({ prompt: "", imageUri });
+      fetchGlowResults({ prompt: "Here is an image of a face.", imageUri });
     }
   }, [loadingProgress, imageUri, setScanResults]);
 
@@ -212,11 +267,11 @@ const ResultsScreen = () => {
   // }, [apiCallsComplete, loadingProgress]);
 
   // test unlock results screen
-  useEffect(() => {
-    if (apiCallsComplete && loadingProgress >= 100) {
-      router.replace("/unlock-results-screen");
-    }
-  }, [apiCallsComplete, loadingProgress]);
+  // useEffect(() => {
+  //   if (apiCallsComplete && loadingProgress >= 100) {
+  //     router.replace("/unlock-results-screen");
+  //   }
+  // }, [apiCallsComplete, loadingProgress]);
 
   return (
     <ImageBackground
