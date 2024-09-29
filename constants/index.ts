@@ -65,8 +65,6 @@ export const images = {
   summaryImg,
   screenBgLarger,
   ratingStars,
-  paywallBg,
-  paywallReviewImg,
 };
 
 export const icons = {
