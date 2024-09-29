@@ -174,32 +174,40 @@ const ResultsScreen = () => {
 
           console.log("Recommendations Response:", recommendationsResponse);
 
-          // NOTE: REMOVED AWS SECRETS
+          let s3ImageUrl = "";
 
-          const s3Bucket = new AWS.S3();
+          try {
+            const response = await fetch(
+              "https://wandering-sun-9736.kiettran255.workers.dev/api/upload-image",
+              {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                  imageUri: imageUri,
+                  userId: userId,
+                }),
+              }
+            );
 
-          // Convert the local file to a buffer, or use the correct format for S3.
-          const response = await fetch(imageUri);
-          const blob = await response.blob();
+            if (!response.ok) {
+              throw new Error(`HTTP error! status: ${response.status}`);
+            }
 
-          const params = {
-            Bucket: "glow-snaps",
-            Key: `${userId}/${Date.now()}-image.jpg`,
-            Body: blob,
-            ContentType: "image/jpeg", // Change based on your file type
-            ACL: "public-read", // Ensure the image is publicly accessible
-          };
+            const result = await response.json();
+            console.log("Upload successful:", result.message);
+            console.log("Image URL:", result.location);
 
-          // // Upload image to S3
-          const uploadResult = await s3Bucket.upload(params).promise();
-
-          // // Get the S3 URL of the uploaded image
-          const imageUrl = uploadResult.Location;
-          // console.log(imageUrl);
-          // Alert.alert('FRRR', imageUrl);
+            // return result.location; // Return the S3 URL of the uploaded image
+            s3ImageUrl = result.location;
+          } catch (error) {
+            console.error("Error uploading image:", error);
+            throw error;
+          }
 
           const scanResults = {
-            imageUrl: imageUrl,
+            imageUrl: s3ImageUrl,
             glowScore: glowScoreResponse,
             recommendations: recommendationsResponse,
           };
