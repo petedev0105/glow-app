@@ -1,32 +1,38 @@
-import { useAuth, useUser } from "@clerk/clerk-expo";
+import { useRevenueCat } from "@/hooks/useRevenueCat";
+import { checkOrCreateUserId, getUserId } from "@/lib/auth";
 import { useRouter } from "expo-router";
 import { useEffect, useLayoutEffect, useState } from "react";
-import { Image, View, ActivityIndicator } from "react-native"; // {{ edit_1 }}
-import { useRevenueCat } from "@/hooks/useRevenueCat";
+import { View, ActivityIndicator } from "react-native"; // {{ edit_1 }}
 
 const Page = () => {
-  const { isSignedIn } = useAuth();
-  const { user } = useUser();
-  const userId = user?.id;
   const [loading, setLoading] = useState(true);
-  const [mounted, setMounted] = useState(false); // {{ edit_1 }}
+  const [mounted, setMounted] = useState(false);
+  const [userId, setUserId] = useState<string | null>(null);
   const router = useRouter();
 
-  const {
-    priceString,
-    revenueCatOfferings,
-    error,
-    handleWeeklyPurchase,
-    customerInfo,
-  } = useRevenueCat();
+  const { error, customerInfo } = useRevenueCat();
 
   useLayoutEffect(() => {
     setMounted(true);
   }, []);
 
   useEffect(() => {
-    if (mounted) {
-      if (isSignedIn && userId) {
+    const fetchUserId = async () => {
+      const id = await getUserId();
+      setUserId(id);
+      setLoading(false);
+    };
+
+    checkOrCreateUserId().catch((error) => {
+      console.error("Error in checkOrCreateUserId:", error);
+    });
+
+    fetchUserId();
+  }, []);
+
+  useEffect(() => {
+    if (mounted && !loading) {
+      if (userId) {
         console.log(userId);
         if (customerInfo) {
           console.log(
@@ -44,55 +50,19 @@ const Page = () => {
         if (error) {
           console.error("RevenueCat Error:", error);
           router.replace("/(auth)/welcome");
+          // router.replace("/(home)");
         }
       } else {
         router.replace("/(auth)/sign-in");
       }
     }
-  }, [customerInfo, error, isSignedIn]);
+  }, [customerInfo, error, userId, mounted, loading]);
 
-  // useEffect(() => {
-  //   if (mounted) {
-  //     if (isSignedIn && userId) {
-  //       console.log(userId);
-  //       if (customerInfo) {
-  //         console.log(
-  //           "purchases from index: ",
-  //           JSON.stringify(customerInfo, null, 2)
-  //         );
-  //         if (customerInfo.activeSubscriptions.length > 0) {
-  //           router.replace("/(home)");
-  //         } else {
-  //           router.replace("/(auth)/welcome");
-  //           // router.replace("/(home)");
-  //         }
-  //       }
-  //       if (error) {
-  //         console.error("RevenueCat Error:", error);
-  //         router.replace("/(auth)/welcome");
-  //       }
-  //     } else {
-  //       router.replace("/(auth)/sign-in");
-  //     }
-
-  //     router.replace("/(auth)/welcome");
-  //   }
-  // }, [mounted]);
-
-  if (loading) {
-    return (
-      <View
-        style={{
-          flex: 1,
-          backgroundColor: "white",
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-      >
-        <ActivityIndicator size="large" color="purple" />
-      </View>
-    );
-  }
+  return (
+    <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+      <ActivityIndicator size="large" color="#0000ff" />
+    </View>
+  );
 };
 
 export default Page;

@@ -2,12 +2,12 @@ import React, { useEffect, useState } from "react";
 import { View, Text } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { usePointsStore } from "@/store/pointsStore";
-import { useUser } from "@clerk/clerk-expo";
+import { getUserId } from "@/lib/auth";
 import * as Progress from "react-native-progress";
 
 const AuraStats = () => {
   const { totalPoints, setTotalPoints } = usePointsStore();
-  const { user } = useUser();
+  const userId = getUserId();
   const [level, setLevel] = useState(1);
   const [tier, setTier] = useState("Novice");
   const [nextLevel, setNextLevel] = useState(2);

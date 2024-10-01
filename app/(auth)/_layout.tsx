@@ -14,16 +14,12 @@ const Layout = () => {
 
   return (
     <Stack
-      // screenOptions={{
-      //   headerShown: false, // This will hide the header for all screens
-      // }}
       screenOptions={{
         headerShadowVisible: false,
       }}
       initialRouteName={initialRouteName}
     >
       <Stack.Screen name="start" options={{ headerShown: false }} />
-      <Stack.Screen name="next-screen" options={{ headerShown: false }} />
       <Stack.Screen name="results-screen" options={{ headerShown: false }} />
       <Stack.Screen
         name="unlock-results-screen"

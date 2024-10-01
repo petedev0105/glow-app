@@ -6,7 +6,7 @@ import {
   ScrollView,
   ActivityIndicator,
 } from "react-native";
-import { useUser } from "@clerk/clerk-expo";
+import { getUserId } from "@/lib/auth";
 import { Modal } from "react-native";
 import { fetchAPI } from "@/lib/fetch";
 import { useAuraTasksStore } from "@/store/auraTasksStore"; // Import the aura tasks store
@@ -60,7 +60,7 @@ const TaskCard = ({ task, onPress }) => {
 };
 
 const AuraTasks = () => {
-  const { user } = useUser();
+  const userId = getUserId();
   const { tasks, setTasks } = useAuraTasksStore(); // Use the global state
   const [selectedTask, setSelectedTask] = useState(null);
   const [showConfetti, setShowConfetti] = useState(false);

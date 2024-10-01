@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { View, Text, ActivityIndicator } from "react-native";
-import { useUser } from "@clerk/clerk-expo";
+import { getUserId } from "@/lib/auth";
 import { usePointsStore } from "@/store/pointsStore";
 
 const AuraLevelTier = () => {
-  const { user } = useUser();
+  const userId = getUserId();
   const { totalPoints } = usePointsStore();
   const [level, setLevel] = useState(1);
   const [tier, setTier] = useState("Novice");

@@ -11,7 +11,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
 import * as Progress from "react-native-progress";
 import { LinearGradient } from "expo-linear-gradient";
-import { useUser } from "@clerk/clerk-expo";
+import { getUserId } from "@/lib/auth";
 import AuraTaskModal from "./AuraTaskModal"; // Import the new component
 import { useAuraTasksStore } from "@/store/auraTasksStore";
 
@@ -81,8 +81,8 @@ const TaskCard = ({ task, onPress }) => (
 );
 
 const DailyAuraTasks = () => {
-  const { user } = useUser(); // Get user object
-  const userId = user?.id; // Extract userId from user object
+  const userId = getUserId(); // Get user object
+  // Extract userId from user object
   const { tasks, setTasks } = useAuraTasksStore(); // Use the store
   const [completedTasks, setCompletedTasks] = useState([]);
   const [selectedTask, setSelectedTask] = useState(null);

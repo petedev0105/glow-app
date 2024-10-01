@@ -7,14 +7,14 @@ import {
   ActivityIndicator,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import { useUser } from "@clerk/clerk-expo"; // Import useUser
+import { getUserId } from "@/lib/auth"; // Import useUser
 import { usePointsStore } from "@/store/pointsStore"; // Import the points store
 import { useAuraTasksStore } from "@/store/auraTasksStore"; // Import the aura tasks store
 import { useRouter } from "expo-router"; // Import useRouter
 
 const AuraTaskModal = ({ task, visible, onClose, onMarkAsDone }) => {
-  const { user } = useUser(); // Get user object
-  const userId = user?.id; // Extract userId from user object
+  const userId = getUserId(); // Get user object
+  // Extract userId from user object
   const [loading, setLoading] = useState(false); // Loading state
   const [successMessage, setSuccessMessage] = useState(""); // Success message state
   const { tasks, setTasks } = useAuraTasksStore();

@@ -20,14 +20,7 @@ import { styles } from "../../constants/onboarding";
 import * as Linking from "expo-linking";
 
 const ProfileScreen = () => {
-  const { signOut, isSignedIn } = useAuth();
   const navigation = useNavigation<ProfileScreenNavigationProp>();
-
-  useEffect(() => {
-    if (!isSignedIn) {
-      router.replace("/(auth)/sign-in");
-    }
-  }, [isSignedIn]);
 
   const openPrivacyPolicy = () => {
     Linking.openURL(
@@ -150,7 +143,7 @@ const ProfileScreen = () => {
             </TouchableOpacity>
 
             {/* Log Out & Delete Account Section */}
-            <View style={localStyles.buttonContainer}>
+            {/* <View style={localStyles.buttonContainer}>
               <TouchableOpacity
                 style={localStyles.logoutButton}
                 onPress={() => {
@@ -169,7 +162,7 @@ const ProfileScreen = () => {
                   Delete Account
                 </Text>
               </TouchableOpacity>
-            </View>
+            </View> */}
           </ScrollView>
         </View>
         <View style={{ ...styles.footerContainer, flex: 0.3 }}></View>

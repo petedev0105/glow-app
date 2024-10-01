@@ -1,7 +1,7 @@
 import { fetchAPI } from "@/lib/fetch";
 import { useScanResultsStore } from "@/store/scanResultsStore";
 import { useImageStore } from "@/store/imageStore";
-import { useUser } from "@clerk/clerk-expo";
+import { getUserId } from "@/lib/auth";
 import { useRouter } from "expo-router";
 import React, { useEffect, useRef, useState } from "react";
 import {
@@ -19,8 +19,20 @@ import AWS from "aws-sdk";
 const { width, height } = Dimensions.get("window");
 
 const ResultsScreen = () => {
-  const { user } = useUser();
-  const userId = user?.id;
+  // const userId = await getUserId();
+  const [userId, setUserId] = useState("");
+
+  useEffect(() => {
+    async function getId() {
+      const id = await getUserId();
+      if (id) {
+        console.log("user id from welcome screen: ", id);
+        setUserId(id);
+      }
+    }
+
+    getId();
+  }, []);
   const images = useImageStore((state: { images: string[] }) => state.images);
   const imageUri = images[0];
 
@@ -28,7 +40,7 @@ const ResultsScreen = () => {
   const [loading, setLoading] = useState(true);
   const { scanResults, setScanResults } = useScanResultsStore();
   const [message, setMessage] = useState("Analyzing your features...");
-  const [intervalDuration, setIntervalDuration] = useState(80);
+  const [intervalDuration, setIntervalDuration] = useState(110);
 
   const [apiCallsStarted, setApiCallsStarted] = useState<boolean>(false);
   const [apiCallsComplete, setApiCallsComplete] = useState<boolean>(false);
@@ -50,10 +62,6 @@ const ResultsScreen = () => {
     "Just a moment, almost there... ⏳",
     "Finalizing results... 🌟",
   ];
-
-  // useEffect(() => {
-  //   console.log("image Uri is: ", imageUri);
-  // }, []);
 
   useEffect(() => {
     // Ripple animation
@@ -140,6 +148,7 @@ const ResultsScreen = () => {
     }) => {
       if (!imageUri) {
         Alert.alert("Error", "Image URI is missing");
+        handleApiFailure();
         return;
       }
 
@@ -160,6 +169,13 @@ const ResultsScreen = () => {
 
         console.log("Glow Score Response:", glowScoreResponse);
 
+        if (glowScoreResponse.error) {
+          await Alert.alert(
+            "Could not scan this image. Please ensure your face is clearly showing or try again later."
+          );
+          router.replace("/(auth)/facial-analysis-screen");
+        }
+
         const stringResponse = JSON.stringify(glowScoreResponse);
 
         try {
@@ -174,32 +190,28 @@ const ResultsScreen = () => {
 
           console.log("Recommendations Response:", recommendationsResponse);
 
-          // NOTE: REMOVED AWS SECRETS
+          let s3ImageUrl = "";
 
-          const s3Bucket = new AWS.S3();
+          const s3Response = await fetchAPI(
+            "https://wandering-sun-9736.kiettran255.workers.dev/api/upload-image",
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                imageUri: imageUri,
+                userId: userId,
+              }),
+            }
+          );
 
-          // Convert the local file to a buffer, or use the correct format for S3.
-          const response = await fetch(imageUri);
-          const blob = await response.blob();
+          console.log(s3Response);
 
-          const params = {
-            Bucket: "glow-snaps",
-            Key: `${userId}/${Date.now()}-image.jpg`,
-            Body: blob,
-            ContentType: "image/jpeg", // Change based on your file type
-            ACL: "public-read", // Ensure the image is publicly accessible
-          };
-
-          // // Upload image to S3
-          const uploadResult = await s3Bucket.upload(params).promise();
-
-          // // Get the S3 URL of the uploaded image
-          const imageUrl = uploadResult.Location;
-          // console.log(imageUrl);
-          // Alert.alert('FRRR', imageUrl);
+          s3ImageUrl = s3Response.imageUrl;
 
           const scanResults = {
-            imageUrl: imageUrl,
+            imageUrl: s3ImageUrl,
             glowScore: glowScoreResponse,
             recommendations: recommendationsResponse,
           };
@@ -232,8 +244,10 @@ const ResultsScreen = () => {
           console.error("Error fetching recommendations:", recommendationError);
         }
       } catch (error) {
+        useImageStore.getState().clearImages();
         console.error("Error fetching glow results:", error);
         Alert.alert("Error", "Could not fetch glow results.");
+        handleApiFailure();
       } finally {
         setLoading(false);
       }
@@ -243,6 +257,10 @@ const ResultsScreen = () => {
       fetchGlowResults({ prompt: "Here is an image of a face.", imageUri });
     }
   }, [loadingProgress, imageUri, setScanResults]);
+
+  const handleApiFailure = () => {
+    router.replace("/(auth)/facial-analysis-screen");
+  };
 
   // useEffect(() => {
   //   if (apiCallsComplete && loadingProgress >= 100) {

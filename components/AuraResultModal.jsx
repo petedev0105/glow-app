@@ -6,7 +6,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { Image } from "react-native";
 import { images } from "@/constants";
 import { fetchAPI } from "@/lib/fetch"; // Import the fetchAPI function
-import { useUser } from "@clerk/clerk-expo";
+import { getUserId } from "@/lib/auth";
 import { ActivityIndicator } from "react-native";
 import { PointerType } from "react-native-gesture-handler";
 import { usePointsStore } from "@/store/pointsStore";
@@ -15,7 +15,7 @@ import { useRouter } from "expo-router";
 const AuraResultModal = ({ isVisible, onClose, result }) => {
   const [bottomModalVisible, setBottomModalVisible] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState(null);
-  const { user } = useUser();
+  const userId = getUserId();
   const [loading, setLoading] = useState(false); // Add loading state
   const [scoreRecorded, setScoreRecorded] = useState(false); // Add state for score recorded
   const { totalPoints, setTotalPoints } = usePointsStore();

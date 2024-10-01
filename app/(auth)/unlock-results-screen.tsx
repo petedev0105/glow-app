@@ -20,15 +20,18 @@ import {
   TouchableOpacity,
   View,
   Alert,
+  ActivityIndicator,
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useRouter } from "expo-router";
+import { useRevenueCat } from "@/hooks/useRevenueCat";
 
 // revenue cat hook
 
 const AnimatedLinearGradient = Animated.createAnimatedComponent(LinearGradient);
 
 const GlowResultScreen = () => {
+  const [isPaymentLoading, setIsPaymentLoading] = useState(false);
   const [activeTab, setActiveTab] = useState("Ratings");
   const insets = useSafeAreaInsets();
   const [unlockBtnAnimatedValue] = useState(new Animated.Value(0));
@@ -619,9 +622,8 @@ const GlowResultScreen = () => {
             localStyles.buttonContainer,
             { paddingBottom: insets.bottom },
           ]}
-          // TODO CHANGE ROUTE TO PAYWALL SCREEN INSTEAD AFTER THEY CLICK UNLOCK
-          onPress={handleWeeklyPurchase}
-          // onPress={() => router.replace("/home")}
+          onPress={() => handleWeeklyPurchase({ setIsPaymentLoading })}
+          disabled={isPaymentLoading}
         >
           <AnimatedLinearGradient
             colors={["#da70d6", "#7b68ee", "#87cefa"]}
@@ -630,9 +632,13 @@ const GlowResultScreen = () => {
             style={localStyles.gradientBackground}
           >
             <View style={localStyles.whiteButton}>
-              <Text style={localStyles.unlockButtonText}>
-                Unlock Results 🙌
-              </Text>
+              {isPaymentLoading ? (
+                <ActivityIndicator className="p-0 m-0" />
+              ) : (
+                <Text style={localStyles.unlockButtonText}>
+                  Unlock Results 🙌
+                </Text>
+              )}
             </View>
           </AnimatedLinearGradient>
         </TouchableOpacity>

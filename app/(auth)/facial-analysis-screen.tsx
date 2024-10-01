@@ -1,12 +1,14 @@
 import { images } from "@/constants";
 import { onboardingQuestionsList, styles } from "@/constants/onboarding";
 import { useImageStore } from "@/store/imageStore";
-import { useUser } from "@clerk/clerk-expo";
+import { getUserId } from "@/lib/auth";
 import * as FileSystem from "expo-file-system";
 import * as ImageManipulator from "expo-image-manipulator";
 import * as ImagePicker from "expo-image-picker";
 import { router } from "expo-router";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { Ionicons } from "@expo/vector-icons";
+import { useNavigation } from "@react-navigation/native";
 import {
   Alert,
   Image,
@@ -23,7 +25,20 @@ import { LinearGradient } from "expo-linear-gradient";
 
 const FacialAnalysisScreen = () => {
   const [image, setImage] = useState<string | null>(null);
-  const { user } = useUser();
+  const [userId, setUserId] = useState("");
+
+  useEffect(() => {
+    async function getId() {
+      const id = await getUserId();
+      if (id) {
+        console.log("user id from facial analysis screen screen: ", id);
+        setUserId(id);
+      }
+    }
+
+    getId();
+  }, []);
+  const navigation = useNavigation();
   // compress image
   const compressImage = async (uri: string) => {
     try {
@@ -122,7 +137,7 @@ const FacialAnalysisScreen = () => {
   };
 
   const handleImageUpload = async (imageUri: string) => {
-    if (!user || !user.id) {
+    if (!userId) {
       console.error("User is not logged in");
       return;
     }
@@ -134,8 +149,6 @@ const FacialAnalysisScreen = () => {
       // console.log(imageUri);
 
       console.log(imageUri);
-
-      // router.replace("/(auth)/next-screen");
     } catch (error: any) {
       console.error("Error uploading image:", error);
       Alert.alert("Error uploading image", error.message);
@@ -169,7 +182,28 @@ const FacialAnalysisScreen = () => {
         </View>
 
         <View style={styles.container}>
-          <Text style={styles.title}>{onboardingQuestionsList[10].title}</Text>
+          <View style={localStyles.header}>
+            <TouchableOpacity
+              style={[
+                localStyles.backButton,
+                localStyles.tabBase,
+                localStyles.activeTab,
+                {
+                  backgroundColor: "#F4EFFF",
+                  borderWidth: 2,
+                  borderColor: "#7c4cff",
+                },
+              ]}
+              onPress={() => {
+                navigation.goBack();
+              }}
+            >
+              <Ionicons name="arrow-back" size={24} color="#7c4cff" />
+            </TouchableOpacity>
+            <Text style={[localStyles.centeredTitle]}>
+              {onboardingQuestionsList[10].title}
+            </Text>
+          </View>
           <Text style={styles.subtitleCaption}>
             {onboardingQuestionsList[10].subtitle}
           </Text>
@@ -239,6 +273,30 @@ const localStyles = StyleSheet.create({
   safeArea: {
     flex: 1,
     backgroundColor: "transparent",
+  },
+  header: {
+    position: "relative",
+    justifyContent: "center",
+    alignItems: "center",
+    height: 50,
+    marginBottom: 0,
+  },
+  centeredTitle: {
+    fontSize: 24,
+    fontWeight: "bold",
+  },
+  backButton: {
+    position: "absolute",
+    left: 0,
+    padding: 4,
+  },
+  tabBase: {
+    borderRadius: 20,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  activeTab: {
+    backgroundColor: "black",
   },
 });
 

@@ -31,20 +31,20 @@ export function useRevenueCat() {
 
         const info = await Purchases.getCustomerInfo();
         setCustomerInfo(info);
-        console.log("Customer info:", JSON.stringify(info, null, 2));
+        // console.log("Customer info:", JSON.stringify(info, null, 2));
 
         const isSubscribed = info.entitlements.active["glowProWeekly"];
         if (isSubscribed) {
           console.log("User is already subscribed. Navigating to home.");
-          router.push("/home");
+          // router.push("/(home)");
           return;
         }
 
         const offerings = await Purchases.getOfferings();
-        console.log(
-          "RevenueCat offerings:",
-          JSON.stringify(offerings, null, 2)
-        );
+        // console.log(
+        //   "RevenueCat offerings:",
+        //   JSON.stringify(offerings, null, 2)
+        // );
 
         if (offerings?.current?.availablePackages?.length ?? 0 > 0) {
           const weeklyPackage = offerings.current?.availablePackages?.find(
@@ -54,7 +54,7 @@ export function useRevenueCat() {
           if (weeklyPackage) {
             const weeklyPriceString = weeklyPackage.product.priceString;
             setPriceString(weeklyPriceString);
-            console.log("Weekly price string:", weeklyPriceString);
+            // console.log("Weekly price string:", weeklyPriceString);
           }
 
           setRevenueCatOfferings(offerings);
@@ -70,12 +70,18 @@ export function useRevenueCat() {
     initializePurchases();
   }, [router]);
 
-  async function handleWeeklyPurchase() {
+  async function handleWeeklyPurchase({
+    setIsPaymentLoading,
+  }: {
+    setIsPaymentLoading?: any;
+  }) {
     console.log("handleWeeklyPurchase started");
+    setIsPaymentLoading(true);
     try {
       if (!revenueCatOfferings?.current?.weekly) {
         console.log("No weekly offering available");
         setError("No weekly offering available");
+        setIsPaymentLoading(false);
         return;
       }
 
@@ -83,23 +89,26 @@ export function useRevenueCat() {
       const purchaseResult = await Purchases.purchasePackage(
         revenueCatOfferings.current.weekly
       );
-      console.log("Purchase result:", JSON.stringify(purchaseResult, null, 2));
+      // console.log("Purchase result:", JSON.stringify(purchaseResult, null, 2));
 
       const updatedCustomerInfo = await Purchases.getCustomerInfo();
       setCustomerInfo(updatedCustomerInfo);
-      console.log(
-        "Updated customer info:",
-        JSON.stringify(updatedCustomerInfo, null, 2)
-      );
+      // console.log(
+      //   "Updated customer info:",
+      //   JSON.stringify(updatedCustomerInfo, null, 2)
+      // );
 
       if (updatedCustomerInfo.entitlements.active["glowProWeekly"]) {
         console.log("Weekly entitlement is now active");
-        router.push("/glow-results-screen");
+        router.replace("/glow-results-screen");
       } else {
         console.log("Weekly entitlement is not active after purchase");
         setError("Purchase was not successful. Please try again.");
       }
+
+      setIsPaymentLoading(false);
     } catch (error) {
+      setIsPaymentLoading(false);
       if ((error as PurchasesError).userCancelled) {
         console.log("Purchase cancelled by user");
       } else {
@@ -109,6 +118,7 @@ export function useRevenueCat() {
       }
     }
     console.log("handleWeeklyPurchase completed");
+    setIsPaymentLoading(false);
   }
 
   return {

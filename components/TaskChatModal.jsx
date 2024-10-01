@@ -11,11 +11,11 @@ import {
   Modal,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import { useUser } from "@clerk/clerk-expo";
+import { getUserId } from "@/lib/auth";
 
 const TaskChatModal = ({ isVisible, onClose, taskDetails }) => {
-  const { user } = useUser();
-  const userId = user?.id;
+  const userId = getUserId();
+
   const [messages, setMessages] = useState([]);
   const [inputText, setInputText] = useState("");
   const [loading, setLoading] = useState(false);

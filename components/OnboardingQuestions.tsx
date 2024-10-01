@@ -1,7 +1,7 @@
 import glowTitle from "@/assets/images/glow-title.png";
 import { images } from "@/constants";
 import { useQuestionStore } from "@/store/onboardingStore";
-import { useUser } from "@clerk/clerk-expo";
+import { getUserId } from "@/lib/auth";
 import { useNavigation } from "@react-navigation/native";
 import * as Haptics from "expo-haptics";
 import { router } from "expo-router";
@@ -21,30 +21,28 @@ import { styles } from "../constants/onboarding";
 import { AgeScreen } from "./OnboardingScreens/ageScreen";
 import { AuthScreen } from "./OnboardingScreens/authScreen";
 import { BeautyGoalsScreen } from "./OnboardingScreens/beautyGoalsScreen";
-import { BenefitsScreen } from './OnboardingScreens/benefitsScreen';
-import { LeaveRatingScreen } from './OnboardingScreens/leaveRatingScreen';
-import { MakeUpPreferencesScreen } from './OnboardingScreens/makeupPreferencesScreen';
-import { ProductPreferencesScreen } from './OnboardingScreens/productPreferencesScreen';
-import { ReferralScreen } from './OnboardingScreens/referralScreen';
-import { SkinConcernsScreen } from './OnboardingScreens/skinConcernsScreen';
-import { TrustedScreen } from './OnboardingScreens/trustedScreen';
-
-export const initialiseScreens = [TrustedScreen, ReferralScreen, AuthScreen];
+import { BenefitsScreen } from "./OnboardingScreens/benefitsScreen";
+// import { LeaveRatingScreen } from "./OnboardingScreens/leaveRatingScreen";
+import { MakeUpPreferencesScreen } from "./OnboardingScreens/makeupPreferencesScreen";
+import { ProductPreferencesScreen } from "./OnboardingScreens/productPreferencesScreen";
+// import { ReferralScreen } from "./OnboardingScreens/referralScreen";
+import { SkinConcernsScreen } from "./OnboardingScreens/skinConcernsScreen";
+import { TrustedScreen } from "./OnboardingScreens/trustedScreen";
 
 export const onboardingQuestionsScreens = [
   TrustedScreen,
-  ReferralScreen,
+  // ReferralScreen,
   AgeScreen,
   BeautyGoalsScreen,
   SkinConcernsScreen,
   ProductPreferencesScreen,
   MakeUpPreferencesScreen,
-  LeaveRatingScreen,
+  // LeaveRatingScreen,
   BenefitsScreen,
 ];
 
 const OnboardingQuestions = () => {
-  const { user, isLoaded, isSignedIn } = useUser();
+  // const userId = await getUserId();
   const { showQuestions, setShowQuestions } = useQuestionStore();
   const swiperRef = useRef<Swiper>(null);
   const [activeIndex, setActiveIndex] = useState(0);
@@ -100,14 +98,14 @@ const OnboardingQuestions = () => {
 
   return (
     <ImageBackground
-      resizeMode='cover'
+      resizeMode="cover"
       source={images.screenBg}
       style={styles.container}
     >
-      <SafeAreaView className='flex h-full'>
-        <StatusBar barStyle='dark-content' backgroundColor='#6a51ae' />
+      <SafeAreaView className="flex h-full">
+        <StatusBar barStyle="dark-content" backgroundColor="#6a51ae" />
 
-        <View className='flex items-center mb-10'>
+        <View className="flex items-center mb-10">
           <Image source={glowTitle} style={styles.logo as ImageStyle} />
         </View>
 

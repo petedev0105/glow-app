@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { View, Text, FlatList, ActivityIndicator } from "react-native";
-import { useUser } from "@clerk/clerk-expo";
+import { getUserId } from "@/lib/auth";
 import { fetchAPI } from "@/lib/fetch";
 
 const CompletedTasksHistory = () => {
-  const { user } = useUser();
+  const userId = getUserId();
   const [completedTasks, setCompletedTasks] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 

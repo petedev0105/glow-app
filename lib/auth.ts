@@ -1,5 +1,6 @@
 import * as Linking from "expo-linking";
 import * as SecureStore from "expo-secure-store";
+import { router } from "expo-router";
 
 import { fetchAPI } from "@/lib/fetch";
 
@@ -71,4 +72,41 @@ export const googleOAuth = async (startOAuthFlow: any) => {
       message: err?.errors[0]?.longMessage,
     };
   }
+};
+
+const USER_ID_KEY = "user_id";
+
+// Simple UUID generation function
+const generateUUID = () => {
+  return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function (c) {
+    var r = (Math.random() * 16) | 0,
+      v = c == "x" ? r : (r & 0x3) | 0x8;
+    return v.toString(16);
+  });
+};
+
+export const checkOrCreateUserId = async () => {
+  console.log("auth: checking user id exists...");
+  try {
+    // Try to fetch the existing user ID
+    const existingUserId = await SecureStore.getItemAsync(USER_ID_KEY);
+
+    if (existingUserId) {
+      console.log("auth: user has id: ", existingUserId);
+      // User ID exists, user is considered signed in
+      // router.replace("/(auth)/welcome");
+    } else {
+      // User ID doesn't exist, create a new one
+      const newUserId = generateUUID();
+      console.log("auth: created user id: ", newUserId);
+      await SecureStore.setItemAsync(USER_ID_KEY, newUserId);
+      // router.replace("/(auth)/sign-in");
+    }
+  } catch (error) {
+    console.error("Error checking or creating user ID:", error);
+  }
+};
+
+export const getUserId = async () => {
+  return await SecureStore.getItemAsync(USER_ID_KEY);
 };

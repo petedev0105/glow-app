@@ -1,10 +1,12 @@
 import OAuth from "@/components/OAuth";
 import { images } from "@/constants";
+import { styles } from "@/constants/onboarding";
 import { useAuth } from "@clerk/clerk-expo";
 import { router } from "expo-router";
 import { useEffect } from "react";
 import {
   ImageBackground,
+  SafeAreaView,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -12,32 +14,50 @@ import {
 } from "react-native";
 
 const SignIn = () => {
-  const { isSignedIn } = useAuth();
+  // const { isSignedIn } = useAuth();
 
-  useEffect(() => {
-    if (isSignedIn) {
-      router.replace("/(auth)/welcome");
-    }
-  }, [isSignedIn]);
+  // useEffect(() => {
+  //   if (isSignedIn) {
+  //     router.replace("/(auth)/welcome");
+  //   }
+  // }, [isSignedIn]);
 
   return (
     <ImageBackground
       source={images.signinBackground} // Use the existing background image
       style={localStyles.background}
     >
-      <View style={localStyles.contentContainer}>
-        <Text style={localStyles.title}>Start your glow up journey today</Text>
-        <Text style={localStyles.subtitle}>
-          Get started on your glow up journey today with Glow.
-        </Text>
+      <SafeAreaView>
+        <View style={[localStyles.contentContainer, { paddingHorizontal: 24 }]}>
+          <Text style={localStyles.title}>
+            Start your glow up journey today
+          </Text>
+          <Text style={localStyles.subtitle}>
+            Get started on your glow up journey today with Glow.
+          </Text>
 
-        <TouchableOpacity onPress={() => console.log("auth triggered!!")}>
+          {/* <TouchableOpacity onPress={() => console.log("auth triggered!!")}>
           <View style={localStyles.oauthButton}>
             <OAuth />
           </View>
-          {/* <Text style={localStyles.oauthText}>Sign in with Google</Text> */}
-        </TouchableOpacity>
-      </View>
+        </TouchableOpacity> */}
+          <TouchableOpacity
+            style={[styles.button, { backgroundColor: "black" }]}
+            onPress={() => {
+              router.push("/(auth)/welcome");
+            }}
+          >
+            <Text
+              style={[
+                styles.buttonText,
+                { color: "white", textAlign: "center" },
+              ]}
+            >
+              Get Started 🙌
+            </Text>
+          </TouchableOpacity>
+        </View>
+      </SafeAreaView>
     </ImageBackground>
   );
 };

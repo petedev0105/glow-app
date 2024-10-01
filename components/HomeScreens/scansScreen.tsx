@@ -15,10 +15,11 @@ import {
 } from "react-native";
 import { styles } from "../../constants/onboarding";
 import LoadingSpinner from "../LoadingSpinner";
-import { useUser } from "@clerk/clerk-expo";
+import { getUserId } from "@/lib/auth";
 import { fetchAPI } from "@/lib/fetch";
 import ScanResultModal from "../ScanResultModal";
 import { format } from "date-fns"; // Add this import
+import { get } from "react-native/Libraries/TurboModule/TurboModuleRegistry";
 
 type Scan = {
   id: number;
@@ -71,8 +72,7 @@ type Scan = {
 const ScansScreen = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [scans, setScans] = useState<Scan[]>([]);
-  const { user } = useUser();
-  const userId = user?.id;
+
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedScan, setSelectedScan] = useState<Scan | null>(null);
 
@@ -84,22 +84,28 @@ const ScansScreen = () => {
 
   useEffect(() => {
     const fetchUserScans = async () => {
-      if (!userId) return;
-      setIsLoading(true);
-      try {
-        const response = await fetchAPI(
-          `https://wandering-sun-9736.kiettran255.workers.dev/api/get-scan-results/${userId}`
-        );
-        console.log(response.data);
-        const scanResults = response.data.map(
-          (item: { scan_results: Scan }) => item.scan_results
-        );
-        console.log(scanResults);
-        setScans(scanResults);
-      } catch (error) {
-        console.error("Error fetching user scans:", error);
-      } finally {
-        setIsLoading(false);
+      const userId = await getUserId();
+
+      // if (!userId) return;
+      if (userId) {
+        console.log(userId);
+        try {
+          setIsLoading(true);
+          const response = await fetchAPI(
+            `https://wandering-sun-9736.kiettran255.workers.dev/api/get-scan-results/${userId}`
+          );
+          console.log(response.data);
+          const scanResults = response.data.map(
+            (item: { scan_results: Scan }) => item.scan_results
+          );
+          console.log(scanResults);
+          console.log("scan results type shit");
+          setScans(scanResults);
+        } catch (error) {
+          console.error("Error fetching user scans:", error);
+        } finally {
+          setIsLoading(false);
+        }
       }
     };
 
