@@ -69,18 +69,6 @@ const FacialAnalysisScreen = () => {
       // console.log(image);
       await handleImageUpload(image);
       router.replace("/(auth)/results-screen");
-
-      // try {
-      //   console.log("calling image analysis api");
-      //   const response = await fetchAPI("/(api)/(openai)/glowscore", {
-      //     method: "POST",
-      //     body: JSON.stringify({ text: "", imageUri: image }),
-      //   });
-
-      //   console.log(response);
-      // } catch (error) {
-      //   console.log(error);
-      // }
     }
   }
 

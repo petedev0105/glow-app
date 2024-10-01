@@ -40,7 +40,7 @@ const ResultsScreen = () => {
   const [loading, setLoading] = useState(true);
   const { scanResults, setScanResults } = useScanResultsStore();
   const [message, setMessage] = useState("Analyzing your features...");
-  const [intervalDuration, setIntervalDuration] = useState(110);
+  const [intervalDuration, setIntervalDuration] = useState(200);
 
   const [apiCallsStarted, setApiCallsStarted] = useState<boolean>(false);
   const [apiCallsComplete, setApiCallsComplete] = useState<boolean>(false);
