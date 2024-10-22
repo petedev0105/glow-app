@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Platform } from "react-native";
+import { Platform, Alert } from "react-native";
 import { useRouter } from "expo-router";
 import Purchases, {
   CustomerInfo,
@@ -8,7 +8,7 @@ import Purchases, {
 } from "react-native-purchases";
 
 const API_KEYS = {
-  ios: "appl_KwCRoyhPJbkTPAXYmbfPmFjtfJu",
+  ios: "appl_ygiCuafSyHvNHJDrjhAUwNyccsM",
   android: "your_android_api_key",
 };
 
@@ -18,6 +18,7 @@ export function useRevenueCat() {
     useState<PurchasesOfferings | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [customerInfo, setCustomerInfo] = useState<CustomerInfo | null>(null);
+  const [isRestoring, setIsRestoring] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
@@ -121,11 +122,41 @@ export function useRevenueCat() {
     setIsPaymentLoading(false);
   }
 
+  async function handleRestorePurchases() {
+    setIsRestoring(true);
+    try {
+      const restoredInfo = await Purchases.restorePurchases();
+      setCustomerInfo(restoredInfo);
+      if (restoredInfo.activeSubscriptions.length > 0) {
+        console.log("Purchases restored successfully");
+        Alert.alert(
+          "Success",
+          "Your purchases have been restored successfully."
+        );
+        router.replace("/glow-results-screen");
+      } else {
+        console.log("No active subscriptions found");
+        Alert.alert(
+          "No Subscriptions",
+          "No active subscriptions were found to restore."
+        );
+      }
+    } catch (error) {
+      console.error("Error restoring purchases:", error);
+      setError("Failed to restore purchases. Please try again.");
+      Alert.alert("Error", "Failed to restore purchases. Please try again.");
+    } finally {
+      setIsRestoring(false);
+    }
+  }
+
   return {
     priceString,
     revenueCatOfferings,
     error,
     handleWeeklyPurchase,
     customerInfo,
+    handleRestorePurchases,
+    isRestoring,
   };
 }

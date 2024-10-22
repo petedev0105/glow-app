@@ -146,7 +146,7 @@ const FacialAnalysisScreen = () => {
   const showImagePickerOptions = () => {
     Alert.alert(
       "Upload Image",
-      "Choose an option",
+      "Choose an option to upload your face photo so Glow can provide a facial analysis.",
       [
         { text: "Take a Selfie", onPress: handleCameraCapture },
         { text: "Choose Existing Image", onPress: handleGalleryUpload },

@@ -101,10 +101,10 @@ const ProfileScreen = () => {
             <TouchableOpacity
               style={localStyles.sectionBottom}
               onPress={() => {
-                router.push("/(auth)/facial-analysis-screen");
+                router.push("/(auth)/facial-analysis-screen"); 
               }}
             >
-              <Text style={localStyles.sectionText}>Start a new scan</Text>
+              <Text style={localStyles.sectionText}>Start a new scan</Text> 
             </TouchableOpacity>
 
             {/* Help & Support Section */}

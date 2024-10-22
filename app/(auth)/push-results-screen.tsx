@@ -11,7 +11,7 @@ const PushResultsScreen = () => {
   useEffect(() => {
     if (customerInfo) {
       const isSubscribed =
-        (customerInfo as CustomerInfo).activeSubscriptions?.length > 0;
+        (customerInfo as CustomerInfo).activeSubscriptions?.length > 0; 
       const nextScreen = isSubscribed
         ? "/glow-results-screen"
         : "/unlock-results-screen";

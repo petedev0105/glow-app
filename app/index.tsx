@@ -45,12 +45,14 @@ const Page = () => {
           } else {
             router.replace("/(auth)/welcome");
             // router.replace("/(home)");
+            // router.replace("/(auth)/unlock-results-screen");
           }
         }
         if (error) {
           console.error("RevenueCat Error:", error);
           router.replace("/(auth)/welcome");
           // router.replace("/(home)");
+          // router.replace("/(auth)/unlock-results-screen");
         }
       } else {
         router.replace("/(auth)/sign-in");

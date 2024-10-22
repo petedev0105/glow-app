@@ -25,6 +25,7 @@ import {
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useRouter } from "expo-router";
 import { useRevenueCat } from "@/hooks/useRevenueCat";
+import * as Linking from "expo-linking";
 
 // revenue cat hook
 
@@ -40,13 +41,30 @@ const GlowResultScreen = () => {
   );
   const [openAccordion, setOpenAccordion] = useState<number | null>(null);
 
-  const { handleWeeklyPurchase } = useRevenueCat();
+  const {
+    handleWeeklyPurchase,
+    priceString,
+    handleRestorePurchases,
+    isRestoring,
+  } = useRevenueCat();
 
   const percentile = 70; // Dummy percentile value
 
   const navigation = useNavigation();
 
   const router = useRouter();
+
+  const openPrivacyPolicy = () => {
+    Linking.openURL(
+      "https://getdoryai.notion.site/Privacy-Policy-104f1bbab427809dbef3dc9de97ee495?pvs=4"
+    );
+  };
+
+  const openTermsOfUse = () => {
+    Linking.openURL(
+      "https://getdoryai.notion.site/Terms-of-Use-b1810bbb67e547a39813b0e396446853?pvs=4"
+    );
+  };
 
   useEffect(() => {
     const animateGradient = () => {
@@ -623,8 +641,13 @@ const GlowResultScreen = () => {
             { paddingBottom: insets.bottom },
           ]}
           onPress={() => handleWeeklyPurchase({ setIsPaymentLoading })}
-          disabled={isPaymentLoading}
+          disabled={isPaymentLoading || isRestoring}
         >
+          <View>
+            <Text className="font-medium">
+              Glow Pro renews at {priceString}/week
+            </Text>
+          </View>
           <AnimatedLinearGradient
             colors={["#da70d6", "#7b68ee", "#87cefa"]}
             start={{ x: animatedStartX, y: 0 }}
@@ -641,6 +664,27 @@ const GlowResultScreen = () => {
               )}
             </View>
           </AnimatedLinearGradient>
+          <TouchableOpacity
+            onPress={handleRestorePurchases}
+            disabled={isRestoring}
+            style={localStyles.restorePurchasesButton}
+          >
+            {isRestoring ? (
+              <ActivityIndicator size="small" color="#000" />
+            ) : (
+              <Text style={localStyles.restorePurchasesText}>
+                Restore Purchases
+              </Text>
+            )}
+          </TouchableOpacity>
+          <View className="pt-3 flex-row justify-between space-x-3">
+            <Text className="underline" onPress={openTermsOfUse}>
+              Terms of Use
+            </Text>
+            <Text className="underline" onPress={openPrivacyPolicy}>
+              Privacy Policy
+            </Text>
+          </View>
         </TouchableOpacity>
       </SafeAreaView>
     </ImageBackground>
@@ -1150,6 +1194,15 @@ const localStyles = StyleSheet.create({
 
   boldText: {
     fontWeight: "bold",
+  },
+  restorePurchasesButton: {
+    marginTop: 10,
+    padding: 10,
+  },
+  restorePurchasesText: {
+    color: "#000",
+    fontSize: 14,
+    textDecorationLine: "underline",
   },
 });
 
